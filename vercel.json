@@ -1,0 +1,13 @@
+{
+  "crons": [
+    {
+      "path": "/api/cron/check-reviews",
+      "schedule": "0 * * * *"
+    }
+  ],
+  "functions": {
+    "src/app/api/cron/check-reviews/route.ts": {
+      "maxDuration": 300
+    }
+  }
+}
