@@ -14,6 +14,17 @@ export default async function DashboardLayout({
     redirect("/login");
   }
 
+  // Check active subscription
+  const { data: profile } = await supabase
+    .from("profiles")
+    .select("subscription_status")
+    .eq("id", user.id)
+    .single();
+
+  if (!profile || profile.subscription_status !== "active") {
+    redirect("/pricing");
+  }
+
   // Create restaurant record if it doesn't exist yet
   const { data: restaurant } = await supabase
     .from("restaurants")

@@ -22,8 +22,12 @@ export default function AuthLayout({ children }: { children: React.ReactNode }) 
       </main>
 
       {/* Footer */}
-      <footer className="p-6 text-center text-xs text-gray-400">
-        © 2024 ReviewChef · Tous droits réservés
+      <footer className="p-6 text-center text-xs text-gray-400 space-y-1">
+        <p>© {new Date().getFullYear()} ReviewChef · Tous droits réservés</p>
+        <nav className="flex items-center justify-center gap-4">
+          <a href="/mentions-legales" className="hover:text-gray-600 transition-colors">Mentions légales</a>
+          <a href="/cgv" className="hover:text-gray-600 transition-colors">CGV</a>
+        </nav>
       </footer>
     </div>
   );
