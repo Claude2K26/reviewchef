@@ -20,6 +20,7 @@
     "@radix-ui/react-slot": "^1.1.0",
     "@radix-ui/react-switch": "^1.1.1",
     "@radix-ui/react-toast": "^1.2.2",
+    "@stripe/stripe-js": "^9.5.0",
     "@supabase/ssr": "^0.5.2",
     "@supabase/supabase-js": "^2.46.2",
     "autoprefixer": "^10.5.0",
@@ -33,6 +34,7 @@
     "react-dom": "^19.0.0",
     "react-hook-form": "^7.54.0",
     "recharts": "^2.13.3",
+    "stripe": "^22.1.1",
     "tailwind-merge": "^2.5.5",
     "zod": "^3.23.8"
   },

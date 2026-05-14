@@ -98,8 +98,8 @@ export default function HomePage() {
           </p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-3 mt-10">
             <Button asChild size="lg" className="w-full sm:w-auto shadow-lg">
-              <Link href="/signup">
-                Commencer gratuitement
+              <Link href="/pricing">
+                Commencer maintenant
                 <ArrowRight className="w-4 h-4" />
               </Link>
             </Button>
@@ -197,8 +197,8 @@ export default function HomePage() {
           </p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
             <Button asChild size="lg" variant="secondary" className="w-full sm:w-auto bg-white text-brand-700 hover:bg-brand-50">
-              <Link href="/signup">
-                Commencer gratuitement
+              <Link href="/pricing">
+                Commencer maintenant
                 <ArrowRight className="w-4 h-4" />
               </Link>
             </Button>

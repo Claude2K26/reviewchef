@@ -35,20 +35,28 @@ export async function updateSession(request: NextRequest) {
 
   const pathname = request.nextUrl.pathname;
 
-  // Redirect unauthenticated users away from dashboard
-  if (!user && pathname.startsWith("/dashboard")) {
+  const isProtected = pathname.startsWith("/dashboard") || pathname.startsWith("/reviews") || pathname.startsWith("/settings");
+
+  if (!user && isProtected) {
     const url = request.nextUrl.clone();
     url.pathname = "/login";
     return NextResponse.redirect(url);
   }
 
-  if (!user && (pathname.startsWith("/reviews") || pathname.startsWith("/settings"))) {
-    const url = request.nextUrl.clone();
-    url.pathname = "/login";
-    return NextResponse.redirect(url);
+  if (user && isProtected) {
+    const { data: profile } = await supabase
+      .from("profiles")
+      .select("subscription_status")
+      .eq("id", user.id)
+      .single();
+
+    if (profile?.subscription_status !== "active") {
+      const url = request.nextUrl.clone();
+      url.pathname = "/pricing";
+      return NextResponse.redirect(url);
+    }
   }
 
-  // Redirect authenticated users away from auth pages
   if (user && (pathname === "/login" || pathname === "/signup")) {
     const url = request.nextUrl.clone();
     url.pathname = "/dashboard";
