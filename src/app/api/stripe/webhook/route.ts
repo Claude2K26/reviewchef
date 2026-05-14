@@ -26,29 +26,29 @@ export async function POST(req: NextRequest) {
     const subscriptionId = session.subscription as string;
 
     if (userId && subscriptionId) {
-      const subscription = await stripe.subscriptions.retrieve(subscriptionId);
+      const subscription = await stripe.subscriptions.retrieve(subscriptionId) as any;
       await supabase.from("profiles").upsert({
         id: userId,
         stripe_subscription_id: subscriptionId,
         subscription_status: "active",
-        subscription_end_date: new Date(subscription.current_period_end * 1000).toISOString(),
+        subscription_end_date: subscription.current_period_end
+          ? new Date(subscription.current_period_end * 1000).toISOString()
+          : null,
       });
     }
   }
 
   if (event.type === "customer.subscription.updated") {
-    const subscription = event.data.object as Stripe.Subscription;
-    const userId = subscription.metadata?.supabase_user_id;
-
-    if (!userId) {
-      const customer = await stripe.customers.retrieve(subscription.customer as string) as Stripe.Customer;
-      const uid = customer.metadata?.supabase_user_id;
-      if (uid) {
-        await supabase.from("profiles").update({
-          subscription_status: subscription.status === "active" ? "active" : "inactive",
-          subscription_end_date: new Date(subscription.current_period_end * 1000).toISOString(),
-        }).eq("stripe_subscription_id", subscription.id);
-      }
+    const subscription = event.data.object as any;
+    const customer = await stripe.customers.retrieve(subscription.customer as string) as Stripe.Customer;
+    const uid = customer.metadata?.supabase_user_id;
+    if (uid) {
+      await supabase.from("profiles").update({
+        subscription_status: subscription.status === "active" ? "active" : "inactive",
+        subscription_end_date: subscription.current_period_end
+          ? new Date(subscription.current_period_end * 1000).toISOString()
+          : null,
+      }).eq("stripe_subscription_id", subscription.id);
     }
   }
 
