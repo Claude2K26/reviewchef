@@ -12,9 +12,9 @@ export function PublicFooter() {
           <Link href="/cgv" className="hover:text-gray-600 transition-colors">
             CGV
           </Link>
-          <a href="mailto:yann.cfw@gmail.com" className="hover:text-gray-600 transition-colors">
+          <Link href="/contact" className="hover:text-gray-600 transition-colors">
             Contact
-          </a>
+          </Link>
         </nav>
       </div>
     </footer>
