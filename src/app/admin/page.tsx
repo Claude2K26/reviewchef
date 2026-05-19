@@ -2,7 +2,7 @@ import { createClient, createServiceClient } from "@/lib/supabase/server";
 import { redirect } from "next/navigation";
 import { Users, CreditCard, TrendingUp, Activity } from "lucide-react";
 
-const ADMIN_EMAIL = "yann.cfw@gmail.com";
+const ADMIN_EMAIL = "ky92390empire@gmail.com";
 
 export default async function AdminPage() {
   // Auth check
