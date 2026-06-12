@@ -2,7 +2,7 @@ import { Resend } from "resend";
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 
-const FROM = "ReviewChef <noreply@reviewchef.fr>";
+const FROM = "ReviewChef <onboarding@resend.dev>";
 const APP_URL = process.env.NEXT_PUBLIC_APP_URL ?? "https://reviewchef.vercel.app";
 
 export async function sendTrialEndingEmail({
