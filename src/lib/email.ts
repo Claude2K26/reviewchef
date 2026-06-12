@@ -149,6 +149,147 @@ export async function sendTrialEndingEmail({
   });
 }
 
+export async function sendNewReviewEmail({
+  to,
+  restaurantName,
+  authorName,
+  rating,
+  reviewText,
+  responseText,
+}: {
+  to: string;
+  restaurantName: string;
+  authorName: string;
+  rating: number;
+  reviewText: string;
+  responseText: string;
+}) {
+  const stars = "⭐".repeat(rating);
+
+  const html = `<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Nouvel avis répondu automatiquement</title>
+</head>
+<body style="margin:0;padding:0;background:#f4f4f5;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;">
+  <table width="100%" cellpadding="0" cellspacing="0" style="background:#f4f4f5;padding:40px 16px;">
+    <tr>
+      <td align="center">
+        <table width="560" cellpadding="0" cellspacing="0" style="max-width:560px;width:100%;">
+
+          <!-- Logo -->
+          <tr>
+            <td align="center" style="padding-bottom:32px;">
+              <table cellpadding="0" cellspacing="0">
+                <tr>
+                  <td style="background:linear-gradient(135deg,#f97316,#ea580c);border-radius:12px;padding:10px 14px;">
+                    <span style="color:#fff;font-size:18px;font-weight:800;letter-spacing:-0.5px;">ReviewChef</span>
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+
+          <!-- Card -->
+          <tr>
+            <td style="background:#ffffff;border-radius:16px;box-shadow:0 4px 24px rgba(0,0,0,0.08);overflow:hidden;">
+
+              <!-- Orange top bar -->
+              <table width="100%" cellpadding="0" cellspacing="0">
+                <tr>
+                  <td style="background:linear-gradient(90deg,#ea580c,#f97316,#fb923c);height:4px;"></td>
+                </tr>
+              </table>
+
+              <!-- Content -->
+              <table width="100%" cellpadding="0" cellspacing="0" style="padding:40px 40px 32px;">
+                <tr>
+                  <td>
+                    <!-- Badge -->
+                    <div style="display:inline-block;background:#fff7ed;border:1px solid #fed7aa;border-radius:999px;padding:4px 14px;margin-bottom:24px;">
+                      <span style="color:#ea580c;font-size:13px;font-weight:600;">✨ Nouvel avis répondu automatiquement</span>
+                    </div>
+
+                    <h1 style="margin:0 0 8px;font-size:22px;font-weight:800;color:#111827;line-height:1.3;">
+                      L'IA vient de répondre à un avis pour <span style="color:#f97316;">${restaurantName}</span>
+                    </h1>
+                    <p style="margin:0 0 28px;color:#6b7280;font-size:14px;">Vous n'avez rien eu à faire.</p>
+
+                    <!-- Review -->
+                    <table width="100%" cellpadding="0" cellspacing="0" style="background:#f9fafb;border-radius:12px;margin-bottom:16px;">
+                      <tr>
+                        <td style="padding:20px;">
+                          <p style="margin:0 0 6px;font-size:14px;font-weight:700;color:#111827;">${stars} ${authorName}</p>
+                          <p style="margin:0;font-size:14px;color:#6b7280;line-height:1.6;font-style:italic;">"${reviewText}"</p>
+                        </td>
+                      </tr>
+                    </table>
+
+                    <!-- Response -->
+                    <table width="100%" cellpadding="0" cellspacing="0" style="margin-bottom:32px;">
+                      <tr>
+                        <td style="border-left:4px solid #f97316;padding-left:16px;">
+                          <p style="margin:0 0 4px;font-size:12px;font-weight:600;color:#ea580c;text-transform:uppercase;letter-spacing:0.05em;">Réponse publiée par l'IA</p>
+                          <p style="margin:0;font-size:14px;color:#374151;line-height:1.6;">${responseText}</p>
+                        </td>
+                      </tr>
+                    </table>
+
+                    <!-- CTA Button -->
+                    <table cellpadding="0" cellspacing="0" style="margin:0 auto;">
+                      <tr>
+                        <td style="background:linear-gradient(105deg,#ea580c,#f97316);border-radius:10px;box-shadow:0 4px 16px rgba(249,115,22,0.4);">
+                          <a href="${APP_URL}/dashboard" style="display:block;padding:14px 32px;color:#ffffff;font-size:15px;font-weight:700;text-decoration:none;white-space:nowrap;">
+                            Voir tous mes avis →
+                          </a>
+                        </td>
+                      </tr>
+                    </table>
+                  </td>
+                </tr>
+              </table>
+
+              <!-- Footer card -->
+              <table width="100%" cellpadding="0" cellspacing="0" style="padding:0 40px 32px;">
+                <tr>
+                  <td style="border-top:1px solid #f3f4f6;padding-top:24px;">
+                    <p style="margin:0;color:#9ca3af;font-size:13px;line-height:1.5;">
+                      Vous recevez cet email à chaque nouvel avis répondu automatiquement.
+                      <br />Des questions ? Répondez à cet email, on vous répond rapidement.
+                    </p>
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+
+          <!-- Footer -->
+          <tr>
+            <td align="center" style="padding-top:24px;">
+              <p style="margin:0;color:#9ca3af;font-size:12px;">
+                © ${new Date().getFullYear()} ReviewChef ·
+                <a href="${APP_URL}/mentions-legales" style="color:#9ca3af;">Mentions légales</a>
+              </p>
+            </td>
+          </tr>
+
+        </table>
+      </td>
+    </tr>
+  </table>
+</body>
+</html>`;
+
+  return resend.emails.send({
+    from: FROM,
+    to,
+    subject: `✨ ${stars} Nouvel avis de ${authorName} — répondu automatiquement par ReviewChef`,
+    html,
+  });
+}
+
 export async function sendWeeklyRecapEmail({
   to,
   restaurantName,

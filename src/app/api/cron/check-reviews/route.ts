@@ -3,6 +3,7 @@ import { createServiceClient } from "@/lib/supabase/server";
 import { getValidOAuthClient } from "@/lib/google/token-manager";
 import { listReviews, replyToReview, starRatingToNumber } from "@/lib/google/mybusiness";
 import { generateReviewResponse } from "@/lib/anthropic/client";
+import { sendNewReviewEmail } from "@/lib/email";
 
 // Security: only allow Vercel cron or authorized callers
 function isAuthorized(request: Request): boolean {
@@ -14,6 +15,7 @@ function isAuthorized(request: Request): boolean {
 
 interface RestaurantRow {
   id: string;
+  user_id: string;
   name: string;
   cuisine_type: string;
   tone: string;
@@ -36,7 +38,7 @@ export async function POST(request: Request) {
     // Fetch all restaurants with automation enabled and Google connected
     const { data: restaurants, error } = await supabase
       .from("restaurants")
-      .select("id, name, cuisine_type, tone, signature, google_account_id, google_location_id, last_checked")
+      .select("id, user_id, name, cuisine_type, tone, signature, google_account_id, google_location_id, last_checked")
       .eq("automation_enabled", true)
       .not("google_access_token", "is", null)
       .not("google_account_id", "is", null)
@@ -144,6 +146,23 @@ export async function POST(request: Request) {
               },
               { onConflict: "restaurant_id,google_review_id" }
             );
+
+            // Send notification email to restaurant owner
+            try {
+              const { data: { user: owner } } = await supabase.auth.admin.getUserById(restaurant.user_id);
+              if (owner?.email) {
+                await sendNewReviewEmail({
+                  to: owner.email,
+                  restaurantName: restaurant.name,
+                  authorName: googleReview.reviewer.displayName,
+                  rating,
+                  reviewText: googleReview.comment ?? "",
+                  responseText,
+                });
+              }
+            } catch (emailErr) {
+              console.error(`[CronJob] Failed to send review notification email:`, emailErr);
+            }
 
             result.processed++;
             console.log(`[CronJob] Replied to review ${reviewId} for ${restaurant.name}`);
