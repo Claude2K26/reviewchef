@@ -3,11 +3,18 @@
     {
       "path": "/api/cron/check-reviews",
       "schedule": "0 9 * * *"
+    },
+    {
+      "path": "/api/cron/weekly-recap",
+      "schedule": "0 7 * * 1"
     }
   ],
   "functions": {
     "src/app/api/cron/check-reviews/route.ts": {
       "maxDuration": 300
+    },
+    "src/app/api/cron/weekly-recap/route.ts": {
+      "maxDuration": 60
     }
   }
 }
