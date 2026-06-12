@@ -155,12 +155,14 @@ export async function sendWeeklyRecapEmail({
   reviewsThisWeek,
   responsesPublished,
   averageRating,
+  recentResponses = [],
 }: {
   to: string;
   restaurantName: string;
   reviewsThisWeek: number;
   responsesPublished: number;
   averageRating: number | null;
+  recentResponses?: { authorName: string; rating: number; reviewText: string; responseText: string }[];
 }) {
   const ratingDisplay = averageRating !== null ? averageRating.toFixed(1) : "—";
   const stars = averageRating !== null ? "⭐".repeat(Math.round(averageRating)) : "";
@@ -208,14 +210,14 @@ export async function sendWeeklyRecapEmail({
                   <td>
                     <!-- Badge -->
                     <div style="display:inline-block;background:#fff7ed;border:1px solid #fed7aa;border-radius:999px;padding:4px 14px;margin-bottom:24px;">
-                      <span style="color:#ea580c;font-size:13px;font-weight:600;">📊 Récap de la semaine</span>
+                      <span style="color:#ea580c;font-size:13px;font-weight:600;">📊 Récap des 2 dernières semaines</span>
                     </div>
 
                     <h1 style="margin:0 0 8px;font-size:26px;font-weight:800;color:#111827;line-height:1.2;">
                       Voici ce qui s'est passé pour <span style="color:#f97316;">${restaurantName}</span>
                     </h1>
                     <p style="margin:0 0 32px;color:#6b7280;font-size:15px;line-height:1.6;">
-                      L'IA a travaillé pour vous cette semaine. Voici le bilan.
+                      L'IA a travaillé pour vous ces 2 dernières semaines. Voici le bilan.
                     </p>
 
                     <!-- Stats -->
@@ -243,6 +245,30 @@ export async function sendWeeklyRecapEmail({
                       : `<p style="margin:0 0 32px;color:#6b7280;font-size:15px;line-height:1.6;text-align:center;">ReviewChef a géré vos avis automatiquement, sans que vous ayez à intervenir.</p>`
                     }
 
+                    <!-- Réponses récentes -->
+                    ${recentResponses.length > 0 ? `
+                    <table width="100%" cellpadding="0" cellspacing="0" style="margin-bottom:32px;">
+                      <tr>
+                        <td>
+                          <p style="margin:0 0 16px;font-size:13px;font-weight:600;color:#374151;text-transform:uppercase;letter-spacing:0.05em;">Dernières réponses publiées</p>
+                          ${recentResponses.map(r => `
+                          <table width="100%" cellpadding="0" cellspacing="0" style="margin-bottom:12px;background:#f9fafb;border-radius:10px;overflow:hidden;">
+                            <tr>
+                              <td style="padding:16px;">
+                                <p style="margin:0 0 4px;font-size:13px;font-weight:600;color:#111827;">${"⭐".repeat(r.rating)} ${r.authorName}</p>
+                                <p style="margin:0 0 10px;font-size:13px;color:#6b7280;line-height:1.5;font-style:italic;">"${r.reviewText.length > 120 ? r.reviewText.slice(0, 120) + "…" : r.reviewText}"</p>
+                                <div style="border-left:3px solid #f97316;padding-left:10px;">
+                                  <p style="margin:0;font-size:13px;color:#374151;line-height:1.5;">${r.responseText.length > 150 ? r.responseText.slice(0, 150) + "…" : r.responseText}</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </table>
+                          `).join("")}
+                        </td>
+                      </tr>
+                    </table>
+                    ` : ""}
+
                     <!-- CTA Button -->
                     <table cellpadding="0" cellspacing="0" style="margin:0 auto 32px;">
                       <tr>
@@ -262,7 +288,7 @@ export async function sendWeeklyRecapEmail({
                 <tr>
                   <td style="border-top:1px solid #f3f4f6;padding-top:24px;">
                     <p style="margin:0;color:#9ca3af;font-size:13px;line-height:1.5;">
-                      Ce récap est envoyé chaque lundi matin automatiquement.
+                      Ce récap est envoyé automatiquement tous les 15 jours, le lundi matin.
                       <br />Des questions ? Répondez à cet email, on vous répond rapidement.
                     </p>
                   </td>
@@ -291,7 +317,7 @@ export async function sendWeeklyRecapEmail({
   return resend.emails.send({
     from: FROM,
     to,
-    subject: `📊 Récap ReviewChef : ${reviewsThisWeek} avis cette semaine pour ${restaurantName}`,
+    subject: `📊 Récap ReviewChef : ${reviewsThisWeek} avis ces 2 dernières semaines pour ${restaurantName}`,
     html,
   });
 }
