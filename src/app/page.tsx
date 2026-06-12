@@ -221,7 +221,7 @@ export default function HomePage() {
                   }}
                 >
                   <Link href="/pricing">
-                    Commencer — 49€/mois
+                    Essayer gratuitement 7 jours
                     <ArrowRight className="w-4 h-4 ml-1" />
                   </Link>
                 </Button>
@@ -556,7 +556,7 @@ export default function HomePage() {
               }}
             >
               <Link href="/pricing">
-                Commencer maintenant — 49€/mois
+                Essayer gratuitement 7 jours
                 <ArrowRight className="w-5 h-5 ml-2" />
               </Link>
             </Button>

@@ -124,9 +124,12 @@ export default function PricingPage() {
               animation: loading ? "none" : "btn-bg-shimmer 3s linear infinite",
             }}
           >
-            {loading ? "Chargement..." : "S'abonner maintenant"}
+            {loading ? "Chargement..." : "Essayer gratuitement 7 jours"}
             {!loading && <ArrowRight className="w-4 h-4 ml-1" />}
           </Button>
+          <p className="text-xs text-white/25 text-center mt-3">
+            Aucun prélèvement pendant 7 jours · Annulable avant sans frais
+          </p>
 
           {/* Guarantees */}
           <div className="grid grid-cols-3 gap-3 mt-6 pt-6 border-t border-white/5">

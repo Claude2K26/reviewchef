@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { stripe } from "@/lib/stripe";
 import { createServiceClient } from "@/lib/supabase/server";
+import { sendTrialEndingEmail } from "@/lib/email";
 import Stripe from "stripe";
 
 export async function POST(req: NextRequest) {
@@ -27,10 +28,12 @@ export async function POST(req: NextRequest) {
 
     if (userId && subscriptionId) {
       const subscription = await stripe.subscriptions.retrieve(subscriptionId) as any;
+      // status peut être "trialing" ou "active" selon si le trial est activé
+      const status = ["active", "trialing"].includes(subscription.status) ? subscription.status : "inactive";
       await supabase.from("profiles").upsert({
         id: userId,
         stripe_subscription_id: subscriptionId,
-        subscription_status: "active",
+        subscription_status: status,
         subscription_end_date: subscription.current_period_end
           ? new Date(subscription.current_period_end * 1000).toISOString()
           : null,
@@ -43,8 +46,11 @@ export async function POST(req: NextRequest) {
     const customer = await stripe.customers.retrieve(subscription.customer as string) as Stripe.Customer;
     const uid = customer.metadata?.supabase_user_id;
     if (uid) {
+      const updatedStatus = ["active", "trialing"].includes(subscription.status)
+        ? subscription.status
+        : "inactive";
       await supabase.from("profiles").update({
-        subscription_status: subscription.status === "active" ? "active" : "inactive",
+        subscription_status: updatedStatus,
         subscription_end_date: subscription.current_period_end
           ? new Date(subscription.current_period_end * 1000).toISOString()
           : null,
@@ -58,6 +64,33 @@ export async function POST(req: NextRequest) {
       subscription_status: "inactive",
       stripe_subscription_id: null,
     }).eq("stripe_subscription_id", subscription.id);
+  }
+
+  if (event.type === "customer.subscription.trial_will_end") {
+    const subscription = event.data.object as Stripe.Subscription;
+    const customer = await stripe.customers.retrieve(subscription.customer as string) as Stripe.Customer;
+
+    if (customer.email && subscription.trial_end) {
+      const trialEndDate = new Date(subscription.trial_end * 1000);
+
+      // Récupérer le nom du restaurant pour personnaliser l'email
+      const uid = customer.metadata?.supabase_user_id;
+      let restaurantName: string | undefined;
+      if (uid) {
+        const { data: restaurant } = await supabase
+          .from("restaurants")
+          .select("name")
+          .eq("user_id", uid)
+          .single();
+        restaurantName = restaurant?.name || undefined;
+      }
+
+      await sendTrialEndingEmail({
+        to: customer.email,
+        trialEndDate,
+        restaurantName,
+      });
+    }
   }
 
   if (event.type === "invoice.payment_failed") {

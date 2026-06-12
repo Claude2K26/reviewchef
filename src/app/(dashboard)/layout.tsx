@@ -21,7 +21,7 @@ export default async function DashboardLayout({
     .eq("id", user.id)
     .single();
 
-  if (!profile || profile.subscription_status !== "active") {
+  if (!profile || !["active", "trialing"].includes(profile.subscription_status ?? "")) {
     redirect("/pricing");
   }
 

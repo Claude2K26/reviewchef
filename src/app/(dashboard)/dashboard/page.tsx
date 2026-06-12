@@ -6,6 +6,7 @@ import { StatsCards } from "@/components/dashboard/stats-cards";
 import { RatingChart } from "@/components/dashboard/rating-chart";
 import { RecentReviewsList } from "@/components/dashboard/recent-reviews-list";
 import { AutomationStatusBanner } from "@/components/dashboard/automation-status-banner";
+import { TrialBanner } from "@/components/dashboard/trial-banner";
 import { calculateResponseRate } from "@/lib/utils";
 import type { DashboardStats, Restaurant, Review } from "@/types";
 
@@ -27,6 +28,13 @@ export default async function DashboardPage() {
     .single();
 
   if (!restaurant) redirect("/settings");
+
+  // Fetch trial info
+  const { data: profile } = await supabase
+    .from("profiles")
+    .select("subscription_status, subscription_end_date")
+    .eq("id", user.id)
+    .single();
 
   // Fetch reviews stats
   const { data: reviewsData } = await supabase
@@ -76,6 +84,11 @@ export default async function DashboardPage() {
         subtitle={restaurant.name ? `${restaurant.name} · Vue d'ensemble` : "Vue d'ensemble"}
       />
       <main className="flex-1 p-6 space-y-6 overflow-auto">
+        {/* Bannière trial si en période d'essai */}
+        {profile?.subscription_status === "trialing" && profile.subscription_end_date && (
+          <TrialBanner trialEndDate={profile.subscription_end_date} />
+        )}
+
         {/* Automation status */}
         <AutomationStatusBanner restaurant={restaurant as Restaurant} />
 
