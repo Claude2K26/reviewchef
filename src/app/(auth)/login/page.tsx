@@ -8,10 +8,10 @@ export const metadata: Metadata = {
 
 export default function LoginPage() {
   return (
-    <Card className="shadow-2xl border border-white/8 text-white" style={{background: "rgba(255,255,255,0.04)", backdropFilter: "blur(20px)"}}>
+    <Card className="shadow-sm border border-gray-200 bg-white">
       <CardHeader className="text-center pb-2">
-        <CardTitle className="text-2xl font-bold text-white">Bienvenue !</CardTitle>
-        <CardDescription className="text-white/40">Connectez-vous à votre espace ReviewChef</CardDescription>
+        <CardTitle className="text-2xl font-bold text-gray-900">Bienvenue !</CardTitle>
+        <CardDescription className="text-gray-500">Connectez-vous à votre espace ReviewChef</CardDescription>
       </CardHeader>
       <CardContent>
         <LoginForm />
