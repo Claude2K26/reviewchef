@@ -19,6 +19,7 @@ import { AnimatedText } from "@/components/home/animated-text";
 import { AnimatedCounter } from "@/components/home/animated-counter";
 import { HeroDemo } from "@/components/home/hero-demo";
 import { FloatingParticles } from "@/components/home/floating-particles";
+import { ReviewsMarquee } from "@/components/home/reviews-marquee";
 
 export const metadata: Metadata = {
   alternates: { canonical: "/" },
@@ -57,26 +58,6 @@ const features = [
   },
 ];
 
-const testimonials = [
-  {
-    name: "Marie Dupont",
-    restaurant: "Le Bistrot Parisien",
-    rating: 5,
-    text: "Je n'ai plus à penser à répondre aux avis. ReviewChef le fait pour moi avec des réponses vraiment personnalisées. Mes clients sont surpris de la rapidité !",
-  },
-  {
-    name: "Thomas Martin",
-    restaurant: "La Pizzeria du Coin",
-    rating: 5,
-    text: "En 2 semaines, mon taux de réponse est passé de 20% à 100%. Ma note Google a augmenté d'un demi-point. Je recommande.",
-  },
-  {
-    name: "Sophie Chen",
-    restaurant: "Restaurant Sakura",
-    rating: 5,
-    text: "Même les mauvais avis sont gérés avec beaucoup de tact. Plusieurs clients mécontents sont revenus après la réponse de l'IA.",
-  },
-];
 
 const faqs = [
   {
@@ -105,9 +86,8 @@ const faqs = [
   },
 ];
 
-const ORANGE_GRADIENT = "linear-gradient(105deg, #ea580c 0%, #f97316 45%, #fb923c 55%, #ea580c 100%)";
-const ORANGE_SHIMMER_ANIM = "btn-bg-shimmer 3s linear infinite";
-const ORANGE_GLOW = "0 0 32px rgba(249,115,22,0.45), 0 8px 32px rgba(0,0,0,0.4)";
+const DARK_BTN = "#111111";
+const DARK_BTN_SHADOW = "0 4px 20px rgba(0,0,0,0.15)";
 
 export default function HomePage() {
   const jsonLd = {
@@ -134,7 +114,7 @@ export default function HomePage() {
   };
 
   return (
-    <div className="min-h-screen bg-[#06060f] text-white overflow-x-hidden">
+    <div className="min-h-screen bg-white text-gray-900 overflow-x-hidden">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
@@ -146,15 +126,11 @@ export default function HomePage() {
       <section className="relative min-h-[95vh] flex items-center hero-grid overflow-hidden">
         <FloatingParticles count={25} />
 
-        {/* Aurora blobs */}
+        {/* Subtle light blobs */}
         <div className="absolute inset-0 overflow-hidden pointer-events-none">
           <div
-            className="absolute -top-48 -left-48 w-[900px] h-[900px] rounded-full opacity-25 animate-aurora"
-            style={{ background: "radial-gradient(circle, rgba(249,115,22,0.5) 0%, transparent 65%)" }}
-          />
-          <div
-            className="absolute -bottom-48 -right-48 w-[700px] h-[700px] rounded-full opacity-15 animate-aurora-2"
-            style={{ background: "radial-gradient(circle, rgba(168,85,247,0.5) 0%, transparent 65%)" }}
+            className="absolute -top-48 -left-48 w-[900px] h-[900px] rounded-full opacity-20 animate-aurora"
+            style={{ background: "radial-gradient(circle, rgba(0,0,0,0.04) 0%, transparent 65%)" }}
           />
         </div>
 
@@ -167,12 +143,12 @@ export default function HomePage() {
               <div
                 className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-sm font-medium mb-8 animate-scale-breath"
                 style={{
-                  border: "1px solid rgba(249,115,22,0.35)",
-                  background: "rgba(249,115,22,0.1)",
-                  color: "#fb923c",
+                  border: "1px solid rgba(0,0,0,0.12)",
+                  background: "rgba(0,0,0,0.04)",
+                  color: "#555",
                 }}
               >
-                <span className="w-1.5 h-1.5 rounded-full bg-brand-500 animate-pulse inline-block" />
+                <span className="w-1.5 h-1.5 rounded-full bg-gray-800 animate-pulse inline-block" />
                 Propulsé par Claude (Anthropic)
               </div>
 
@@ -181,23 +157,14 @@ export default function HomePage() {
                 <AnimatedText text="Vos avis Google" mode="words" delay={0.1} />
                 <br />
                 {/* gradient shimmer + float */}
-                <span
-                  className="bg-clip-text text-transparent animate-float-slow"
-                  style={{
-                    backgroundImage: "linear-gradient(90deg, #fb923c, #f97316, #ea580c, #f97316, #fb923c)",
-                    backgroundSize: "200% auto",
-                    WebkitBackgroundClip: "text",
-                    WebkitTextFillColor: "transparent",
-                    animation: "btn-bg-shimmer 5s linear infinite, float 7s ease-in-out infinite",
-                  }}
-                >
+                <span className="text-gray-900 animate-float-slow">
                   répondus auto.
                 </span>
               </h1>
 
               {/* Subtitle — fade in */}
               <p
-                className="text-lg text-white/50 mb-10 max-w-lg mx-auto lg:mx-0 animate-fade-in"
+                className="text-lg text-gray-500 mb-10 max-w-lg mx-auto lg:mx-0 animate-fade-in"
                 style={{ animationDelay: "0.5s" }}
               >
                 ReviewChef surveille vos avis 24h/24 et publie des réponses personnalisées par IA.
@@ -212,13 +179,8 @@ export default function HomePage() {
                 <Button
                   asChild
                   size="lg"
-                  className="w-full sm:w-auto h-12 px-8 text-base text-white font-semibold rounded-xl transition-all duration-300 hover:scale-105"
-                  style={{
-                    background: ORANGE_GRADIENT,
-                    backgroundSize: "200% auto",
-                    boxShadow: ORANGE_GLOW,
-                    animation: ORANGE_SHIMMER_ANIM,
-                  }}
+                  className="w-full sm:w-auto h-12 px-8 text-base text-white font-semibold rounded-xl transition-all duration-300 hover:scale-105 hover:opacity-80"
+                  style={{ background: DARK_BTN, boxShadow: DARK_BTN_SHADOW }}
                 >
                   <Link href="/pricing">
                     Essayer gratuitement 7 jours
@@ -229,14 +191,14 @@ export default function HomePage() {
                   asChild
                   variant="outline"
                   size="lg"
-                  className="w-full sm:w-auto h-12 text-base bg-transparent border-white/10 text-white/60 hover:bg-white/5 hover:text-white hover:border-white/20 rounded-xl transition-all"
+                  className="w-full sm:w-auto h-12 text-base bg-transparent border-gray-200 text-gray-500 hover:bg-gray-50 hover:text-gray-900 hover:border-gray-300 rounded-xl transition-all"
                 >
                   <Link href="/login">J&apos;ai déjà un compte</Link>
                 </Button>
               </div>
 
               <p
-                className="text-xs text-white/25 mt-5 animate-fade-in text-center lg:text-left"
+                className="text-xs text-gray-400 mt-5 animate-fade-in text-center lg:text-left"
                 style={{ animationDelay: "0.8s" }}
               >
                 Sans engagement · Annulable à tout moment · Paiement sécurisé Stripe
@@ -254,23 +216,23 @@ export default function HomePage() {
         </div>
 
         {/* Scroll indicator — float */}
-        <div className="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 text-white/20 animate-float">
+        <div className="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 text-gray-300 animate-float">
           <span className="text-xs tracking-widest uppercase">Découvrir</span>
           <ChevronDown className="w-4 h-4" />
         </div>
       </section>
 
       {/* ── Tech strip ── */}
-      <div className="border-y border-white/5 py-4" style={{ background: "rgba(255,255,255,0.01)" }}>
+      <div className="border-y border-gray-100 py-4 bg-gray-50">
         <div className="max-w-5xl mx-auto px-6">
-          <div className="flex flex-wrap items-center justify-center gap-x-10 gap-y-3 text-sm text-white/25">
+          <div className="flex flex-wrap items-center justify-center gap-x-10 gap-y-3 text-sm text-gray-400">
             {["Claude Anthropic", "Google My Business API", "Stripe", "OAuth 2.0", "Supabase"].map((tech, i) => (
               <span
                 key={tech}
                 className="flex items-center gap-2 animate-fade-in"
                 style={{ animationDelay: `${i * 0.08}s` }}
               >
-                <span className="w-1 h-1 rounded-full bg-brand-500/60 inline-block" />
+                <span className="w-1 h-1 rounded-full bg-gray-400 inline-block" />
                 {tech}
               </span>
             ))}
@@ -286,16 +248,14 @@ export default function HomePage() {
           <AnimatedSection delay={0}>
             <div className="text-center">
               <div
-                className="text-6xl font-black mb-3 glow-text"
+                className="text-6xl font-black mb-3"
                 style={{
-                  background: "linear-gradient(135deg, #fb923c, #f97316, #ea580c)",
-                  WebkitBackgroundClip: "text",
-                  WebkitTextFillColor: "transparent",
+                  color: "#111",
                 }}
               >
                 <AnimatedCounter to={100} suffix="%" duration={1600} />
               </div>
-              <p className="text-white/40 text-sm">Taux de réponse garanti</p>
+              <p className="text-gray-400 text-sm">Taux de réponse garanti</p>
             </div>
           </AnimatedSection>
 
@@ -303,16 +263,14 @@ export default function HomePage() {
           <AnimatedSection delay={120}>
             <div className="text-center">
               <div
-                className="text-6xl font-black mb-3 inline-block animate-tremble-slow"
+                className="text-6xl font-black mb-3 inline-block"
                 style={{
-                  background: "linear-gradient(135deg, #fb923c, #f97316, #ea580c)",
-                  WebkitBackgroundClip: "text",
-                  WebkitTextFillColor: "transparent",
+                  color: "#111",
                 }}
               >
                 &lt; 10 min
               </div>
-              <p className="text-white/40 text-sm">Pour démarrer</p>
+              <p className="text-gray-400 text-sm">Pour démarrer</p>
             </div>
           </AnimatedSection>
 
@@ -320,23 +278,21 @@ export default function HomePage() {
           <AnimatedSection delay={240}>
             <div className="text-center">
               <div
-                className="text-6xl font-black mb-3 animate-float-slow inline-block"
+                className="text-6xl font-black mb-3 inline-block"
                 style={{
-                  background: "linear-gradient(135deg, #fb923c, #f97316, #ea580c)",
-                  WebkitBackgroundClip: "text",
-                  WebkitTextFillColor: "transparent",
+                  color: "#111",
                 }}
               >
                 24h/24
               </div>
-              <p className="text-white/40 text-sm">Surveillance active</p>
+              <p className="text-gray-400 text-sm">Surveillance active</p>
             </div>
           </AnimatedSection>
         </div>
       </section>
 
       <div className="max-w-5xl mx-auto px-6">
-        <div className="h-px bg-gradient-to-r from-transparent via-white/8 to-transparent" />
+        <div className="h-px bg-gradient-to-r from-transparent via-gray-200 to-transparent" />
       </div>
 
       {/* ── How it works ── */}
@@ -344,13 +300,13 @@ export default function HomePage() {
         <div className="max-w-4xl mx-auto">
           <AnimatedSection className="text-center mb-16">
             {/* Label en vague */}
-            <span className="text-xs font-semibold text-brand-400 tracking-widest uppercase mb-4 block">
+            <span className="text-xs font-semibold text-gray-400 tracking-widest uppercase mb-4 block">
               <AnimatedText text="Comment ça marche" mode="wave" delay={0} />
             </span>
-            <h2 className="text-4xl sm:text-5xl font-black text-white mb-4">
+            <h2 className="text-4xl sm:text-5xl font-black text-gray-900 mb-4">
               <AnimatedText text="Opérationnel en 10 minutes" mode="words" delay={0.05} />
             </h2>
-            <p className="text-white/40 max-w-xl mx-auto">
+            <p className="text-gray-500 max-w-xl mx-auto">
               Pas de configuration complexe, pas d&apos;intégration technique.
             </p>
           </AnimatedSection>
@@ -359,7 +315,7 @@ export default function HomePage() {
             <div
               className="hidden md:block absolute top-8 left-[12.5%] right-[12.5%] h-px"
               style={{
-                background: "linear-gradient(90deg, transparent, rgba(249,115,22,0.35), rgba(249,115,22,0.35), transparent)",
+                background: "linear-gradient(90deg, transparent, rgba(0,0,0,0.1), rgba(0,0,0,0.1), transparent)",
               }}
             />
             {[
@@ -374,16 +330,15 @@ export default function HomePage() {
                   <div
                     className="w-16 h-16 rounded-2xl mx-auto mb-5 flex items-center justify-center animate-float"
                     style={{
-                      background: "linear-gradient(135deg, rgba(249,115,22,0.15), rgba(234,88,12,0.1))",
-                      border: "1px solid rgba(249,115,22,0.3)",
-                      boxShadow: "0 0 24px rgba(249,115,22,0.1)",
+                      background: "#f5f5f5",
+                      border: "1px solid rgba(0,0,0,0.08)",
                       animationDelay: `${i * 0.6}s`,
                     }}
                   >
-                    <span className="text-brand-400 font-black text-xl glow-text">{item.step}</span>
+                    <span className="text-gray-900 font-black text-xl">{item.step}</span>
                   </div>
-                  <h3 className="font-semibold text-white mb-2 hover-wiggle cursor-default">{item.title}</h3>
-                  <p className="text-sm text-white/40 leading-relaxed">{item.desc}</p>
+                  <h3 className="font-semibold text-gray-900 mb-2 hover-wiggle cursor-default">{item.title}</h3>
+                  <p className="text-sm text-gray-500 leading-relaxed">{item.desc}</p>
                 </div>
               </AnimatedSection>
             ))}
@@ -392,20 +347,20 @@ export default function HomePage() {
       </section>
 
       <div className="max-w-5xl mx-auto px-6">
-        <div className="h-px bg-gradient-to-r from-transparent via-white/8 to-transparent" />
+        <div className="h-px bg-gradient-to-r from-transparent via-gray-200 to-transparent" />
       </div>
 
       {/* ── Features ── */}
       <section className="py-24 px-6">
         <div className="max-w-5xl mx-auto">
           <AnimatedSection className="text-center mb-16">
-            <span className="text-xs font-semibold text-brand-400 tracking-widest uppercase mb-4 block">
+            <span className="text-xs font-semibold text-gray-400 tracking-widest uppercase mb-4 block">
               <AnimatedText text="Fonctionnalités" mode="wave" delay={0} />
             </span>
-            <h2 className="text-4xl sm:text-5xl font-black text-white mb-4">
+            <h2 className="text-4xl sm:text-5xl font-black text-gray-900 mb-4">
               <AnimatedText text="Tout ce dont vous avez besoin" mode="words" delay={0.05} />
             </h2>
-            <p className="text-white/40 max-w-xl mx-auto">
+            <p className="text-gray-500 max-w-xl mx-auto">
               Un seul outil pour surveiller, analyser et répondre à vos avis Google.
             </p>
           </AnimatedSection>
@@ -419,15 +374,14 @@ export default function HomePage() {
                     <div
                       className="w-10 h-10 rounded-xl flex items-center justify-center mb-4 transition-all duration-300 group-hover:scale-110 group-hover:rotate-3"
                       style={{
-                        background: "rgba(249,115,22,0.1)",
-                        border: "1px solid rgba(249,115,22,0.2)",
+                        background: "#f5f5f5",
+                        border: "1px solid rgba(0,0,0,0.08)",
                       }}
                     >
-                      <Icon className="w-5 h-5 text-brand-400" />
+                      <Icon className="w-5 h-5 text-gray-700" />
                     </div>
-                    {/* Titre wiggle au hover */}
-                    <h3 className="font-semibold text-white mb-2 hover-wiggle inline-block">{f.title}</h3>
-                    <p className="text-sm text-white/40 leading-relaxed">{f.desc}</p>
+                    <h3 className="font-semibold text-gray-900 mb-2 hover-wiggle inline-block">{f.title}</h3>
+                    <p className="text-sm text-gray-500 leading-relaxed">{f.desc}</p>
                   </div>
                 </AnimatedSection>
               );
@@ -437,69 +391,59 @@ export default function HomePage() {
       </section>
 
       <div className="max-w-5xl mx-auto px-6">
-        <div className="h-px bg-gradient-to-r from-transparent via-white/8 to-transparent" />
+        <div className="h-px bg-gradient-to-r from-transparent via-gray-200 to-transparent" />
       </div>
 
-      {/* ── Testimonials ── */}
-      <section className="py-24 px-6">
-        <div className="max-w-5xl mx-auto">
+      {/* ── Testimonials marquee ── */}
+      <section className="py-24">
+        <div className="max-w-5xl mx-auto px-6">
           <AnimatedSection className="text-center mb-16">
-            <span className="text-xs font-semibold text-brand-400 tracking-widest uppercase mb-4 block">
+            <span className="text-xs font-semibold text-gray-400 tracking-widest uppercase mb-4 block">
               <AnimatedText text="Témoignages" mode="wave" delay={0} />
             </span>
-            <h2 className="text-4xl sm:text-5xl font-black text-white mb-4">
+            <h2 className="text-4xl sm:text-5xl font-black text-gray-900 mb-4">
               <AnimatedText text="Ce que disent les restaurateurs" mode="words" delay={0.04} />
             </h2>
-            <p className="text-white/40">Des résultats concrets dès les premières semaines.</p>
+            <p className="text-gray-500">Des résultats concrets dès les premières semaines.</p>
           </AnimatedSection>
+        </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            {testimonials.map((t, i) => (
-              <AnimatedSection key={t.name} delay={i * 100}>
-                <div className="glass-card rounded-2xl p-6 h-full hover:scale-[1.015] transition-transform duration-300">
-                  <div className="flex gap-0.5 mb-4">
-                    {Array.from({ length: t.rating }).map((_, idx) => (
-                      <Star key={idx} className="w-4 h-4 fill-brand-400 text-brand-400" />
-                    ))}
-                  </div>
-                  <p className="text-sm text-white/60 leading-relaxed italic mb-4">&ldquo;{t.text}&rdquo;</p>
-                  <div className="pt-4 border-t border-white/5">
-                    <p className="font-medium text-white text-sm">{t.name}</p>
-                    <p className="text-xs text-white/30 mt-0.5">{t.restaurant}</p>
-                  </div>
-                </div>
-              </AnimatedSection>
-            ))}
-          </div>
+        {/* Dégradés masquants sur les bords */}
+        <div className="relative">
+          <div className="absolute left-0 top-0 bottom-0 w-40 z-10 pointer-events-none"
+            style={{ background: "linear-gradient(to right, white 60%, transparent)" }} />
+          <div className="absolute right-0 top-0 bottom-0 w-40 z-10 pointer-events-none"
+            style={{ background: "linear-gradient(to left, white 60%, transparent)" }} />
+          <ReviewsMarquee />
         </div>
       </section>
 
       <div className="max-w-5xl mx-auto px-6">
-        <div className="h-px bg-gradient-to-r from-transparent via-white/8 to-transparent" />
+        <div className="h-px bg-gradient-to-r from-transparent via-gray-200 to-transparent" />
       </div>
 
       {/* ── FAQ ── */}
       <section className="py-24 px-6">
         <div className="max-w-3xl mx-auto">
           <AnimatedSection className="text-center mb-16">
-            <span className="text-xs font-semibold text-brand-400 tracking-widest uppercase mb-4 block">
+            <span className="text-xs font-semibold text-gray-400 tracking-widest uppercase mb-4 block">
               <AnimatedText text="Questions fréquentes" mode="wave" delay={0} />
             </span>
-            <h2 className="text-4xl sm:text-5xl font-black text-white mb-4">
+            <h2 className="text-4xl sm:text-5xl font-black text-gray-900 mb-4">
               <AnimatedText text="Tout ce qu'il faut savoir" mode="words" delay={0.05} />
             </h2>
-            <p className="text-white/40">Avant de vous lancer.</p>
+            <p className="text-gray-500">Avant de vous lancer.</p>
           </AnimatedSection>
 
           <div className="space-y-3">
             {faqs.map((faq, i) => (
               <AnimatedSection key={faq.q} delay={i * 60}>
                 <details className="group glass-card rounded-2xl overflow-hidden">
-                  <summary className="flex items-center justify-between gap-4 p-5 cursor-pointer list-none font-medium text-white/75 hover:text-white transition-colors">
+                  <summary className="flex items-center justify-between gap-4 p-5 cursor-pointer list-none font-medium text-gray-700 hover:text-gray-900 transition-colors">
                     {faq.q}
-                    <ChevronDown className="w-4 h-4 text-white/30 shrink-0 transition-transform group-open:rotate-180" />
+                    <ChevronDown className="w-4 h-4 text-gray-400 shrink-0 transition-transform group-open:rotate-180" />
                   </summary>
-                  <div className="px-5 pb-5 text-sm text-white/40 leading-relaxed border-t border-white/5 pt-4">
+                  <div className="px-5 pb-5 text-sm text-gray-500 leading-relaxed border-t border-gray-100 pt-4">
                     {faq.a}
                   </div>
                 </details>
@@ -510,60 +454,41 @@ export default function HomePage() {
       </section>
 
       {/* ── CTA final ── */}
-      <section className="py-32 px-6 relative overflow-hidden">
+      <section className="py-32 px-6 relative overflow-hidden bg-gray-50">
         <div className="absolute inset-0 pointer-events-none">
-          <div
-            className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[900px] h-[500px] rounded-full animate-glow-pulse"
-            style={{ background: "radial-gradient(ellipse, rgba(249,115,22,0.14) 0%, transparent 65%)" }}
-          />
-          <div className="absolute inset-0 hero-grid opacity-20" />
-          <FloatingParticles count={15} />
+          <div className="absolute inset-0 hero-grid opacity-30" />
         </div>
 
         <AnimatedSection>
           <div className="relative max-w-2xl mx-auto text-center">
-            <span className="text-xs font-semibold text-brand-400 tracking-widest uppercase mb-6 block">
+            <span className="text-xs font-semibold text-gray-400 tracking-widest uppercase mb-6 block">
               <AnimatedText text="Prêt à démarrer ?" mode="wave" delay={0} />
             </span>
-            <h2 className="text-5xl sm:text-6xl font-black text-white mb-6 leading-tight">
+            <h2 className="text-5xl sm:text-6xl font-black text-gray-900 mb-6 leading-tight">
               <AnimatedText text="Automatisez vos réponses" mode="words" delay={0.05} />
               <br />
-              <span
-                className="bg-clip-text text-transparent"
-                style={{
-                  backgroundImage: "linear-gradient(90deg, #fb923c, #f97316, #ea580c, #f97316, #fb923c)",
-                  backgroundSize: "200% auto",
-                  WebkitBackgroundClip: "text",
-                  WebkitTextFillColor: "transparent",
-                  animation: "btn-bg-shimmer 5s linear infinite, float 6s ease-in-out 0.3s infinite",
-                }}
-              >
+              <span className="text-gray-900">
                 dès aujourd&apos;hui
               </span>
             </h2>
-            <p className="text-white/40 mb-10 text-lg">
+            <p className="text-gray-500 mb-10 text-lg">
               Rejoignez des restaurateurs qui gagnent du temps chaque jour.
             </p>
             <Button
               asChild
               size="lg"
-              className="h-14 px-10 text-base text-white font-semibold rounded-xl transition-all duration-300 hover:scale-105"
-              style={{
-                background: ORANGE_GRADIENT,
-                backgroundSize: "200% auto",
-                boxShadow: "0 0 50px rgba(249,115,22,0.5), 0 8px 40px rgba(0,0,0,0.4)",
-                animation: ORANGE_SHIMMER_ANIM,
-              }}
+              className="h-14 px-10 text-base text-white font-semibold rounded-xl transition-all duration-300 hover:scale-105 hover:opacity-80"
+              style={{ background: DARK_BTN, boxShadow: DARK_BTN_SHADOW }}
             >
               <Link href="/pricing">
                 Essayer gratuitement 7 jours
                 <ArrowRight className="w-5 h-5 ml-2" />
               </Link>
             </Button>
-            <div className="flex flex-wrap items-center justify-center gap-x-8 gap-y-2 mt-8 text-white/30 text-sm">
+            <div className="flex flex-wrap items-center justify-center gap-x-8 gap-y-2 mt-8 text-gray-400 text-sm">
               {["Sans engagement", "Annulable à tout moment", "Support inclus"].map((item) => (
                 <span key={item} className="flex items-center gap-2">
-                  <CheckCircle className="w-3.5 h-3.5 text-brand-500/50" /> {item}
+                  <CheckCircle className="w-3.5 h-3.5 text-gray-400" /> {item}
                 </span>
               ))}
             </div>

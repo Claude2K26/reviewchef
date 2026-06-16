@@ -113,6 +113,10 @@ const config: Config = {
           "0%, 100%": { transform: "scale(1)" },
           "50%": { transform: "scale(1.04)" },
         },
+        marquee: {
+          "0%": { transform: "translateX(0)" },
+          "100%": { transform: "translateX(-50%)" },
+        },
         tremble: {
           "0%, 100%": { transform: "translate(0, 0) rotate(0deg)" },
           "20%": { transform: "translate(-1px, -1px) rotate(-0.5deg)" },
@@ -135,6 +139,7 @@ const config: Config = {
         "scale-breath": "scale-breath 3s ease-in-out infinite",
         tremble: "tremble 0.6s ease-in-out infinite",
         "tremble-slow": "tremble 2s ease-in-out infinite",
+        marquee: "marquee 30s linear infinite",
       },
     },
   },
