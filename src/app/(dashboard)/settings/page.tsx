@@ -5,6 +5,7 @@ import { DashboardHeader } from "@/components/layout/dashboard-header";
 import { RestaurantForm } from "@/components/settings/restaurant-form";
 import { GoogleConnectionCard } from "@/components/settings/google-connection-card";
 import { AutomationToggle } from "@/components/settings/automation-toggle";
+import { BillingPortalButton } from "@/components/settings/billing-portal-button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import type { Restaurant } from "@/types";
 
@@ -80,6 +81,19 @@ export default async function SettingsPage() {
             <p className="text-xs text-gray-400 mt-1">
               Compte créé le {new Date(user.created_at).toLocaleDateString("fr-FR")}
             </p>
+          </CardContent>
+        </Card>
+
+        {/* Billing */}
+        <Card className="border-0 shadow-sm">
+          <CardHeader>
+            <CardTitle className="text-base">Abonnement & facturation</CardTitle>
+            <CardDescription>
+              Gérez votre abonnement, vos factures et votre moyen de paiement
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <BillingPortalButton />
           </CardContent>
         </Card>
       </main>
