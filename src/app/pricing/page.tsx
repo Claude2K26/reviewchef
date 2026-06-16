@@ -3,19 +3,64 @@
 import { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { CheckCircle, ArrowRight, Star, Shield, Zap, Clock } from "lucide-react";
+import { CheckCircle, ArrowRight, Shield, Zap, Clock } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { PublicNav } from "@/components/layout/public-nav";
 import { PublicFooter } from "@/components/layout/public-footer";
 
-const features = [
-  "1 établissement Google My Business",
-  "Surveillance des avis 24h/24",
-  "Réponses générées par IA (Claude)",
-  "Personnalisation du ton et signature",
-  "Tableau de bord complet",
-  "Publication automatique des réponses",
-  "Support par email",
+const plans = [
+  {
+    id: "starter",
+    name: "Starter",
+    price: 19,
+    features: [
+      "1 établissement Google My Business",
+      "Maximum 50 réponses IA par mois",
+      "Surveillance des avis 24h/24",
+      "Tableau de bord basique",
+      "Historique des avis 30 jours",
+      'Badge "Propulsé par ReviewChef" en signature',
+      "Support par email",
+    ],
+    cta: "Commencer avec Starter",
+    highlighted: false,
+  },
+  {
+    id: "pro",
+    name: "Pro",
+    price: 49,
+    features: [
+      "1 établissement Google My Business",
+      "Réponses IA illimitées",
+      "Personnalisation du ton et signature",
+      "Notification email à chaque avis répondu",
+      "Récap hebdomadaire par email",
+      "Statistiques avancées (note & volume)",
+      "Historique des avis 12 mois",
+      "Support prioritaire",
+    ],
+    cta: "Essayer gratuitement 7 jours",
+    highlighted: true,
+  },
+  {
+    id: "business",
+    name: "Business",
+    price: 89,
+    features: [
+      "Jusqu'à 3 établissements Google My Business",
+      "Vue centralisée tous établissements",
+      "Réponses IA illimitées",
+      "Tout le plan Pro inclus",
+      "Réponses en plusieurs langues (FR, EN, ES)",
+      "Export CSV mensuel des avis et réponses",
+      "Widget avis intégrable sur votre site",
+      "Rapport mensuel PDF",
+      "Onboarding personnalisé (appel 30 min)",
+      "Support dédié — réponse sous 2h",
+    ],
+    cta: "Commencer avec Business",
+    highlighted: false,
+  },
 ];
 
 const guarantees = [
@@ -28,7 +73,7 @@ export default function PricingPage() {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
 
-  async function handleSubscribe() {
+  async function handleProSubscribe() {
     setLoading(true);
     try {
       const res = await fetch("/api/stripe/checkout", { method: "POST" });
@@ -44,118 +89,141 @@ export default function PricingPage() {
   }
 
   return (
-    <div className="min-h-screen bg-[#06060f] text-white flex flex-col">
+    <div className="min-h-screen bg-white text-gray-900 flex flex-col overflow-x-hidden">
       <PublicNav />
 
-      {/* Aurora blob */}
-      <div className="fixed inset-0 pointer-events-none overflow-hidden">
-        <div
-          className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[800px] h-[500px] rounded-full opacity-20 animate-aurora"
-          style={{ background: "radial-gradient(circle, rgba(249,115,22,0.5) 0%, transparent 65%)" }}
-        />
-      </div>
-
-      <main className="relative flex-1 max-w-lg mx-auto w-full px-6 py-16">
-        <div className="text-center mb-10">
-          <span className="text-xs font-semibold text-brand-400 tracking-widest uppercase mb-4 block">
-            Tarif
+      <main className="flex-1 w-full px-6 py-20">
+        {/* Header */}
+        <div className="text-center mb-16">
+          <span className="text-xs font-semibold text-gray-400 tracking-widest uppercase mb-4 block">
+            Tarifs
           </span>
-          <h1 className="text-4xl font-black text-white mb-3">Un seul plan, tout inclus</h1>
-          <p className="text-white/40">Pas de frais cachés. Pas de limites surprises. Résiliable à tout moment.</p>
-        </div>
-
-        {/* Card */}
-        <div
-          className="rounded-2xl p-8"
-          style={{
-            background: "rgba(255,255,255,0.04)",
-            border: "1px solid rgba(249,115,22,0.25)",
-            boxShadow: "0 0 60px rgba(249,115,22,0.08), 0 32px 64px rgba(0,0,0,0.4)",
-          }}
-        >
-          {/* Price */}
-          <div className="flex items-start justify-between mb-6">
-            <div>
-              <p className="text-xs font-semibold text-brand-400 uppercase tracking-widest mb-2">
-                Plan Pro
-              </p>
-              <div className="flex items-end gap-1">
-                <span
-                  className="text-6xl font-black bg-clip-text text-transparent"
-                  style={{
-                    backgroundImage: "linear-gradient(135deg, #fb923c, #f97316, #ea580c)",
-                    WebkitBackgroundClip: "text",
-                    WebkitTextFillColor: "transparent",
-                  }}
-                >
-                  49€
-                </span>
-                <span className="text-white/30 mb-2 text-lg">/mois</span>
-              </div>
-              <p className="text-xs text-white/25 mt-1">TTC · Renouvellement mensuel automatique</p>
-            </div>
-            <div className="flex mt-1">
-              {[...Array(5)].map((_, i) => (
-                <Star key={i} className="w-4 h-4 fill-brand-400 text-brand-400" />
-              ))}
-            </div>
-          </div>
-
-          {/* Features */}
-          <ul className="space-y-3 mb-8">
-            {features.map((f) => (
-              <li key={f} className="flex items-center gap-3 text-sm text-white/70">
-                <CheckCircle className="w-4 h-4 text-brand-500 shrink-0" />
-                {f}
-              </li>
-            ))}
-          </ul>
-
-          {/* CTA */}
-          <Button
-            onClick={handleSubscribe}
-            disabled={loading}
-            size="lg"
-            className="w-full text-base text-white font-semibold rounded-xl h-12 transition-all duration-300 hover:scale-[1.02] disabled:opacity-60 disabled:cursor-not-allowed disabled:scale-100"
-            style={{
-              background: "linear-gradient(105deg, #ea580c 0%, #f97316 45%, #fb923c 55%, #ea580c 100%)",
-              backgroundSize: "200% auto",
-              boxShadow: "0 0 30px rgba(249,115,22,0.4), 0 8px 32px rgba(0,0,0,0.3)",
-              animation: loading ? "none" : "btn-bg-shimmer 3s linear infinite",
-            }}
-          >
-            {loading ? "Chargement..." : "Essayer gratuitement 7 jours"}
-            {!loading && <ArrowRight className="w-4 h-4 ml-1" />}
-          </Button>
-          <p className="text-xs text-white/25 text-center mt-3">
-            Aucun prélèvement pendant 7 jours · Annulable avant sans frais
+          <h1 className="text-5xl sm:text-6xl font-black text-gray-900 mb-4 leading-tight">
+            Choisissez votre plan
+          </h1>
+          <p className="text-gray-500 text-lg max-w-xl mx-auto">
+            Pas de frais cachés. Résiliable à tout moment.
           </p>
-
-          {/* Guarantees */}
-          <div className="grid grid-cols-3 gap-3 mt-6 pt-6 border-t border-white/5">
-            {guarantees.map(({ icon: Icon, label }) => (
-              <div key={label} className="flex flex-col items-center gap-2 text-center">
-                <Icon className="w-4 h-4 text-brand-500/60" />
-                <span className="text-xs text-white/30 leading-tight">{label}</span>
-              </div>
-            ))}
-          </div>
         </div>
 
-        <p className="text-sm text-white/30 text-center mt-6">
+        {/* Plans grid */}
+        <div className="max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-6 items-start">
+          {plans.map((plan) => {
+            const isHighlighted = plan.highlighted;
+
+            return (
+              <div
+                key={plan.id}
+                className={`rounded-2xl p-8 relative flex flex-col ${
+                  isHighlighted
+                    ? "border-2 border-gray-900"
+                    : "glass-card"
+                }`}
+                style={
+                  isHighlighted
+                    ? { background: "#ffffff", boxShadow: "0 8px 48px rgba(0,0,0,0.12)" }
+                    : {}
+                }
+              >
+                {/* Badge Populaire */}
+                {isHighlighted && (
+                  <div className="absolute -top-4 left-1/2 -translate-x-1/2">
+                    <span className="bg-gray-900 text-white text-xs font-bold px-4 py-1.5 rounded-full tracking-widest uppercase">
+                      Populaire
+                    </span>
+                  </div>
+                )}
+
+                {/* Plan name & price */}
+                <div className="mb-6">
+                  <p className="text-xs font-semibold text-gray-400 uppercase tracking-widest mb-3">
+                    {plan.name}
+                  </p>
+                  <div className="flex items-end gap-1 mb-1">
+                    <span className="text-5xl font-black text-gray-900">{plan.price}€</span>
+                    <span className="text-gray-400 mb-2 text-base">/mois</span>
+                  </div>
+                  <p className="text-xs text-gray-400">TTC · Renouvellement mensuel automatique</p>
+                </div>
+
+                <div className="h-px bg-gray-100 mb-6" />
+
+                {/* Features */}
+                <ul className="space-y-3 mb-8 flex-1">
+                  {plan.features.map((f) => (
+                    <li key={f} className="flex items-start gap-3 text-sm text-gray-600">
+                      <CheckCircle className="w-4 h-4 text-gray-900 shrink-0 mt-0.5" />
+                      {f}
+                    </li>
+                  ))}
+                </ul>
+
+                {/* CTA */}
+                {plan.id === "pro" ? (
+                  <>
+                    <Button
+                      onClick={handleProSubscribe}
+                      disabled={loading}
+                      size="lg"
+                      className="w-full text-base text-white font-semibold rounded-xl h-12 transition-all duration-300 hover:scale-[1.02] hover:opacity-80 disabled:opacity-60 disabled:cursor-not-allowed disabled:scale-100"
+                      style={{ background: "#111111", boxShadow: "0 4px 20px rgba(0,0,0,0.15)" }}
+                    >
+                      {loading ? "Chargement..." : plan.cta}
+                      {!loading && <ArrowRight className="w-4 h-4 ml-1" />}
+                    </Button>
+                    <p className="text-xs text-gray-400 text-center mt-3">
+                      7 jours gratuits · Annulable avant sans frais
+                    </p>
+                  </>
+                ) : (
+                  <Button
+                    asChild
+                    size="lg"
+                    variant="outline"
+                    className="w-full text-base font-semibold rounded-xl h-12 transition-all duration-300 hover:scale-[1.02] bg-transparent border-gray-200 text-gray-700 hover:bg-gray-50 hover:text-gray-900 hover:border-gray-300"
+                  >
+                    <Link href={`/login?plan=${plan.id}`}>
+                      {plan.cta}
+                      <ArrowRight className="w-4 h-4 ml-1" />
+                    </Link>
+                  </Button>
+                )}
+              </div>
+            );
+          })}
+        </div>
+
+        {/* Guarantees */}
+        <div className="grid grid-cols-3 gap-4 mt-16 max-w-sm mx-auto">
+          {guarantees.map(({ icon: Icon, label }) => (
+            <div key={label} className="flex flex-col items-center gap-2 text-center">
+              <Icon className="w-5 h-5 text-gray-400" />
+              <span className="text-xs text-gray-400 leading-tight">{label}</span>
+            </div>
+          ))}
+        </div>
+
+        {/* Login link */}
+        <p className="text-sm text-gray-400 text-center mt-8">
           Déjà abonné ?{" "}
-          <Link href="/login" className="text-brand-400 hover:text-brand-300 font-medium transition-colors">
+          <Link
+            href="/login"
+            className="text-gray-900 hover:text-gray-700 font-medium transition-colors underline underline-offset-2"
+          >
             Se connecter
           </Link>
         </p>
 
-        <p className="text-xs text-white/20 text-center mt-4">
+        <p className="text-xs text-gray-300 text-center mt-4">
           En vous abonnant, vous acceptez nos{" "}
-          <Link href="/cgv" className="hover:text-white/40 transition-colors">CGV</Link>
-          {" "}et nos{" "}
-          <Link href="/mentions-legales" className="hover:text-white/40 transition-colors">
+          <Link href="/cgv" className="hover:text-gray-500 transition-colors">
+            CGV
+          </Link>{" "}
+          et nos{" "}
+          <Link href="/mentions-legales" className="hover:text-gray-500 transition-colors">
             Mentions légales
-          </Link>.
+          </Link>
+          .
         </p>
       </main>
 

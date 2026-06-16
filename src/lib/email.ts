@@ -1,6 +1,12 @@
 import { Resend } from "resend";
 
-const resend = new Resend(process.env.RESEND_API_KEY);
+let _resend: Resend | null = null;
+function getResend(): Resend {
+  if (!_resend) {
+    _resend = new Resend(process.env.RESEND_API_KEY);
+  }
+  return _resend;
+}
 
 const FROM = "ReviewChef <onboarding@resend.dev>";
 const APP_URL = process.env.NEXT_PUBLIC_APP_URL ?? "https://reviewchef.vercel.app";
@@ -141,7 +147,7 @@ export async function sendTrialEndingEmail({
 </body>
 </html>`;
 
-  return resend.emails.send({
+  return getResend().emails.send({
     from: FROM,
     to,
     subject: `⏰ Votre essai ReviewChef se termine dans ${daysLeft} jour${daysLeft > 1 ? "s" : ""} — continuez sans interruption`,
@@ -282,7 +288,7 @@ export async function sendNewReviewEmail({
 </body>
 </html>`;
 
-  return resend.emails.send({
+  return getResend().emails.send({
     from: FROM,
     to,
     subject: `✨ ${stars} Nouvel avis de ${authorName} — répondu automatiquement par ReviewChef`,
@@ -455,7 +461,7 @@ export async function sendWeeklyRecapEmail({
 </body>
 </html>`;
 
-  return resend.emails.send({
+  return getResend().emails.send({
     from: FROM,
     to,
     subject: `📊 Récap ReviewChef : ${reviewsThisWeek} avis ces 2 dernières semaines pour ${restaurantName}`,
