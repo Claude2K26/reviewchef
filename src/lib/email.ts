@@ -468,3 +468,408 @@ export async function sendWeeklyRecapEmail({
     html,
   });
 }
+
+export async function sendWelcomeEmail({ to }: { to: string }) {
+  const steps = [
+    { n: "01", title: "Connecter votre fiche Google My Business", desc: "Autorisez l'accès via OAuth 2.0 sécurisé en quelques clics." },
+    { n: "02", title: "Configurer votre ton et votre signature", desc: "Choisissez comment l'IA parle à votre place : professionnel, chaleureux, décontracté." },
+    { n: "03", title: "Activer l'autopilote", desc: "ReviewChef surveille vos avis 24h/24 et publie les réponses automatiquement." },
+  ];
+
+  const html = `<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Bienvenue sur ReviewChef</title>
+</head>
+<body style="margin:0;padding:0;background:#f4f4f5;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;">
+  <table width="100%" cellpadding="0" cellspacing="0" style="background:#f4f4f5;padding:40px 16px;">
+    <tr>
+      <td align="center">
+        <table width="560" cellpadding="0" cellspacing="0" style="max-width:560px;width:100%;">
+
+          <!-- Logo -->
+          <tr>
+            <td align="center" style="padding-bottom:32px;">
+              <table cellpadding="0" cellspacing="0">
+                <tr>
+                  <td style="background:linear-gradient(135deg,#f97316,#ea580c);border-radius:12px;padding:10px 14px;">
+                    <span style="color:#fff;font-size:18px;font-weight:800;letter-spacing:-0.5px;">ReviewChef</span>
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+
+          <!-- Card -->
+          <tr>
+            <td style="background:#ffffff;border-radius:16px;box-shadow:0 4px 24px rgba(0,0,0,0.08);overflow:hidden;">
+
+              <!-- Orange top bar -->
+              <table width="100%" cellpadding="0" cellspacing="0">
+                <tr>
+                  <td style="background:linear-gradient(90deg,#ea580c,#f97316,#fb923c);height:4px;"></td>
+                </tr>
+              </table>
+
+              <!-- Content -->
+              <table width="100%" cellpadding="0" cellspacing="0" style="padding:40px 40px 32px;">
+                <tr>
+                  <td>
+                    <!-- Badge -->
+                    <div style="display:inline-block;background:#fff7ed;border:1px solid #fed7aa;border-radius:999px;padding:4px 14px;margin-bottom:24px;">
+                      <span style="color:#ea580c;font-size:13px;font-weight:600;">🎉 Bienvenue !</span>
+                    </div>
+
+                    <h1 style="margin:0 0 12px;font-size:26px;font-weight:800;color:#111827;line-height:1.2;">
+                      Votre compte ReviewChef est prêt
+                    </h1>
+
+                    <p style="margin:0 0 32px;color:#6b7280;font-size:15px;line-height:1.6;">
+                      Plus qu'à connecter votre fiche Google My Business et l'IA répondra automatiquement à tous vos avis — même la nuit et le week-end.
+                    </p>
+
+                    <!-- Steps -->
+                    <p style="margin:0 0 16px;font-size:13px;font-weight:600;color:#374151;text-transform:uppercase;letter-spacing:0.05em;">3 étapes pour démarrer</p>
+                    ${steps.map(s => `
+                    <table width="100%" cellpadding="0" cellspacing="0" style="margin-bottom:12px;">
+                      <tr>
+                        <td width="36" valign="top">
+                          <div style="width:32px;height:32px;border-radius:8px;background:#fff7ed;border:1px solid #fed7aa;display:flex;align-items:center;justify-content:center;text-align:center;line-height:32px;">
+                            <span style="color:#ea580c;font-size:12px;font-weight:800;">${s.n}</span>
+                          </div>
+                        </td>
+                        <td style="padding-left:12px;">
+                          <p style="margin:0 0 2px;font-size:14px;font-weight:600;color:#111827;">${s.title}</p>
+                          <p style="margin:0;font-size:13px;color:#6b7280;line-height:1.5;">${s.desc}</p>
+                        </td>
+                      </tr>
+                    </table>
+                    `).join("")}
+
+                    <!-- CTA Button -->
+                    <table cellpadding="0" cellspacing="0" style="margin:32px auto 0;">
+                      <tr>
+                        <td style="background:linear-gradient(105deg,#ea580c,#f97316);border-radius:10px;box-shadow:0 4px 16px rgba(249,115,22,0.4);">
+                          <a href="${APP_URL}/dashboard" style="display:block;padding:14px 32px;color:#ffffff;font-size:16px;font-weight:700;text-decoration:none;white-space:nowrap;">
+                            Accéder à mon tableau de bord →
+                          </a>
+                        </td>
+                      </tr>
+                    </table>
+                  </td>
+                </tr>
+              </table>
+
+              <!-- Footer card -->
+              <table width="100%" cellpadding="0" cellspacing="0" style="padding:0 40px 32px;">
+                <tr>
+                  <td style="border-top:1px solid #f3f4f6;padding-top:24px;">
+                    <p style="margin:0;color:#9ca3af;font-size:13px;line-height:1.5;">
+                      Des questions ? Répondez à cet email, on vous répond rapidement.
+                    </p>
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+
+          <!-- Footer -->
+          <tr>
+            <td align="center" style="padding-top:24px;">
+              <p style="margin:0;color:#9ca3af;font-size:12px;">
+                © ${new Date().getFullYear()} ReviewChef ·
+                <a href="${APP_URL}/mentions-legales" style="color:#9ca3af;">Mentions légales</a>
+              </p>
+            </td>
+          </tr>
+
+        </table>
+      </td>
+    </tr>
+  </table>
+</body>
+</html>`;
+
+  return getResend().emails.send({
+    from: FROM,
+    to,
+    subject: "Bienvenue sur ReviewChef 🎉",
+    html,
+  });
+}
+
+export async function sendNegativeReviewAlertEmail({
+  to,
+  restaurantName,
+  authorName,
+  rating,
+  reviewText,
+  responseText,
+}: {
+  to: string;
+  restaurantName: string;
+  authorName: string;
+  rating: number;
+  reviewText: string;
+  responseText: string;
+}) {
+  const stars = "⭐".repeat(rating);
+
+  const html = `<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Avis négatif reçu</title>
+</head>
+<body style="margin:0;padding:0;background:#f4f4f5;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;">
+  <table width="100%" cellpadding="0" cellspacing="0" style="background:#f4f4f5;padding:40px 16px;">
+    <tr>
+      <td align="center">
+        <table width="560" cellpadding="0" cellspacing="0" style="max-width:560px;width:100%;">
+
+          <!-- Logo -->
+          <tr>
+            <td align="center" style="padding-bottom:32px;">
+              <table cellpadding="0" cellspacing="0">
+                <tr>
+                  <td style="background:linear-gradient(135deg,#f97316,#ea580c);border-radius:12px;padding:10px 14px;">
+                    <span style="color:#fff;font-size:18px;font-weight:800;letter-spacing:-0.5px;">ReviewChef</span>
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+
+          <!-- Card -->
+          <tr>
+            <td style="background:#ffffff;border-radius:16px;box-shadow:0 4px 24px rgba(0,0,0,0.08);overflow:hidden;">
+
+              <!-- Red top bar for negative alert -->
+              <table width="100%" cellpadding="0" cellspacing="0">
+                <tr>
+                  <td style="background:linear-gradient(90deg,#dc2626,#ef4444,#f87171);height:4px;"></td>
+                </tr>
+              </table>
+
+              <!-- Content -->
+              <table width="100%" cellpadding="0" cellspacing="0" style="padding:40px 40px 32px;">
+                <tr>
+                  <td>
+                    <!-- Badge -->
+                    <div style="display:inline-block;background:#fef2f2;border:1px solid #fecaca;border-radius:999px;padding:4px 14px;margin-bottom:24px;">
+                      <span style="color:#dc2626;font-size:13px;font-weight:600;">⚠️ Avis négatif — action recommandée</span>
+                    </div>
+
+                    <h1 style="margin:0 0 8px;font-size:22px;font-weight:800;color:#111827;line-height:1.3;">
+                      Avis ${stars} de <span style="color:#dc2626;">${authorName}</span> pour ${restaurantName}
+                    </h1>
+                    <p style="margin:0 0 28px;color:#6b7280;font-size:14px;line-height:1.6;">
+                      L'IA a déjà publié une réponse automatique, mais ce commentaire mérite votre attention.
+                    </p>
+
+                    <!-- Review -->
+                    <table width="100%" cellpadding="0" cellspacing="0" style="background:#fef2f2;border-radius:12px;margin-bottom:16px;">
+                      <tr>
+                        <td style="padding:20px;">
+                          <p style="margin:0 0 6px;font-size:14px;font-weight:700;color:#111827;">${stars} ${authorName}</p>
+                          <p style="margin:0;font-size:14px;color:#6b7280;line-height:1.6;font-style:italic;">"${reviewText}"</p>
+                        </td>
+                      </tr>
+                    </table>
+
+                    <!-- AI Response -->
+                    <table width="100%" cellpadding="0" cellspacing="0" style="margin-bottom:32px;">
+                      <tr>
+                        <td style="border-left:4px solid #f97316;padding-left:16px;">
+                          <p style="margin:0 0 4px;font-size:12px;font-weight:600;color:#ea580c;text-transform:uppercase;letter-spacing:0.05em;">Réponse publiée par l'IA</p>
+                          <p style="margin:0;font-size:14px;color:#374151;line-height:1.6;">${responseText}</p>
+                        </td>
+                      </tr>
+                    </table>
+
+                    <!-- CTA Button -->
+                    <table cellpadding="0" cellspacing="0" style="margin:0 auto;">
+                      <tr>
+                        <td style="background:linear-gradient(105deg,#ea580c,#f97316);border-radius:10px;box-shadow:0 4px 16px rgba(249,115,22,0.4);">
+                          <a href="${APP_URL}/dashboard" style="display:block;padding:14px 32px;color:#ffffff;font-size:15px;font-weight:700;text-decoration:none;white-space:nowrap;">
+                            Voir l'avis dans le tableau de bord →
+                          </a>
+                        </td>
+                      </tr>
+                    </table>
+                  </td>
+                </tr>
+              </table>
+
+              <!-- Footer card -->
+              <table width="100%" cellpadding="0" cellspacing="0" style="padding:0 40px 32px;">
+                <tr>
+                  <td style="border-top:1px solid #f3f4f6;padding-top:24px;">
+                    <p style="margin:0;color:#9ca3af;font-size:13px;line-height:1.5;">
+                      Vous recevez cet email uniquement pour les avis de 1 ou 2 étoiles.
+                      <br />Des questions ? Répondez à cet email, on vous répond rapidement.
+                    </p>
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+
+          <!-- Footer -->
+          <tr>
+            <td align="center" style="padding-top:24px;">
+              <p style="margin:0;color:#9ca3af;font-size:12px;">
+                © ${new Date().getFullYear()} ReviewChef ·
+                <a href="${APP_URL}/mentions-legales" style="color:#9ca3af;">Mentions légales</a>
+              </p>
+            </td>
+          </tr>
+
+        </table>
+      </td>
+    </tr>
+  </table>
+</body>
+</html>`;
+
+  return getResend().emails.send({
+    from: FROM,
+    to,
+    subject: `⚠️ Avis négatif reçu (${rating}⭐) — action recommandée`,
+    html,
+  });
+}
+
+export async function sendPaymentFailedEmail({
+  to,
+  portalUrl,
+}: {
+  to: string;
+  portalUrl: string;
+}) {
+  const html = `<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Problème de paiement ReviewChef</title>
+</head>
+<body style="margin:0;padding:0;background:#f4f4f5;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;">
+  <table width="100%" cellpadding="0" cellspacing="0" style="background:#f4f4f5;padding:40px 16px;">
+    <tr>
+      <td align="center">
+        <table width="560" cellpadding="0" cellspacing="0" style="max-width:560px;width:100%;">
+
+          <!-- Logo -->
+          <tr>
+            <td align="center" style="padding-bottom:32px;">
+              <table cellpadding="0" cellspacing="0">
+                <tr>
+                  <td style="background:linear-gradient(135deg,#f97316,#ea580c);border-radius:12px;padding:10px 14px;">
+                    <span style="color:#fff;font-size:18px;font-weight:800;letter-spacing:-0.5px;">ReviewChef</span>
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+
+          <!-- Card -->
+          <tr>
+            <td style="background:#ffffff;border-radius:16px;box-shadow:0 4px 24px rgba(0,0,0,0.08);overflow:hidden;">
+
+              <!-- Orange top bar -->
+              <table width="100%" cellpadding="0" cellspacing="0">
+                <tr>
+                  <td style="background:linear-gradient(90deg,#ea580c,#f97316,#fb923c);height:4px;"></td>
+                </tr>
+              </table>
+
+              <!-- Content -->
+              <table width="100%" cellpadding="0" cellspacing="0" style="padding:40px 40px 32px;">
+                <tr>
+                  <td>
+                    <!-- Badge -->
+                    <div style="display:inline-block;background:#fef2f2;border:1px solid #fecaca;border-radius:999px;padding:4px 14px;margin-bottom:24px;">
+                      <span style="color:#dc2626;font-size:13px;font-weight:600;">⚠️ Problème de paiement</span>
+                    </div>
+
+                    <h1 style="margin:0 0 12px;font-size:26px;font-weight:800;color:#111827;line-height:1.2;">
+                      Votre paiement ReviewChef a échoué
+                    </h1>
+
+                    <p style="margin:0 0 16px;color:#6b7280;font-size:15px;line-height:1.6;">
+                      Nous n'avons pas pu encaisser votre abonnement mensuel. Cela peut arriver si votre carte a expiré, si les fonds sont insuffisants ou si votre banque a bloqué le paiement.
+                    </p>
+
+                    <p style="margin:0 0 32px;color:#6b7280;font-size:15px;line-height:1.6;">
+                      <strong style="color:#111827;">Votre service est momentanément suspendu.</strong> Mettez à jour votre moyen de paiement pour reprendre la réponse automatique à vos avis.
+                    </p>
+
+                    <!-- Steps -->
+                    <table width="100%" cellpadding="0" cellspacing="0" style="background:#f9fafb;border-radius:10px;padding:20px;margin-bottom:32px;">
+                      <tr>
+                        <td>
+                          <p style="margin:0 0 12px;font-size:13px;font-weight:600;color:#374151;text-transform:uppercase;letter-spacing:0.05em;">Comment résoudre le problème</p>
+                          ${[
+                            "Cliquez sur le bouton ci-dessous pour accéder à votre portail de facturation",
+                            "Mettez à jour ou remplacez votre carte bancaire",
+                            "Votre abonnement reprend automatiquement",
+                          ].map((s, i) => `<p style="margin:0 0 6px;color:#4b5563;font-size:14px;"><strong style="color:#111827;">${i + 1}.</strong> ${s}</p>`).join("")}
+                        </td>
+                      </tr>
+                    </table>
+
+                    <!-- CTA Button -->
+                    <table cellpadding="0" cellspacing="0" style="margin:0 auto;">
+                      <tr>
+                        <td style="background:linear-gradient(105deg,#ea580c,#f97316);border-radius:10px;box-shadow:0 4px 16px rgba(249,115,22,0.4);">
+                          <a href="${portalUrl}" style="display:block;padding:14px 32px;color:#ffffff;font-size:16px;font-weight:700;text-decoration:none;white-space:nowrap;">
+                            Mettre à jour ma carte bancaire →
+                          </a>
+                        </td>
+                      </tr>
+                    </table>
+                  </td>
+                </tr>
+              </table>
+
+              <!-- Footer card -->
+              <table width="100%" cellpadding="0" cellspacing="0" style="padding:0 40px 32px;">
+                <tr>
+                  <td style="border-top:1px solid #f3f4f6;padding-top:24px;">
+                    <p style="margin:0;color:#9ca3af;font-size:13px;line-height:1.5;">
+                      Des questions sur votre facturation ? Répondez à cet email, on vous répond rapidement.
+                    </p>
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+
+          <!-- Footer -->
+          <tr>
+            <td align="center" style="padding-top:24px;">
+              <p style="margin:0;color:#9ca3af;font-size:12px;">
+                © ${new Date().getFullYear()} ReviewChef ·
+                <a href="${APP_URL}/mentions-legales" style="color:#9ca3af;">Mentions légales</a>
+              </p>
+            </td>
+          </tr>
+
+        </table>
+      </td>
+    </tr>
+  </table>
+</body>
+</html>`;
+
+  return getResend().emails.send({
+    from: FROM,
+    to,
+    subject: "⚠️ Problème de paiement ReviewChef — action requise",
+    html,
+  });
+}

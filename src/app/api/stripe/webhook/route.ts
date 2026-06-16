@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { stripe } from "@/lib/stripe";
 import { createServiceClient } from "@/lib/supabase/server";
-import { sendTrialEndingEmail } from "@/lib/email";
+import { sendTrialEndingEmail, sendPaymentFailedEmail } from "@/lib/email";
 import Stripe from "stripe";
 
 export async function POST(req: NextRequest) {
@@ -100,6 +100,25 @@ export async function POST(req: NextRequest) {
       await supabase.from("profiles").update({
         subscription_status: "past_due",
       }).eq("stripe_subscription_id", subscriptionId);
+    }
+
+    const customerId = (invoice as any).customer as string;
+    if (customerId) {
+      try {
+        const customer = await stripe.customers.retrieve(customerId) as Stripe.Customer;
+        if (customer.email) {
+          const portalSession = await stripe.billingPortal.sessions.create({
+            customer: customerId,
+            return_url: `${process.env.NEXT_PUBLIC_APP_URL}/settings`,
+          });
+          await sendPaymentFailedEmail({
+            to: customer.email,
+            portalUrl: portalSession.url,
+          });
+        }
+      } catch (emailErr) {
+        console.error("[StripeWebhook] Failed to send payment failed email:", emailErr);
+      }
     }
   }
 

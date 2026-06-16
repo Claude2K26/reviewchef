@@ -3,7 +3,7 @@ import { createServiceClient } from "@/lib/supabase/server";
 import { getValidOAuthClient } from "@/lib/google/token-manager";
 import { listReviews, replyToReview, starRatingToNumber } from "@/lib/google/mybusiness";
 import { generateReviewResponse } from "@/lib/anthropic/client";
-import { sendNewReviewEmail } from "@/lib/email";
+import { sendNewReviewEmail, sendNegativeReviewAlertEmail } from "@/lib/email";
 
 // Security: only allow Vercel cron or authorized callers
 function isAuthorized(request: Request): boolean {
@@ -151,14 +151,25 @@ export async function POST(request: Request) {
             try {
               const { data: { user: owner } } = await supabase.auth.admin.getUserById(restaurant.user_id);
               if (owner?.email) {
-                await sendNewReviewEmail({
-                  to: owner.email,
-                  restaurantName: restaurant.name,
-                  authorName: googleReview.reviewer.displayName,
-                  rating,
-                  reviewText: googleReview.comment ?? "",
-                  responseText,
-                });
+                if (rating <= 2) {
+                  await sendNegativeReviewAlertEmail({
+                    to: owner.email,
+                    restaurantName: restaurant.name,
+                    authorName: googleReview.reviewer.displayName,
+                    rating,
+                    reviewText: googleReview.comment ?? "",
+                    responseText,
+                  });
+                } else {
+                  await sendNewReviewEmail({
+                    to: owner.email,
+                    restaurantName: restaurant.name,
+                    authorName: googleReview.reviewer.displayName,
+                    rating,
+                    reviewText: googleReview.comment ?? "",
+                    responseText,
+                  });
+                }
               }
             } catch (emailErr) {
               console.error(`[CronJob] Failed to send review notification email:`, emailErr);
