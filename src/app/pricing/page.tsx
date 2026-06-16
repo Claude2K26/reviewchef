@@ -71,20 +71,24 @@ const guarantees = [
 
 export default function PricingPage() {
   const router = useRouter();
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState<string | null>(null);
 
-  async function handleProSubscribe() {
-    setLoading(true);
+  async function handleSubscribe(plan: string) {
+    setLoading(plan);
     try {
-      const res = await fetch("/api/stripe/checkout", { method: "POST" });
+      const res = await fetch("/api/stripe/checkout", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ plan }),
+      });
       const data = await res.json();
       if (data.url) {
         window.location.href = data.url;
       } else if (res.status === 401) {
-        router.push("/login?redirect=/pricing");
+        router.push(`/login?redirect=/pricing`);
       }
     } finally {
-      setLoading(false);
+      setLoading(null);
     }
   }
 
@@ -159,35 +163,19 @@ export default function PricingPage() {
                 </ul>
 
                 {/* CTA */}
-                {plan.id === "pro" ? (
-                  <>
-                    <Button
-                      onClick={handleProSubscribe}
-                      disabled={loading}
-                      size="lg"
-                      className="w-full text-base text-white font-semibold rounded-xl h-12 transition-all duration-300 hover:scale-[1.02] hover:opacity-80 disabled:opacity-60 disabled:cursor-not-allowed disabled:scale-100"
-                      style={{ background: "#111111", boxShadow: "0 4px 20px rgba(0,0,0,0.15)" }}
-                    >
-                      {loading ? "Chargement..." : plan.cta}
-                      {!loading && <ArrowRight className="w-4 h-4 ml-1" />}
-                    </Button>
-                    <p className="text-xs text-gray-400 text-center mt-3">
-                      7 jours gratuits · Annulable avant sans frais
-                    </p>
-                  </>
-                ) : (
-                  <Button
-                    asChild
-                    size="lg"
-                    variant="outline"
-                    className="w-full text-base font-semibold rounded-xl h-12 transition-all duration-300 hover:scale-[1.02] bg-transparent border-gray-200 text-gray-700 hover:bg-gray-50 hover:text-gray-900 hover:border-gray-300"
-                  >
-                    <Link href={`/login?plan=${plan.id}`}>
-                      {plan.cta}
-                      <ArrowRight className="w-4 h-4 ml-1" />
-                    </Link>
-                  </Button>
-                )}
+                <Button
+                  onClick={() => handleSubscribe(plan.id)}
+                  disabled={loading === plan.id}
+                  size="lg"
+                  className="w-full text-base text-white font-semibold rounded-xl h-12 transition-all duration-300 hover:scale-[1.02] hover:opacity-80 disabled:opacity-60 disabled:cursor-not-allowed disabled:scale-100"
+                  style={{ background: "#111111", boxShadow: "0 4px 20px rgba(0,0,0,0.15)" }}
+                >
+                  {loading === plan.id ? "Chargement..." : plan.cta}
+                  {loading !== plan.id && <ArrowRight className="w-4 h-4 ml-1" />}
+                </Button>
+                <p className="text-xs text-gray-400 text-center mt-3">
+                  7 jours gratuits · Annulable avant sans frais
+                </p>
               </div>
             );
           })}
