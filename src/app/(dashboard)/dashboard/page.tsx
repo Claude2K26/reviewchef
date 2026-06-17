@@ -27,7 +27,8 @@ export default async function DashboardPage() {
     .eq("user_id", user.id)
     .single();
 
-  if (!restaurant) redirect("/settings");
+  if (!restaurant) redirect("/onboarding");
+  if (!restaurant.name) redirect("/onboarding");
 
   // Fetch trial info
   const { data: profile } = await supabase

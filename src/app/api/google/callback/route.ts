@@ -17,7 +17,7 @@ export async function GET(request: Request) {
   }
 
   try {
-    const { userId } = decodeState(state);
+    const { userId, redirectTo } = decodeState(state);
     const tokens = await exchangeCodeForTokens(code);
 
     if (!tokens.access_token || !tokens.refresh_token) {
@@ -66,7 +66,7 @@ export async function GET(request: Request) {
 
     if (dbError) throw dbError;
 
-    return NextResponse.redirect(`${appUrl}/settings?connected=true`);
+    return NextResponse.redirect(`${appUrl}${redirectTo ?? "/settings"}?connected=true`);
   } catch (err) {
     console.error("Google OAuth callback error:", err);
     return NextResponse.redirect(`${appUrl}/settings?error=google_auth_failed`);
