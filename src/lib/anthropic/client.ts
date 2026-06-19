@@ -49,12 +49,17 @@ export async function generateReviewResponse(
 ): Promise<string> {
   const { restaurantName, cuisineType, tone, signature, reviewText, rating, authorName } = params;
 
-  const systemPrompt = `You are the owner of "${restaurantName}", a ${cuisineType} restaurant.
+  const languageInstruction = reviewText.trim().length < 5
+    ? "Réponds en français."
+    : "Réponds dans la même langue que l'avis du client. Si l'avis est en anglais, réponds en anglais. Si l'avis est en espagnol, réponds en espagnol. Si l'avis est en français, réponds en français. Adapte-toi à la langue détectée.";
+
+  const systemPrompt = `${languageInstruction}
+
+You are the owner of "${restaurantName}", a ${cuisineType} restaurant.
 Your communication style is ${getToneDescription(tone)}.
 You respond to Google reviews personally and authentically.
 
 Rules:
-- Write in French (the restaurant is French-speaking)
 - Keep responses between 60 and 150 words
 - Address the reviewer by their first name if possible
 - Never use generic copy-paste responses
