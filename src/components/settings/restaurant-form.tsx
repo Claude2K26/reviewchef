@@ -52,7 +52,7 @@ export function RestaurantForm({ restaurant }: RestaurantFormProps) {
   });
 
   async function onSubmit(data: RestaurantSettingsInput) {
-    const result = await updateRestaurant(data);
+    const result = await updateRestaurant(data, restaurant.id);
     if (result.success) {
       toast({ title: "Paramètres sauvegardés !", variant: "success" as any });
     } else {

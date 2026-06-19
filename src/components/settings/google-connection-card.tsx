@@ -17,7 +17,7 @@ export function GoogleConnectionCard({ restaurant }: GoogleConnectionCardProps) 
   const isConnected = !!restaurant.google_access_token;
 
   async function handleConnect() {
-    window.location.href = "/api/google/connect";
+    window.location.href = `/api/google/connect?restaurant_id=${restaurant.id}&redirect=/settings`;
   }
 
   async function handleDisconnect() {

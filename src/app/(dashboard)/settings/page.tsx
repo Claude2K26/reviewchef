@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { createClient } from "@/lib/supabase/server";
+import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { DashboardHeader } from "@/components/layout/dashboard-header";
 import { RestaurantForm } from "@/components/settings/restaurant-form";
@@ -19,11 +20,16 @@ export default async function SettingsPage() {
 
   if (!user) redirect("/login");
 
-  const { data: restaurant } = await supabase
+  const cookieStore = await cookies();
+  const activeId = cookieStore.get("active_restaurant_id")?.value;
+
+  const { data: allRestaurants } = await supabase
     .from("restaurants")
     .select("*")
     .eq("user_id", user.id)
-    .single();
+    .order("created_at");
+
+  const restaurant = allRestaurants?.find((r) => r.id === activeId) ?? allRestaurants?.[0];
 
   if (!restaurant) redirect("/login");
 

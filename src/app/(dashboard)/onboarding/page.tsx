@@ -5,24 +5,45 @@ import type { Restaurant } from "@/types";
 
 export const metadata = { title: "Bienvenue sur ReviewChef" };
 
-export default async function OnboardingPage() {
+interface OnboardingPageProps {
+  searchParams: Promise<{ restaurant_id?: string }>;
+}
+
+export default async function OnboardingPage({ searchParams }: OnboardingPageProps) {
+  const params = await searchParams;
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
 
   if (!user) redirect("/login");
 
-  const { data: restaurant } = await supabase
-    .from("restaurants")
-    .select("*")
-    .eq("user_id", user.id)
-    .single();
+  let restaurant;
+  if (params.restaurant_id) {
+    const { data } = await supabase
+      .from("restaurants")
+      .select("*")
+      .eq("user_id", user.id)
+      .eq("id", params.restaurant_id)
+      .maybeSingle();
+    restaurant = data;
+  } else {
+    const { data } = await supabase
+      .from("restaurants")
+      .select("*")
+      .eq("user_id", user.id)
+      .order("created_at")
+      .limit(1)
+      .maybeSingle();
+    restaurant = data;
+  }
 
   if (!restaurant) redirect("/login");
 
-  // Already configured → go to dashboard
-  if (restaurant.name && restaurant.google_access_token && restaurant.automation_enabled) {
+  // Already fully configured and no specific restaurant requested → go to dashboard
+  if (!params.restaurant_id && restaurant.name && restaurant.google_access_token && restaurant.automation_enabled) {
     redirect("/dashboard");
   }
 
-  return <OnboardingWizard restaurant={restaurant as Restaurant} />;
+  const startStep = params.restaurant_id ? 2 : 1;
+
+  return <OnboardingWizard restaurant={restaurant as Restaurant} startStep={startStep} />;
 }

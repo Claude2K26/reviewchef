@@ -14,18 +14,18 @@ export function createOAuth2Client() {
   );
 }
 
-export function getAuthUrl(userId: string, redirectTo?: string): string {
+export function getAuthUrl(userId: string, redirectTo?: string, restaurantId?: string): string {
   const oauth2Client = createOAuth2Client();
 
   return oauth2Client.generateAuthUrl({
     access_type: "offline",
     scope: SCOPES,
     prompt: "consent", // Force consent to always get refresh_token
-    state: Buffer.from(JSON.stringify({ userId, redirectTo })).toString("base64"),
+    state: Buffer.from(JSON.stringify({ userId, redirectTo, restaurantId })).toString("base64"),
   });
 }
 
-export function decodeState(state: string): { userId: string; redirectTo?: string } {
+export function decodeState(state: string): { userId: string; redirectTo?: string; restaurantId?: string } {
   try {
     return JSON.parse(Buffer.from(state, "base64").toString("utf-8"));
   } catch {

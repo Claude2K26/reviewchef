@@ -12,7 +12,8 @@ export async function GET(request: Request) {
 
   const { searchParams } = new URL(request.url);
   const redirectTo = searchParams.get("redirect") ?? undefined;
+  const restaurantId = searchParams.get("restaurant_id") ?? undefined;
 
-  const authUrl = getAuthUrl(user.id, redirectTo);
+  const authUrl = getAuthUrl(user.id, redirectTo, restaurantId);
   return NextResponse.redirect(authUrl);
 }

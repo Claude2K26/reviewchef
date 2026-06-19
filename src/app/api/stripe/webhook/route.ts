@@ -34,6 +34,7 @@ export async function POST(req: NextRequest) {
         id: userId,
         stripe_subscription_id: subscriptionId,
         subscription_status: status,
+        plan: session.metadata?.plan ?? "pro",
         subscription_end_date: subscription.current_period_end
           ? new Date(subscription.current_period_end * 1000).toISOString()
           : null,

@@ -17,7 +17,7 @@ export async function GET(request: Request) {
   }
 
   try {
-    const { userId, redirectTo } = decodeState(state);
+    const { userId, redirectTo, restaurantId } = decodeState(state);
     const tokens = await exchangeCodeForTokens(code);
 
     if (!tokens.access_token || !tokens.refresh_token) {
@@ -51,22 +51,26 @@ export async function GET(request: Request) {
       // Continue — tokens are still saved, user can configure manually
     }
 
-    // Save tokens to restaurant
-    const { error: dbError } = await supabase
-      .from("restaurants")
-      .update({
-        google_access_token: tokens.access_token,
-        google_refresh_token: tokens.refresh_token,
-        token_expiry: tokens.expiry_date ? new Date(tokens.expiry_date).toISOString() : null,
-        google_account_id: accountId,
-        google_location_id: locationId,
-        google_location_name: locationName,
-      })
-      .eq("user_id", userId);
+    // Save tokens to the specific restaurant (or all restaurants for the user as fallback)
+    const tokenUpdate = {
+      google_access_token: tokens.access_token,
+      google_refresh_token: tokens.refresh_token,
+      token_expiry: tokens.expiry_date ? new Date(tokens.expiry_date).toISOString() : null,
+      google_account_id: accountId,
+      google_location_id: locationId,
+      google_location_name: locationName,
+    };
 
+    const updateQuery = restaurantId
+      ? supabase.from("restaurants").update(tokenUpdate).eq("id", restaurantId).eq("user_id", userId)
+      : supabase.from("restaurants").update(tokenUpdate).eq("user_id", userId);
+
+    const { error: dbError } = await updateQuery;
     if (dbError) throw dbError;
 
-    return NextResponse.redirect(`${appUrl}${redirectTo ?? "/settings"}?connected=true`);
+    const base = redirectTo ?? "/settings";
+    const separator = base.includes("?") ? "&" : "?";
+    return NextResponse.redirect(`${appUrl}${base}${separator}connected=true`);
   } catch (err) {
     console.error("Google OAuth callback error:", err);
     return NextResponse.redirect(`${appUrl}/settings?error=google_auth_failed`);

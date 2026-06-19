@@ -37,12 +37,13 @@ const CUISINE_TYPES = [
 
 interface OnboardingWizardProps {
   restaurant: Restaurant;
+  startStep?: number;
 }
 
-export function OnboardingWizard({ restaurant }: OnboardingWizardProps) {
+export function OnboardingWizard({ restaurant, startStep = 1 }: OnboardingWizardProps) {
   const router = useRouter();
   const { toast } = useToast();
-  const [step, setStep] = useState(1);
+  const [step, setStep] = useState(startStep);
   const [activating, setActivating] = useState(false);
   const isGoogleConnected = !!restaurant.google_access_token;
 
@@ -63,7 +64,7 @@ export function OnboardingWizard({ restaurant }: OnboardingWizardProps) {
   });
 
   async function onSubmitStep1(data: RestaurantSettingsInput) {
-    const result = await updateRestaurant(data);
+    const result = await updateRestaurant(data, restaurant.id);
     if (result.success) {
       setStep(2);
     } else {
@@ -237,7 +238,10 @@ export function OnboardingWizard({ restaurant }: OnboardingWizardProps) {
                 </div>
 
                 <Button
-                  onClick={() => { window.location.href = "/api/google/connect?redirect=/onboarding"; }}
+                  onClick={() => {
+                    const redirectPath = encodeURIComponent(`/onboarding?restaurant_id=${restaurant.id}`);
+                    window.location.href = `/api/google/connect?restaurant_id=${restaurant.id}&redirect=${redirectPath}`;
+                  }}
                   className="w-full"
                 >
                   <svg className="w-4 h-4 mr-2" viewBox="0 0 24 24">
