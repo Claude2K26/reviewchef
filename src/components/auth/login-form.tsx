@@ -42,8 +42,8 @@ export function LoginForm() {
       return;
     }
 
-    router.push("/dashboard");
     router.refresh();
+    router.push("/dashboard");
   }
 
   return (
