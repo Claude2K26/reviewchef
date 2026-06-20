@@ -43,25 +43,6 @@ export async function updateSession(request: NextRequest) {
     return NextResponse.redirect(url);
   }
 
-  if (user && isProtected) {
-    const adminClient = createServerClient(
-      process.env.NEXT_PUBLIC_SUPABASE_URL!,
-      process.env.SUPABASE_SERVICE_ROLE_KEY!,
-      { cookies: { getAll: () => [], setAll: () => {} } }
-    );
-
-    const { data: profile } = await adminClient
-      .from("profiles")
-      .select("subscription_status")
-      .eq("id", user.id)
-      .single();
-
-    if (!profile || !["active", "trialing"].includes(profile.subscription_status ?? "")) {
-      const url = request.nextUrl.clone();
-      url.pathname = "/pricing";
-      return NextResponse.redirect(url);
-    }
-  }
 
   if (user && (pathname === "/login" || pathname === "/signup")) {
     const url = request.nextUrl.clone();
