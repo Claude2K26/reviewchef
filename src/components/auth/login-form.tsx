@@ -9,12 +9,11 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { loginSchema, type LoginInput } from "@/lib/validations";
-import { createClient } from "@/lib/supabase/client";
+import { loginAction } from "@/app/(auth)/login/actions";
 
 export function LoginForm() {
   const [showPassword, setShowPassword] = useState(false);
   const [serverError, setServerError] = useState<string | null>(null);
-  const supabase = createClient();
 
   const {
     register,
@@ -26,21 +25,8 @@ export function LoginForm() {
 
   async function onSubmit(data: LoginInput) {
     setServerError(null);
-    const { error } = await supabase.auth.signInWithPassword({
-      email: data.email,
-      password: data.password,
-    });
-
-    if (error) {
-      setServerError(
-        error.message === "Invalid login credentials"
-          ? "Email ou mot de passe incorrect"
-          : error.message
-      );
-      return;
-    }
-
-    window.location.href = "/dashboard";
+    const error = await loginAction(data.email, data.password);
+    if (error) setServerError(error);
   }
 
   return (
