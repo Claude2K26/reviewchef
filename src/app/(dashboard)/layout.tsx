@@ -2,6 +2,7 @@ import { redirect } from "next/navigation";
 import { cookies } from "next/headers";
 import { createClient, createServiceClient } from "@/lib/supabase/server";
 import { Sidebar } from "@/components/layout/sidebar";
+import { SessionRefresher } from "@/components/auth/session-refresher";
 
 export default async function DashboardLayout({
   children,
@@ -64,6 +65,7 @@ export default async function DashboardLayout({
 
   return (
     <div className="flex min-h-screen bg-gray-50">
+      <SessionRefresher />
       <Sidebar
         restaurants={restaurants ?? []}
         activeRestaurantId={activeRestaurantId}
