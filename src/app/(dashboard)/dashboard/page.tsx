@@ -21,6 +21,9 @@ export default async function DashboardPage() {
 
   if (!user) redirect("/login");
 
+  const ADMIN_IDS = ["9e285161-6980-4f8e-8321-efc48954ce92"];
+  const isAdmin = ADMIN_IDS.includes(user.id);
+
   // Resolve active restaurant from cookie
   const cookieStore = await cookies();
   const activeId = cookieStore.get("active_restaurant_id")?.value;
@@ -33,8 +36,8 @@ export default async function DashboardPage() {
 
   const restaurant = allRestaurants?.find((r) => r.id === activeId) ?? allRestaurants?.[0];
 
-  if (!restaurant) redirect("/onboarding");
-  if (!restaurant.name) redirect("/onboarding");
+  if (!restaurant && !isAdmin) redirect("/onboarding");
+  if (restaurant && !restaurant.name && !isAdmin) redirect("/onboarding");
 
   // Fetch trial info
   const { data: profile } = await supabase
@@ -44,10 +47,10 @@ export default async function DashboardPage() {
     .single();
 
   // Fetch reviews stats
-  const { data: reviewsData } = await supabase
+  const { data: reviewsData } = restaurant ? await supabase
     .from("reviews")
     .select("rating, status, review_date")
-    .eq("restaurant_id", restaurant.id);
+    .eq("restaurant_id", restaurant.id) : { data: [] };
 
   const reviews = reviewsData ?? [];
   const now = new Date();
@@ -77,18 +80,18 @@ export default async function DashboardPage() {
   };
 
   // Fetch recent reviews
-  const { data: recentReviews } = await supabase
+  const { data: recentReviews } = restaurant ? await supabase
     .from("reviews")
     .select("*")
     .eq("restaurant_id", restaurant.id)
     .order("review_date", { ascending: false })
-    .limit(5);
+    .limit(5) : { data: [] };
 
   return (
     <>
       <DashboardHeader
         title="Tableau de bord"
-        subtitle={restaurant.name ? `${restaurant.name} · Vue d'ensemble` : "Vue d'ensemble"}
+        subtitle={restaurant?.name ? `${restaurant.name} · Vue d'ensemble` : "Vue d'ensemble"}
       />
       <main className="flex-1 p-6 space-y-6 overflow-auto">
         {/* Bannière trial si en période d'essai */}
@@ -97,7 +100,7 @@ export default async function DashboardPage() {
         )}
 
         {/* Automation status */}
-        <AutomationStatusBanner restaurant={restaurant as Restaurant} />
+        {restaurant && <AutomationStatusBanner restaurant={restaurant as Restaurant} />}
 
         {/* Stats */}
         <StatsCards stats={stats} />
