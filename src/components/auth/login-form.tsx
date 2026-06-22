@@ -3,7 +3,6 @@
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { Eye, EyeOff, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -13,7 +12,6 @@ import { loginSchema, type LoginInput } from "@/lib/validations";
 import { createClient } from "@/lib/supabase/client";
 
 export function LoginForm() {
-  const router = useRouter();
   const [showPassword, setShowPassword] = useState(false);
   const [serverError, setServerError] = useState<string | null>(null);
   const supabase = createClient();
@@ -42,8 +40,7 @@ export function LoginForm() {
       return;
     }
 
-    router.refresh();
-    router.push("/dashboard");
+    window.location.href = "/dashboard";
   }
 
   return (
