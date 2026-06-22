@@ -1,21 +1,27 @@
 import { NextResponse } from "next/server";
-import { createServiceClient } from "@/lib/supabase/server";
 
 export async function GET() {
-  const supabase = createServiceClient();
+  const url = `${process.env.NEXT_PUBLIC_SUPABASE_URL}/rest/v1/restaurants`;
+  const key = process.env.SUPABASE_SERVICE_ROLE_KEY!;
 
-  const { data, error } = await supabase
-    .from("restaurants")
-    .upsert({
+  const res = await fetch(url, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      "apikey": key,
+      "Authorization": `Bearer ${key}`,
+      "Prefer": "return=representation,resolution=merge-duplicates",
+    },
+    body: JSON.stringify({
       user_id: "9e285161-6980-4f8e-8321-efc48954ce92",
       name: "ReviewChef Admin",
       cuisine_type: "Française",
       tone: "professional",
       signature: "",
-    }, { onConflict: "user_id" })
-    .select()
-    .single();
+    }),
+  });
 
-  if (error) return NextResponse.json({ error: error.message }, { status: 500 });
-  return NextResponse.json({ ok: true, restaurant: data });
+  const text = await res.text();
+  if (!res.ok) return NextResponse.json({ error: text, status: res.status }, { status: 500 });
+  return NextResponse.json({ ok: true, data: JSON.parse(text) });
 }
