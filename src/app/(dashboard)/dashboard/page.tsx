@@ -33,8 +33,8 @@ export default async function DashboardPage() {
 
   const restaurant = allRestaurants?.find((r) => r.id === activeId) ?? allRestaurants?.[0];
 
-  if (!restaurant) redirect("/settings");
-  if (!restaurant.name) redirect("/settings");
+  if (!restaurant) redirect("/onboarding");
+  if (!restaurant.name) redirect("/onboarding");
 
   // Fetch trial info
   const { data: profile } = await supabase
