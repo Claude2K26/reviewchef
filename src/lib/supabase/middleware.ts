@@ -29,20 +29,23 @@ export async function updateSession(request: NextRequest) {
     }
   );
 
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
+  // Use getSession() instead of getUser() to avoid unreliable network calls
+  // from the Edge runtime to Supabase auth servers
+  const { data: { session } } = await supabase.auth.getSession();
+  const user = session?.user ?? null;
 
   const pathname = request.nextUrl.pathname;
 
-  const isProtected = pathname.startsWith("/dashboard") || pathname.startsWith("/reviews") || pathname.startsWith("/settings");
+  const isProtected =
+    pathname.startsWith("/dashboard") ||
+    pathname.startsWith("/reviews") ||
+    pathname.startsWith("/settings");
 
   if (!user && isProtected) {
     const url = request.nextUrl.clone();
     url.pathname = "/login";
     return NextResponse.redirect(url);
   }
-
 
   if (user && (pathname === "/login" || pathname === "/signup")) {
     const url = request.nextUrl.clone();
