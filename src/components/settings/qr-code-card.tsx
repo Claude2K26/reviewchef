@@ -39,12 +39,13 @@ export function QrCodeCard({ restaurant }: QrCodeCardProps) {
   function handlePrint() {
     const win = window.open("", "_blank");
     if (!win || !qrDataUrl) return;
+    const safeName = restaurant.name.replace(/[<>&"]/g, (c) => ({ "<": "&lt;", ">": "&gt;", "&": "&amp;", '"': "&quot;" }[c] ?? c));
     win.document.write(`
       <!DOCTYPE html>
       <html lang="fr">
       <head>
         <meta charset="UTF-8">
-        <title>QR Code avis — ${restaurant.name}</title>
+        <title>QR Code avis — ${safeName}</title>
         <style>
           * { margin: 0; padding: 0; box-sizing: border-box; }
           body { font-family: -apple-system, sans-serif; display: flex; justify-content: center; align-items: center; min-height: 100vh; background: #fff; }
@@ -64,7 +65,7 @@ export function QrCodeCard({ restaurant }: QrCodeCardProps) {
           <img class="qr" src="${qrDataUrl}" alt="QR Code avis Google" />
           <div class="stars">★★★★★</div>
           <h1>Votre avis compte !</h1>
-          <p>Scannez ce QR code pour laisser un avis Google sur <strong>${restaurant.name}</strong> en quelques secondes.</p>
+          <p>Scannez ce QR code pour laisser un avis Google sur <strong>${safeName}</strong> en quelques secondes.</p>
           <div class="cta">Laisser un avis ⭐</div>
         </div>
       </body>
