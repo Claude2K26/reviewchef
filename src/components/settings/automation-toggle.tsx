@@ -22,7 +22,7 @@ export function AutomationToggle({ restaurant }: AutomationToggleProps) {
       const res = await fetch("/api/automation/toggle", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ enabled: newValue }),
+        body: JSON.stringify({ enabled: newValue, restaurantId: restaurant.id }),
       });
       if (!res.ok) throw new Error("Erreur de mise à jour");
       setEnabled(newValue);

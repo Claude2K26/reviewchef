@@ -74,7 +74,7 @@ export async function POST(
       .from("reviews")
       .update({
         status: "failed",
-        error_message: String(err),
+        error_message: err instanceof Error ? err.message : "Erreur de publication Google",
       })
       .eq("id", reviewId);
 

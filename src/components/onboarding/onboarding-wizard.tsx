@@ -78,7 +78,7 @@ export function OnboardingWizard({ restaurant, startStep = 1 }: OnboardingWizard
       const res = await fetch("/api/automation/toggle", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ enabled: true }),
+        body: JSON.stringify({ enabled: true, restaurantId: restaurant.id }),
       });
       if (!res.ok) throw new Error("Erreur d'activation");
       router.push("/dashboard");
