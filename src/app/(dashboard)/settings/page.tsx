@@ -7,6 +7,7 @@ import { RestaurantForm } from "@/components/settings/restaurant-form";
 import { GoogleConnectionCard } from "@/components/settings/google-connection-card";
 import { AutomationToggle } from "@/components/settings/automation-toggle";
 import { BillingPortalButton } from "@/components/settings/billing-portal-button";
+import { QrCodeCard } from "@/components/settings/qr-code-card";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import type { Restaurant } from "@/types";
 
@@ -87,6 +88,19 @@ export default async function SettingsPage() {
             <p className="text-xs text-gray-400 mt-1">
               Compte créé le {new Date(user.created_at).toLocaleDateString("fr-FR")}
             </p>
+          </CardContent>
+        </Card>
+
+        {/* QR Code */}
+        <Card className="border-0 shadow-sm">
+          <CardHeader>
+            <CardTitle className="text-base">QR Code avis Google</CardTitle>
+            <CardDescription>
+              Affichez cette carte en salle pour que vos clients laissent facilement un avis Google
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <QrCodeCard restaurant={restaurant as Restaurant} />
           </CardContent>
         </Card>
 

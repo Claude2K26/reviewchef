@@ -34,6 +34,10 @@ export interface GoogleLocation {
   title: string;
   storeCode?: string;
   websiteUri?: string;
+  metadata?: {
+    placeId?: string;
+    mapsUri?: string;
+  };
 }
 
 export interface ListReviewsResponse {

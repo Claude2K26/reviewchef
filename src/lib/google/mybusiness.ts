@@ -52,7 +52,7 @@ export async function listLocations(
   const accountName = accountId.startsWith("accounts/") ? accountId : `accounts/${accountId}`;
   const data = await makeRequest<{ locations?: GoogleLocation[] }>(
     oauth2Client,
-    `${GMB_BASE}/${accountName}/locations?readMask=name,title`
+    `${GMB_BASE}/${accountName}/locations?readMask=name,title,metadata`
   );
   return data.locations ?? [];
 }

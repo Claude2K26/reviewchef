@@ -34,6 +34,7 @@ export async function GET(request: Request) {
     let accountId: string | null = null;
     let locationId: string | null = null;
     let locationName: string | null = null;
+    let placeId: string | null = null;
 
     try {
       const accounts = await listAccounts(oauth2Client);
@@ -44,6 +45,7 @@ export async function GET(request: Request) {
         if (locations.length > 0) {
           locationId = locations[0].name.split("/").pop() ?? null;
           locationName = locations[0].title;
+          placeId = locations[0].metadata?.placeId ?? null;
         }
       }
     } catch (gmErr) {
@@ -59,6 +61,7 @@ export async function GET(request: Request) {
       google_account_id: accountId,
       google_location_id: locationId,
       google_location_name: locationName,
+      google_place_id: placeId,
     };
 
     const updateQuery = restaurantId
