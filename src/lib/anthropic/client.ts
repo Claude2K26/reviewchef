@@ -104,3 +104,48 @@ Write a personalized response to this review.`;
 
   throw new Error("Failed to generate response after retries");
 }
+
+export interface ReviewTheme {
+  label: string;
+  sentiment: "positive" | "negative";
+  count: number;
+}
+
+export async function analyzeReviewThemes(
+  reviews: { reviewText: string; rating: number }[]
+): Promise<ReviewTheme[]> {
+  if (reviews.length === 0) return [];
+
+  const reviewsText = reviews
+    .map((r, i) => `[${i + 1}] (${r.rating}★) "${r.reviewText}"`)
+    .join("\n");
+
+  const message = await anthropic.messages.create({
+    model: "claude-haiku-4-5-20251001",
+    max_tokens: 400,
+    messages: [
+      {
+        role: "user",
+        content: `Analyse ces avis clients et identifie les thèmes récurrents (max 6 thèmes).
+Pour chaque thème indique : le label court (2-3 mots max), le sentiment (positive ou negative), et le nombre d'avis qui le mentionnent.
+
+Réponds UNIQUEMENT avec un JSON valide, sans texte autour, au format :
+[{"label":"Accueil","sentiment":"positive","count":4},{"label":"Temps d'attente","sentiment":"negative","count":3}]
+
+Avis à analyser :
+${reviewsText}`,
+      },
+    ],
+  });
+
+  const content = message.content[0];
+  if (content.type !== "text") return [];
+
+  try {
+    const parsed = JSON.parse(content.text.trim());
+    if (Array.isArray(parsed)) return parsed as ReviewTheme[];
+    return [];
+  } catch {
+    return [];
+  }
+}

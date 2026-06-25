@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import { createServiceClient } from "@/lib/supabase/server";
 import { getValidOAuthClient } from "@/lib/google/token-manager";
 import { listReviews, replyToReview, starRatingToNumber } from "@/lib/google/mybusiness";
-import { generateReviewResponse } from "@/lib/anthropic/client";
+import { generateReviewResponse, analyzeReviewThemes } from "@/lib/anthropic/client";
 import { sendNewReviewEmail, sendNegativeReviewAlertEmail } from "@/lib/email";
 
 // Security: only allow Vercel cron or authorized callers
@@ -201,6 +201,31 @@ export async function POST(request: Request) {
               { onConflict: "restaurant_id,google_review_id" }
             );
           }
+        }
+
+        // Analyse sémantique des 30 derniers avis
+        try {
+          const { data: recentReviews } = await supabase
+            .from("reviews")
+            .select("review_text, rating")
+            .eq("restaurant_id", restaurant.id)
+            .not("review_text", "is", null)
+            .order("review_date", { ascending: false })
+            .limit(30);
+
+          if (recentReviews && recentReviews.length >= 3) {
+            const themes = await analyzeReviewThemes(
+              recentReviews.map((r) => ({ reviewText: r.review_text, rating: r.rating }))
+            );
+            if (themes.length > 0) {
+              await supabase
+                .from("restaurants")
+                .update({ review_themes: JSON.stringify(themes) })
+                .eq("id", restaurant.id);
+            }
+          }
+        } catch (themesErr) {
+          console.error(`[CronJob] Failed to analyze themes for ${restaurant.id}:`, themesErr);
         }
 
         // Update last_checked timestamp

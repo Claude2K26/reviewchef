@@ -8,8 +8,10 @@ import { RatingChart } from "@/components/dashboard/rating-chart";
 import { RecentReviewsList } from "@/components/dashboard/recent-reviews-list";
 import { AutomationStatusBanner } from "@/components/dashboard/automation-status-banner";
 import { TrialBanner } from "@/components/dashboard/trial-banner";
+import { TopicsCard } from "@/components/dashboard/topics-card";
 import { calculateResponseRate } from "@/lib/utils";
 import type { DashboardStats, Restaurant, Review } from "@/types";
+import type { ReviewTheme } from "@/lib/anthropic/client";
 
 export const metadata: Metadata = {
   title: "Tableau de bord",
@@ -79,6 +81,15 @@ export default async function DashboardPage() {
     ratingDistribution,
   };
 
+  // Parse themes
+  const themes: ReviewTheme[] = (() => {
+    try {
+      const raw = (restaurant as any)?.review_themes;
+      if (!raw) return [];
+      return JSON.parse(raw);
+    } catch { return []; }
+  })();
+
   // Fetch recent reviews
   const { data: recentReviews } = restaurant ? await supabase
     .from("reviews")
@@ -104,6 +115,9 @@ export default async function DashboardPage() {
 
         {/* Stats */}
         <StatsCards stats={stats} />
+
+        {/* Thèmes récurrents */}
+        {themes.length > 0 && <TopicsCard themes={themes} />}
 
         {/* Bottom grid */}
         <div className="grid grid-cols-1 xl:grid-cols-2 gap-6">
