@@ -19,12 +19,12 @@ export const metadata: Metadata = {
     template: "%s | ReviewChef",
   },
   description:
-    "ReviewChef répond automatiquement aux avis Google de votre restaurant grâce à l'IA Claude. Surveillance 24h/24, réponses personnalisées, pilote automatique. 49€/mois.",
+    "ReviewChef répond automatiquement aux avis Google de votre commerce grâce à l'IA Claude. Surveillance 24h/24, réponses personnalisées, pilote automatique. 49€/mois.",
   keywords: [
-    "réponse avis Google restaurant",
+    "réponse avis Google commerce",
     "automatiser réponses avis Google",
     "gestion avis Google My Business",
-    "logiciel réputation restaurant",
+    "logiciel réputation commerce",
     "IA réponse avis client",
     "ReviewChef",
   ],

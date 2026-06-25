@@ -39,7 +39,7 @@ const features = [
   {
     icon: Shield,
     title: "À votre image",
-    desc: "Configurez le ton, le type de cuisine et votre signature. L'IA parle exactement comme vous.",
+    desc: "Configurez le ton, le type d'activité et votre signature. L'IA parle exactement comme vous.",
   },
   {
     icon: Clock,
@@ -81,8 +81,8 @@ const faqs = [
     a: "Oui, sans engagement. Vous résiliez depuis votre espace client et l'accès reste actif jusqu'à la fin de la période mensuelle en cours. Aucun frais de résiliation.",
   },
   {
-    q: "ReviewChef fonctionne-t-il pour tous les types de restaurants ?",
-    a: "Oui : restaurants, brasseries, pizzerias, restaurants asiatiques, gastronomiques, fast-food… Vous configurez le type de cuisine et l'IA adapte son registre. Un seul établissement Google My Business par abonnement.",
+    q: "ReviewChef fonctionne-t-il pour tous les types de commerces ?",
+    a: "Oui : restaurants, coiffeurs, garages, hôtels, pharmacies, boutiques, cabinets médicaux… Vous configurez le type d'activité et l'IA adapte son registre. Un seul établissement Google My Business par abonnement.",
   },
 ];
 
@@ -96,7 +96,7 @@ export default function HomePage() {
     name: "ReviewChef",
     applicationCategory: "BusinessApplication",
     description:
-      "Logiciel SaaS de réponse automatique aux avis Google My Business pour les restaurants, propulsé par l'IA.",
+      "Logiciel SaaS de réponse automatique aux avis Google My Business pour tous les commerces, propulsé par l'IA.",
     url: "https://reviewchef.vercel.app",
     offers: {
       "@type": "Offer",
@@ -402,7 +402,7 @@ export default function HomePage() {
               <AnimatedText text="Témoignages" mode="wave" delay={0} />
             </span>
             <h2 className="text-4xl sm:text-5xl font-black text-gray-900 mb-4">
-              <AnimatedText text="Ce que disent les restaurateurs" mode="words" delay={0.04} />
+              <AnimatedText text="Ce que disent les commerçants" mode="words" delay={0.04} />
             </h2>
             <p className="text-gray-500">Des résultats concrets dès les premières semaines.</p>
           </AnimatedSection>
@@ -472,7 +472,7 @@ export default function HomePage() {
               </span>
             </h2>
             <p className="text-gray-500 mb-10 text-lg">
-              Rejoignez des restaurateurs qui gagnent du temps chaque jour.
+              Rejoignez des commerçants qui gagnent du temps chaque jour.
             </p>
             <Button
               asChild
