@@ -17,8 +17,9 @@ export async function POST(request: Request) {
   }
 
   const body = await request.json().catch(() => ({}));
-  const plan = body.plan ?? "pro";
-  const priceId = PRICE_IDS[plan] ?? PRICE_IDS.pro;
+  const VALID_PLANS = ["starter", "pro", "business"] as const;
+  const plan = VALID_PLANS.includes(body.plan) ? body.plan : "pro";
+  const priceId = PRICE_IDS[plan];
 
   const { data: profile } = await supabase
     .from("profiles")

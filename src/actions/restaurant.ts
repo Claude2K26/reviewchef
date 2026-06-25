@@ -93,7 +93,7 @@ export async function setActiveRestaurant(restaurantId: string): Promise<void> {
   cookieStore.set("active_restaurant_id", restaurantId, {
     path: "/",
     maxAge: 60 * 60 * 24 * 365,
-    httpOnly: false,
+    httpOnly: true,
     sameSite: "lax",
   });
 }

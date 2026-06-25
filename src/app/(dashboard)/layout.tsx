@@ -23,7 +23,7 @@ export default async function DashboardLayout({
     .eq("id", user.id)
     .single();
 
-  const ADMIN_IDS = ["9e285161-6980-4f8e-8321-efc48954ce92"];
+  const ADMIN_IDS = (process.env.ADMIN_USER_IDS ?? "").split(",").filter(Boolean);
   const isAdmin = ADMIN_IDS.includes(user.id);
 
   if (!isAdmin && (!profile || !["active", "trialing"].includes(profile.subscription_status ?? ""))) {

@@ -9,10 +9,11 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "Non authentifié" }, { status: 401 });
   }
 
-  const { enabled, restaurantId } = await request.json();
+  const body = await request.json().catch(() => ({}));
+  const { enabled, restaurantId } = body;
 
-  if (!restaurantId) {
-    return NextResponse.json({ error: "restaurantId requis" }, { status: 400 });
+  if (!restaurantId || typeof restaurantId !== "string" || !/^[0-9a-f-]{36}$/.test(restaurantId)) {
+    return NextResponse.json({ error: "restaurantId invalide" }, { status: 400 });
   }
 
   // Verify ownership
@@ -41,7 +42,8 @@ export async function POST(request: Request) {
     .eq("user_id", user.id);
 
   if (error) {
-    return NextResponse.json({ error: error.message }, { status: 500 });
+    console.error("[toggle] update error:", error.message);
+    return NextResponse.json({ error: "Erreur serveur" }, { status: 500 });
   }
 
   return NextResponse.json({ success: true, enabled });
