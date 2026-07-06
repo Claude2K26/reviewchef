@@ -19,7 +19,7 @@ export default async function DashboardLayout({
   const adminClient = createServiceClient();
   const { data: profile } = await adminClient
     .from("profiles")
-    .select("subscription_status, plan")
+    .select("subscription_status")
     .eq("id", user.id)
     .single();
 
