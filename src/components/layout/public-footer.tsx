@@ -16,6 +16,9 @@ export function PublicFooter() {
         </div>
         <p className="text-gray-400">© {new Date().getFullYear()} ReviewChef — Tous droits réservés</p>
         <nav className="flex items-center gap-6">
+          <Link href="/pricing" className="text-gray-300 hover:text-gray-500 transition-colors text-xs">
+            Abonnements
+          </Link>
           <Link href="/mentions-legales" className="text-gray-400 hover:text-gray-700 transition-colors">
             Mentions légales
           </Link>

@@ -2,14 +2,16 @@ import Link from "next/link";
 import type { Metadata } from "next";
 import {
   Star,
-  Zap,
-  Shield,
-  Clock,
-  TrendingUp,
   CheckCircle,
   ArrowRight,
-  MessageSquare,
   ChevronDown,
+  Phone,
+  BarChart3,
+  QrCode,
+  MessageSquare,
+  Clock,
+  TrendingUp,
+  Shield,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { PublicNav } from "@/components/layout/public-nav";
@@ -17,99 +19,85 @@ import { PublicFooter } from "@/components/layout/public-footer";
 import { AnimatedSection } from "@/components/home/animated-section";
 import { AnimatedText } from "@/components/home/animated-text";
 import { AnimatedCounter } from "@/components/home/animated-counter";
-import { HeroDemo } from "@/components/home/hero-demo";
 import { FloatingParticles } from "@/components/home/floating-particles";
 import { ReviewsMarquee } from "@/components/home/reviews-marquee";
 
 export const metadata: Metadata = {
+  title: "ReviewChef — Votre note Google au-dessus de 4,5 en 90 jours",
+  description:
+    "Service de gestion complète des avis Google pour commerces locaux. Nous répondons à 100% de vos avis sous 24h et collectons des avis positifs. Note Google garantie au-dessus de 4,5 en 90 jours.",
   alternates: { canonical: "/" },
 };
 
-const features = [
+const CALENDLY_URL = process.env.NEXT_PUBLIC_CALENDLY_URL ?? "#";
+const DARK_BTN = "#111111";
+const DARK_BTN_SHADOW = "0 4px 20px rgba(0,0,0,0.15)";
+
+const steps = [
   {
-    icon: Zap,
-    title: "100% Automatique",
-    desc: "Dès qu'un avis arrive, l'IA le détecte et publie une réponse adaptée. Zéro intervention humaine.",
+    num: "01",
+    title: "Un appel de découverte",
+    desc: "On analyse vos avis actuels, on identifie les axes d'amélioration et on vous explique la méthode. 20 minutes, gratuit.",
   },
   {
-    icon: Star,
-    title: "Personnalisé par note",
-    desc: "5 étoiles → réponse enthousiaste. 1 étoile → réponse empathique et professionnelle.",
+    num: "02",
+    title: "On prend tout en main",
+    desc: "Réponse à 100% de vos avis sous 24h, collecte d'avis positifs via QR code. Vous ne touchez à rien.",
   },
   {
-    icon: Shield,
-    title: "À votre image",
-    desc: "Configurez le ton, le type d'activité et votre signature. L'IA parle exactement comme vous.",
-  },
-  {
-    icon: Clock,
-    title: "Disponible 24h/24",
-    desc: "ReviewChef surveille vos avis en permanence, même la nuit et le week-end.",
-  },
-  {
-    icon: TrendingUp,
-    title: "Tableau de bord complet",
-    desc: "Visualisez tous vos avis, réponses et statistiques en un seul endroit.",
-  },
-  {
-    icon: MessageSquare,
-    title: "API Google officielle",
-    desc: "Connexion sécurisée via OAuth 2.0 à l'API Google My Business.",
+    num: "03",
+    title: "Votre note progresse",
+    desc: "Rapport mensuel avec l'évolution de votre note, les nouveaux avis et les statistiques de collecte.",
   },
 ];
 
+const included = [
+  { icon: MessageSquare, label: "Réponse à 100% de vos avis sous 24h" },
+  { icon: QrCode, label: "Collecte d'avis positifs (QR code personnalisé)" },
+  { icon: BarChart3, label: "Rapport mensuel avec évolution de votre note" },
+  { icon: TrendingUp, label: "Suivi de votre note Google en continu" },
+  { icon: Clock, label: "Surveillance 24h/24, 7j/7" },
+  { icon: Shield, label: "Stratégie adaptée à votre type de commerce" },
+];
 
 const faqs = [
   {
-    q: "Comment ReviewChef répond-il à mes avis Google ?",
-    a: "ReviewChef se connecte à votre compte Google My Business via OAuth 2.0 sécurisé. Chaque jour, il récupère vos nouveaux avis, les analyse avec l'IA Claude d'Anthropic, génère une réponse adaptée au ton que vous avez configuré, puis la publie automatiquement.",
+    q: "Que se passe-t-il si ma note n'atteint pas 4,5 en 90 jours ?",
+    a: "On continue jusqu'à l'objectif sans frais supplémentaires. La promesse 4,5 en 90 jours, c'est un engagement — pas une estimation.",
   },
   {
-    q: "Combien de temps pour que le service soit actif ?",
-    a: "Moins de 10 minutes. Vous créez votre compte, connectez votre fiche Google My Business, configurez votre ton et votre signature, puis activez le pilote automatique. ReviewChef prend le relais immédiatement.",
+    q: "Dois-je toucher à quoi que ce soit ?",
+    a: "Non. Vous nous donnez accès à votre fiche Google My Business lors de l'appel, et on s'occupe de tout le reste. Zéro intervention de votre part.",
   },
   {
-    q: "Comment ReviewChef gère-t-il les mauvais avis (1-2 étoiles) ?",
-    a: "L'IA génère des réponses empathiques et professionnelles pour les avis négatifs : elle reconnaît l'expérience décevante, propose de résoudre le problème et invite le client à revenir. Le ton reste toujours constructif et adapté à votre image.",
+    q: "Comment se passe la collecte d'avis positifs ?",
+    a: "On crée un QR code personnalisé à afficher dans votre commerce. Quand un client satisfait le scanne, il arrive directement sur votre fiche Google pour laisser un avis.",
   },
   {
-    q: "Mes données Google sont-elles sécurisées ?",
-    a: "Oui. ReviewChef utilise uniquement l'API officielle Google My Business. Les tokens OAuth sont chiffrés et stockés de manière sécurisée. Vous pouvez révoquer l'accès à tout moment depuis votre compte Google.",
+    q: "Vous répondez vraiment à 100% des avis, même les mauvais ?",
+    a: "Oui. Surtout les mauvais. Une réponse professionnelle à un avis négatif rassure les futurs clients et montre que vous prenez en compte les retours. C'est l'un des leviers les plus puissants pour améliorer votre note.",
   },
   {
-    q: "Puis-je annuler à tout moment ?",
-    a: "Oui, sans engagement. Vous résiliez depuis votre espace client et l'accès reste actif jusqu'à la fin de la période mensuelle en cours. Aucun frais de résiliation.",
+    q: "Pour quels types de commerces est-ce adapté ?",
+    a: "Restaurants, coiffeurs, garages, hôtels, pharmacies, boutiques, cabinets médicaux, instituts de beauté… Tout commerce avec une fiche Google My Business.",
   },
   {
-    q: "ReviewChef fonctionne-t-il pour tous les types de commerces ?",
-    a: "Oui : restaurants, coiffeurs, garages, hôtels, pharmacies, boutiques, cabinets médicaux… Vous configurez le type d'activité et l'IA adapte son registre. Un seul établissement Google My Business par abonnement.",
+    q: "Comment se passe l'appel de découverte ?",
+    a: "C'est un appel de 20 à 30 minutes, sans engagement. On analyse ensemble votre situation actuelle (note, volume d'avis) et on vous explique ce qu'on peut faire concrètement pour vous.",
   },
 ];
-
-const DARK_BTN = "#111111";
-const DARK_BTN_SHADOW = "0 4px 20px rgba(0,0,0,0.15)";
 
 export default function HomePage() {
   const jsonLd = {
     "@context": "https://schema.org",
-    "@type": "SoftwareApplication",
-    name: "ReviewChef",
-    applicationCategory: "BusinessApplication",
+    "@type": "Service",
+    name: "ReviewChef — Gestion des avis Google",
+    serviceType: "Gestion de réputation en ligne",
     description:
-      "Logiciel SaaS de réponse automatique aux avis Google My Business pour tous les commerces, propulsé par l'IA.",
+      "Service de gestion complète des avis Google pour commerces locaux. Réponse à 100% des avis sous 24h, collecte d'avis positifs, rapport mensuel. Note Google garantie au-dessus de 4,5 en 90 jours.",
     url: "https://reviewchef.vercel.app",
-    offers: {
-      "@type": "Offer",
-      price: "49",
-      priceCurrency: "EUR",
-      priceSpecification: {
-        "@type": "UnitPriceSpecification",
-        price: "49",
-        priceCurrency: "EUR",
-        unitText: "MONTH",
-      },
-    },
-    operatingSystem: "Web",
+    provider: { "@type": "Organization", name: "ReviewChef" },
+    areaServed: "France",
     inLanguage: "fr",
   };
 
@@ -123,10 +111,9 @@ export default function HomePage() {
       <PublicNav />
 
       {/* ── Hero ── */}
-      <section className="relative min-h-[95vh] flex items-center hero-grid overflow-hidden">
-        <FloatingParticles count={25} />
+      <section className="relative min-h-[92vh] flex items-center hero-grid overflow-hidden">
+        <FloatingParticles count={20} />
 
-        {/* Subtle light blobs */}
         <div className="absolute inset-0 overflow-hidden pointer-events-none">
           <div
             className="absolute -top-48 -left-48 w-[900px] h-[900px] rounded-full opacity-20 animate-aurora"
@@ -134,158 +121,107 @@ export default function HomePage() {
           />
         </div>
 
-        <div className="relative max-w-6xl mx-auto px-6 py-24 lg:py-32 w-full">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
-
-            {/* Left — text */}
-            <div className="text-center lg:text-left">
-              {/* Badge — scale breath */}
-              <div
-                className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-sm font-medium mb-8 animate-scale-breath"
-                style={{
-                  border: "1px solid rgba(0,0,0,0.12)",
-                  background: "rgba(0,0,0,0.04)",
-                  color: "#555",
-                }}
-              >
-                <span className="w-1.5 h-1.5 rounded-full bg-gray-800 animate-pulse inline-block" />
-                Propulsé par Claude (Anthropic)
-              </div>
-
-              {/* H1 — mots qui slide up un à un */}
-              <h1 className="text-5xl sm:text-6xl lg:text-7xl font-black leading-[0.9] tracking-tight mb-7">
-                <AnimatedText text="Vos avis Google" mode="words" delay={0.1} />
-                <br />
-                {/* gradient shimmer + float */}
-                <span className="text-gray-900 animate-float-slow">
-                  répondus auto.
-                </span>
-              </h1>
-
-              {/* Subtitle — fade in */}
-              <p
-                className="text-lg text-gray-500 mb-10 max-w-lg mx-auto lg:mx-0 animate-fade-in"
-                style={{ animationDelay: "0.5s" }}
-              >
-                ReviewChef surveille vos avis 24h/24 et publie des réponses personnalisées par IA.
-                Zéro effort, 100% efficace.
-              </p>
-
-              {/* CTAs */}
-              <div
-                className="flex flex-col sm:flex-row items-center lg:items-start justify-center lg:justify-start gap-4 animate-fade-in"
-                style={{ animationDelay: "0.65s" }}
-              >
-                <Button
-                  asChild
-                  size="lg"
-                  className="w-full sm:w-auto h-12 px-8 text-base text-white font-semibold rounded-xl transition-all duration-300 hover:scale-105 hover:opacity-80"
-                  style={{ background: DARK_BTN, boxShadow: DARK_BTN_SHADOW }}
-                >
-                  <Link href="/pricing">
-                    Essayer gratuitement 7 jours
-                    <ArrowRight className="w-4 h-4 ml-1" />
-                  </Link>
-                </Button>
-                <Button
-                  asChild
-                  variant="outline"
-                  size="lg"
-                  className="w-full sm:w-auto h-12 text-base bg-transparent border-gray-200 text-gray-500 hover:bg-gray-50 hover:text-gray-900 hover:border-gray-300 rounded-xl transition-all"
-                >
-                  <Link href="/login">J&apos;ai déjà un compte</Link>
-                </Button>
-              </div>
-
-              <p
-                className="text-xs text-gray-400 mt-5 animate-fade-in text-center lg:text-left"
-                style={{ animationDelay: "0.8s" }}
-              >
-                Sans engagement · Annulable à tout moment · Paiement sécurisé Stripe
-              </p>
-            </div>
-
-            {/* Right — démo produit animée */}
-            <div
-              className="hidden lg:flex items-center justify-center animate-fade-in"
-              style={{ animationDelay: "0.6s" }}
-            >
-              <HeroDemo />
-            </div>
+        <div className="relative max-w-4xl mx-auto px-6 py-24 lg:py-32 w-full text-center">
+          <div
+            className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-sm font-medium mb-8 animate-scale-breath"
+            style={{
+              border: "1px solid rgba(0,0,0,0.12)",
+              background: "rgba(0,0,0,0.04)",
+              color: "#555",
+            }}
+          >
+            <span className="w-1.5 h-1.5 rounded-full bg-gray-800 animate-pulse inline-block" />
+            Service de gestion des avis Google · Résultat garanti
           </div>
+
+          <h1 className="text-5xl sm:text-6xl lg:text-7xl font-black leading-tight tracking-tight mb-5">
+            <AnimatedText text="Votre note Google" mode="words" delay={0.05} />
+            <br />
+            <span className="text-gray-900 animate-float-slow">
+              au-dessus de 4,5
+            </span>
+            <br />
+            <span className="text-gray-400 text-4xl sm:text-5xl lg:text-6xl font-black">
+              en 90 jours.
+            </span>
+          </h1>
+
+          <p
+            className="text-xl text-gray-900 font-semibold mb-3 animate-fade-in"
+            style={{ animationDelay: "0.4s" }}
+          >
+            On s&apos;occupe de tout.
+          </p>
+
+          <p
+            className="text-lg text-gray-500 mb-10 max-w-2xl mx-auto animate-fade-in"
+            style={{ animationDelay: "0.55s" }}
+          >
+            Nous répondons à 100&nbsp;% de vos avis sous 24h, collectons des avis positifs
+            et vous envoyons un rapport mensuel. Vous n&apos;avez rien à faire.
+          </p>
+
+          <div
+            className="flex flex-col sm:flex-row items-center justify-center gap-4 animate-fade-in"
+            style={{ animationDelay: "0.7s" }}
+          >
+            <Button
+              asChild
+              size="lg"
+              className="w-full sm:w-auto h-12 px-8 text-base text-white font-semibold rounded-xl transition-all duration-300 hover:scale-105 hover:opacity-80"
+              style={{ background: DARK_BTN, boxShadow: DARK_BTN_SHADOW }}
+            >
+              <Link href={CALENDLY_URL}>
+                <Phone className="w-4 h-4 mr-2" />
+                Réserver un appel gratuit
+                <ArrowRight className="w-4 h-4 ml-2" />
+              </Link>
+            </Button>
+          </div>
+
+          <p
+            className="text-xs text-gray-400 mt-5 animate-fade-in"
+            style={{ animationDelay: "0.85s" }}
+          >
+            Appel de 20 min · Sans engagement · Résultat garanti
+          </p>
         </div>
 
-        {/* Scroll indicator — float */}
         <div className="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 text-gray-300 animate-float">
           <span className="text-xs tracking-widest uppercase">Découvrir</span>
           <ChevronDown className="w-4 h-4" />
         </div>
       </section>
 
-      {/* ── Tech strip ── */}
-      <div className="border-y border-gray-100 py-4 bg-gray-50">
-        <div className="max-w-5xl mx-auto px-6">
-          <div className="flex flex-wrap items-center justify-center gap-x-10 gap-y-3 text-sm text-gray-400">
-            {["Claude Anthropic", "Google My Business API", "Stripe", "OAuth 2.0", "Supabase"].map((tech, i) => (
-              <span
-                key={tech}
-                className="flex items-center gap-2 animate-fade-in"
-                style={{ animationDelay: `${i * 0.08}s` }}
-              >
-                <span className="w-1 h-1 rounded-full bg-gray-400 inline-block" />
-                {tech}
-              </span>
-            ))}
-          </div>
-        </div>
-      </div>
-
-      {/* ── Stats — chiffres qui comptent ── */}
-      <section className="py-24 px-6">
+      {/* ── Chiffres clés ── */}
+      <section className="py-24 px-6 bg-gray-50">
         <div className="max-w-4xl mx-auto grid grid-cols-1 sm:grid-cols-3 gap-12">
-
-          {/* 100% — counter animé */}
           <AnimatedSection delay={0}>
             <div className="text-center">
-              <div
-                className="text-6xl font-black mb-3"
-                style={{
-                  color: "#111",
-                }}
-              >
-                <AnimatedCounter to={100} suffix="%" duration={1600} />
+              <div className="flex items-end justify-center gap-1 mb-3">
+                <span className="text-6xl font-black text-gray-900">4,5</span>
+                <Star className="w-8 h-8 text-yellow-400 mb-2 fill-yellow-400" />
               </div>
-              <p className="text-gray-400 text-sm">Taux de réponse garanti</p>
+              <p className="text-gray-600 text-sm font-medium">Note Google garantie</p>
+              <p className="text-gray-400 text-xs mt-1">en 90 jours ou on continue</p>
             </div>
           </AnimatedSection>
 
-          {/* < 10 min — tremble léger puis stable */}
           <AnimatedSection delay={120}>
             <div className="text-center">
-              <div
-                className="text-6xl font-black mb-3 inline-block"
-                style={{
-                  color: "#111",
-                }}
-              >
-                &lt; 10 min
+              <div className="text-6xl font-black text-gray-900 mb-3">
+                <AnimatedCounter to={100} suffix="%" duration={1400} />
               </div>
-              <p className="text-gray-400 text-sm">Pour démarrer</p>
+              <p className="text-gray-600 text-sm font-medium">Des avis répondus</p>
+              <p className="text-gray-400 text-xs mt-1">sous 24h, même les week-ends</p>
             </div>
           </AnimatedSection>
 
-          {/* 24h/24 — bounce in */}
           <AnimatedSection delay={240}>
             <div className="text-center">
-              <div
-                className="text-6xl font-black mb-3 inline-block"
-                style={{
-                  color: "#111",
-                }}
-              >
-                24h/24
-              </div>
-              <p className="text-gray-400 text-sm">Surveillance active</p>
+              <div className="text-6xl font-black text-gray-900 mb-3">1</div>
+              <p className="text-gray-600 text-sm font-medium">Rapport mensuel</p>
+              <p className="text-gray-400 text-xs mt-1">note, avis, collecte, tendances</p>
             </div>
           </AnimatedSection>
         </div>
@@ -295,38 +231,31 @@ export default function HomePage() {
         <div className="h-px bg-gradient-to-r from-transparent via-gray-200 to-transparent" />
       </div>
 
-      {/* ── How it works ── */}
+      {/* ── Comment ça marche ── */}
       <section className="py-24 px-6">
         <div className="max-w-4xl mx-auto">
           <AnimatedSection className="text-center mb-16">
-            {/* Label en vague */}
             <span className="text-xs font-semibold text-gray-400 tracking-widest uppercase mb-4 block">
               <AnimatedText text="Comment ça marche" mode="wave" delay={0} />
             </span>
             <h2 className="text-4xl sm:text-5xl font-black text-gray-900 mb-4">
-              <AnimatedText text="Opérationnel en 10 minutes" mode="words" delay={0.05} />
+              <AnimatedText text="Simple comme un coup de fil" mode="words" delay={0.05} />
             </h2>
             <p className="text-gray-500 max-w-xl mx-auto">
-              Pas de configuration complexe, pas d&apos;intégration technique.
+              Pas d&apos;outil à apprendre, pas de configuration, pas de changement d&apos;habitudes.
             </p>
           </AnimatedSection>
 
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-6 relative">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 relative">
             <div
-              className="hidden md:block absolute top-8 left-[12.5%] right-[12.5%] h-px"
+              className="hidden md:block absolute top-8 left-[16.5%] right-[16.5%] h-px"
               style={{
                 background: "linear-gradient(90deg, transparent, rgba(0,0,0,0.1), rgba(0,0,0,0.1), transparent)",
               }}
             />
-            {[
-              { step: "01", title: "Créez votre compte", desc: "Inscription en 30 secondes avec votre email" },
-              { step: "02", title: "Connectez GMB", desc: "Autorisez l'accès via OAuth 2.0 sécurisé" },
-              { step: "03", title: "Configurez", desc: "Choisissez votre ton et votre signature" },
-              { step: "04", title: "Auto-pilote", desc: "L'IA répond à votre place 24h/24" },
-            ].map((item, i) => (
-              <AnimatedSection key={item.step} delay={i * 130}>
+            {steps.map((step, i) => (
+              <AnimatedSection key={step.num} delay={i * 150}>
                 <div className="text-center">
-                  {/* Numéro qui flotte + glow */}
                   <div
                     className="w-16 h-16 rounded-2xl mx-auto mb-5 flex items-center justify-center animate-float"
                     style={{
@@ -335,14 +264,28 @@ export default function HomePage() {
                       animationDelay: `${i * 0.6}s`,
                     }}
                   >
-                    <span className="text-gray-900 font-black text-xl">{item.step}</span>
+                    <span className="text-gray-900 font-black text-xl">{step.num}</span>
                   </div>
-                  <h3 className="font-semibold text-gray-900 mb-2 hover-wiggle cursor-default">{item.title}</h3>
-                  <p className="text-sm text-gray-500 leading-relaxed">{item.desc}</p>
+                  <h3 className="font-semibold text-gray-900 mb-2">{step.title}</h3>
+                  <p className="text-sm text-gray-500 leading-relaxed">{step.desc}</p>
                 </div>
               </AnimatedSection>
             ))}
           </div>
+
+          <AnimatedSection className="mt-14 text-center">
+            <Button
+              asChild
+              size="lg"
+              className="h-12 px-8 text-base text-white font-semibold rounded-xl transition-all duration-300 hover:scale-105 hover:opacity-80"
+              style={{ background: DARK_BTN, boxShadow: DARK_BTN_SHADOW }}
+            >
+              <Link href={CALENDLY_URL}>
+                <Phone className="w-4 h-4 mr-2" />
+                Démarrer avec un appel gratuit
+              </Link>
+            </Button>
+          </AnimatedSection>
         </div>
       </section>
 
@@ -350,38 +293,34 @@ export default function HomePage() {
         <div className="h-px bg-gradient-to-r from-transparent via-gray-200 to-transparent" />
       </div>
 
-      {/* ── Features ── */}
+      {/* ── Ce qui est inclus ── */}
       <section className="py-24 px-6">
         <div className="max-w-5xl mx-auto">
           <AnimatedSection className="text-center mb-16">
             <span className="text-xs font-semibold text-gray-400 tracking-widest uppercase mb-4 block">
-              <AnimatedText text="Fonctionnalités" mode="wave" delay={0} />
+              <AnimatedText text="Ce qui est inclus" mode="wave" delay={0} />
             </span>
             <h2 className="text-4xl sm:text-5xl font-black text-gray-900 mb-4">
-              <AnimatedText text="Tout ce dont vous avez besoin" mode="words" delay={0.05} />
+              <AnimatedText text="On gère. Vous récoltez." mode="words" delay={0.05} />
             </h2>
             <p className="text-gray-500 max-w-xl mx-auto">
-              Un seul outil pour surveiller, analyser et répondre à vos avis Google.
+              Un service complet, sans outil à apprendre ni temps à y consacrer.
             </p>
           </AnimatedSection>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-            {features.map((f, i) => {
-              const Icon = f.icon;
+            {included.map((item, i) => {
+              const Icon = item.icon;
               return (
-                <AnimatedSection key={f.title} delay={i * 80}>
-                  <div className="glass-card rounded-2xl p-6 h-full group cursor-default hover:scale-[1.02] transition-transform duration-300">
+                <AnimatedSection key={item.label} delay={i * 80}>
+                  <div className="glass-card rounded-2xl p-6 flex items-start gap-4 group hover:scale-[1.02] transition-transform duration-300">
                     <div
-                      className="w-10 h-10 rounded-xl flex items-center justify-center mb-4 transition-all duration-300 group-hover:scale-110 group-hover:rotate-3"
-                      style={{
-                        background: "#f5f5f5",
-                        border: "1px solid rgba(0,0,0,0.08)",
-                      }}
+                      className="w-10 h-10 rounded-xl flex items-center justify-center shrink-0 transition-all duration-300 group-hover:scale-110 group-hover:rotate-3"
+                      style={{ background: "#f5f5f5", border: "1px solid rgba(0,0,0,0.08)" }}
                     >
                       <Icon className="w-5 h-5 text-gray-700" />
                     </div>
-                    <h3 className="font-semibold text-gray-900 mb-2 hover-wiggle inline-block">{f.title}</h3>
-                    <p className="text-sm text-gray-500 leading-relaxed">{f.desc}</p>
+                    <p className="text-sm text-gray-600 leading-relaxed pt-2">{item.label}</p>
                   </div>
                 </AnimatedSection>
               );
@@ -394,7 +333,7 @@ export default function HomePage() {
         <div className="h-px bg-gradient-to-r from-transparent via-gray-200 to-transparent" />
       </div>
 
-      {/* ── Testimonials marquee ── */}
+      {/* ── Témoignages ── */}
       <section className="py-24">
         <div className="max-w-5xl mx-auto px-6">
           <AnimatedSection className="text-center mb-16">
@@ -408,12 +347,15 @@ export default function HomePage() {
           </AnimatedSection>
         </div>
 
-        {/* Dégradés masquants sur les bords */}
         <div className="relative">
-          <div className="absolute left-0 top-0 bottom-0 w-40 z-10 pointer-events-none"
-            style={{ background: "linear-gradient(to right, white 60%, transparent)" }} />
-          <div className="absolute right-0 top-0 bottom-0 w-40 z-10 pointer-events-none"
-            style={{ background: "linear-gradient(to left, white 60%, transparent)" }} />
+          <div
+            className="absolute left-0 top-0 bottom-0 w-40 z-10 pointer-events-none"
+            style={{ background: "linear-gradient(to right, white 60%, transparent)" }}
+          />
+          <div
+            className="absolute right-0 top-0 bottom-0 w-40 z-10 pointer-events-none"
+            style={{ background: "linear-gradient(to left, white 60%, transparent)" }}
+          />
           <ReviewsMarquee />
         </div>
       </section>
@@ -432,7 +374,6 @@ export default function HomePage() {
             <h2 className="text-4xl sm:text-5xl font-black text-gray-900 mb-4">
               <AnimatedText text="Tout ce qu'il faut savoir" mode="words" delay={0.05} />
             </h2>
-            <p className="text-gray-500">Avant de vous lancer.</p>
           </AnimatedSection>
 
           <div className="space-y-3">
@@ -464,15 +405,13 @@ export default function HomePage() {
             <span className="text-xs font-semibold text-gray-400 tracking-widest uppercase mb-6 block">
               <AnimatedText text="Prêt à démarrer ?" mode="wave" delay={0} />
             </span>
-            <h2 className="text-5xl sm:text-6xl font-black text-gray-900 mb-6 leading-tight">
-              <AnimatedText text="Automatisez vos réponses" mode="words" delay={0.05} />
+            <h2 className="text-5xl sm:text-6xl font-black text-gray-900 mb-4 leading-tight">
+              <AnimatedText text="Votre note à 4,5" mode="words" delay={0.05} />
               <br />
-              <span className="text-gray-900">
-                dès aujourd&apos;hui
-              </span>
+              <span className="text-gray-400 text-4xl sm:text-5xl">en 90 jours.</span>
             </h2>
             <p className="text-gray-500 mb-10 text-lg">
-              Rejoignez des commerçants qui gagnent du temps chaque jour.
+              Un appel de 20 minutes pour tout comprendre. Gratuit, sans engagement.
             </p>
             <Button
               asChild
@@ -480,13 +419,14 @@ export default function HomePage() {
               className="h-14 px-10 text-base text-white font-semibold rounded-xl transition-all duration-300 hover:scale-105 hover:opacity-80"
               style={{ background: DARK_BTN, boxShadow: DARK_BTN_SHADOW }}
             >
-              <Link href="/pricing">
-                Essayer gratuitement 7 jours
+              <Link href={CALENDLY_URL}>
+                <Phone className="w-5 h-5 mr-2" />
+                Réserver un appel gratuit
                 <ArrowRight className="w-5 h-5 ml-2" />
               </Link>
             </Button>
             <div className="flex flex-wrap items-center justify-center gap-x-8 gap-y-2 mt-8 text-gray-400 text-sm">
-              {["Sans engagement", "Annulable à tout moment", "Support inclus"].map((item) => (
+              {["Résultat garanti", "Sans engagement", "Zéro outil à apprendre"].map((item) => (
                 <span key={item} className="flex items-center gap-2">
                   <CheckCircle className="w-3.5 h-3.5 text-gray-400" /> {item}
                 </span>
