@@ -60,7 +60,10 @@ export default async function DashboardLayout({
   const activeRestaurantId = activeRestaurant?.id ?? "";
 
   const plan = (profile as any)?.plan ?? "pro";
-  const maxRestaurants = plan === "business" ? 3 : 1;
+  const maxRestaurants =
+    plan === "premium" ? 999 :
+    plan === "agency" ? 10 :
+    1; // starter et pro : 1 établissement
   const canAddMore = restaurants.length < maxRestaurants;
 
   return (

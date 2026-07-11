@@ -22,9 +22,10 @@ export async function POST(req: NextRequest) {
   const supabase = createServiceClient();
 
   const PRICE_TO_PLAN: Record<string, string> = {
-    [process.env.STRIPE_PRICE_ID!]: "pro",
-    "price_1Titaj23rQeinj31lwGLjbZa": "starter",
-    "price_1TitnM23rQeinj31z6tQQOpU": "business",
+    [process.env.STRIPE_PRICE_STARTER!]: "starter",
+    [process.env.STRIPE_PRICE_PRO!]: "pro",
+    [process.env.STRIPE_PRICE_AGENCY!]: "agency",
+    [process.env.STRIPE_PRICE_PREMIUM!]: "premium",
   };
 
   function planFromSubscription(subscription: any): string {
@@ -50,6 +51,16 @@ export async function POST(req: NextRequest) {
           ? new Date(subscription.current_period_end * 1000).toISOString()
           : null,
       });
+    }
+  }
+
+  if (event.type === "invoice.paid") {
+    const invoice = event.data.object as Stripe.Invoice;
+    const subscriptionId = (invoice as any).subscription as string;
+    if (subscriptionId) {
+      await supabase.from("profiles").update({
+        subscription_status: "active",
+      }).eq("stripe_subscription_id", subscriptionId);
     }
   }
 

@@ -57,7 +57,10 @@ export async function createRestaurant(
     .single();
 
   const plan = (profile as any)?.plan ?? "pro";
-  const maxRestaurants = plan === "business" ? 3 : 1;
+  const maxRestaurants =
+    plan === "premium" ? 999 :
+    plan === "agency" ? 10 :
+    1;
 
   const { count } = await supabase
     .from("restaurants")
@@ -65,10 +68,10 @@ export async function createRestaurant(
     .eq("user_id", user.id);
 
   if ((count ?? 0) >= maxRestaurants) {
-    if (plan === "business") {
-      return { success: false, error: "Limite de 3 établissements atteinte pour le plan Business" };
+    if (plan === "agency") {
+      return { success: false, error: "Limite de 10 établissements atteinte pour le plan Agency" };
     }
-    return { success: false, error: "Passez au plan Business pour gérer plusieurs établissements (89€/mois)" };
+    return { success: false, error: "Passez au plan Agency pour gérer plusieurs établissements (89€/mois)" };
   }
 
   const { data: restaurant, error } = await supabase

@@ -3,9 +3,10 @@ import { stripe } from "@/lib/stripe";
 import { createClient } from "@/lib/supabase/server";
 
 const PRICE_IDS: Record<string, string> = {
-  starter: "price_1Titaj23rQeinj31lwGLjbZa",
-  pro: process.env.STRIPE_PRICE_ID!,
-  business: "price_1TitnM23rQeinj31z6tQQOpU",
+  starter: process.env.STRIPE_PRICE_STARTER!,
+  pro: process.env.STRIPE_PRICE_PRO!,
+  agency: process.env.STRIPE_PRICE_AGENCY!,
+  premium: process.env.STRIPE_PRICE_PREMIUM!,
 };
 
 export async function POST(request: Request) {
@@ -17,7 +18,7 @@ export async function POST(request: Request) {
   }
 
   const body = await request.json().catch(() => ({}));
-  const VALID_PLANS = ["starter", "pro", "business"] as const;
+  const VALID_PLANS = ["starter", "pro", "agency", "premium"] as const;
   const plan = VALID_PLANS.includes(body.plan) ? body.plan : "pro";
   const priceId = PRICE_IDS[plan];
 
