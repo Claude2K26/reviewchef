@@ -51,8 +51,38 @@ export async function POST(request: Request) {
 
     console.log(`[CronJob] Processing ${restaurants.length} restaurants`);
 
+    // Récupère les plans de tous les utilisateurs concernés
+    const userIds = [...new Set((restaurants as RestaurantRow[]).map((r) => r.user_id))];
+    const { data: profiles } = await supabase
+      .from("profiles")
+      .select("id, plan")
+      .in("id", userIds);
+    const planMap = new Map((profiles ?? []).map((p: any) => [p.id, p.plan as string]));
+
     for (const restaurant of restaurants as RestaurantRow[]) {
       const result = { restaurantId: restaurant.id, processed: 0, errors: 0 };
+
+      // Limite Starter : 50 réponses automatiques par mois
+      const userPlan = planMap.get(restaurant.user_id) ?? "pro";
+      if (userPlan === "starter") {
+        const startOfMonth = new Date();
+        startOfMonth.setDate(1);
+        startOfMonth.setHours(0, 0, 0, 0);
+        const userRestaurantIds = (restaurants as RestaurantRow[])
+          .filter((r) => r.user_id === restaurant.user_id)
+          .map((r) => r.id);
+        const { count } = await supabase
+          .from("reviews")
+          .select("id", { count: "exact", head: true })
+          .in("restaurant_id", userRestaurantIds)
+          .eq("status", "responded")
+          .gte("responded_at", startOfMonth.toISOString());
+        if ((count ?? 0) >= 50) {
+          console.log(`[CronJob] Limite Starter atteinte pour user ${restaurant.user_id}`);
+          results.push(result);
+          continue;
+        }
+      }
 
       try {
         const oauth2Client = await getValidOAuthClient(restaurant.id);

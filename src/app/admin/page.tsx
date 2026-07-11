@@ -1,5 +1,6 @@
 import { createClient, createServiceClient } from "@/lib/supabase/server";
 import { redirect } from "next/navigation";
+import Link from "next/link";
 import { Users, CreditCard, TrendingUp, Activity } from "lucide-react";
 
 const ADMIN_EMAIL = process.env.ADMIN_EMAIL ?? "";
@@ -109,15 +110,23 @@ export default async function AdminPage() {
                         })}
                       </p>
                     </div>
-                    <span
-                      className={`text-xs px-2.5 py-1 rounded-full font-medium ${
-                        isActive
-                          ? "bg-green-100 text-green-700"
-                          : "bg-gray-100 text-gray-500"
-                      }`}
-                    >
-                      {isActive ? "Abonné" : "Gratuit"}
-                    </span>
+                    <div className="flex items-center gap-3">
+                      <Link
+                        href={`/rapport/${u.id}`}
+                        className="text-xs text-gray-400 hover:text-gray-700 underline underline-offset-2 transition-colors"
+                      >
+                        Rapport
+                      </Link>
+                      <span
+                        className={`text-xs px-2.5 py-1 rounded-full font-medium ${
+                          isActive
+                            ? "bg-green-100 text-green-700"
+                            : "bg-gray-100 text-gray-500"
+                        }`}
+                      >
+                        {isActive ? "Abonné" : "Gratuit"}
+                      </span>
+                    </div>
                   </div>
                 );
               })

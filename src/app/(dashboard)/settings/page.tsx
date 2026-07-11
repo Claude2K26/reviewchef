@@ -8,6 +8,7 @@ import { GoogleConnectionCard } from "@/components/settings/google-connection-ca
 import { AutomationToggle } from "@/components/settings/automation-toggle";
 import { BillingPortalButton } from "@/components/settings/billing-portal-button";
 import { QrCodeCard } from "@/components/settings/qr-code-card";
+import { CollectPagesCard } from "@/components/settings/collect-pages-card";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import type { Restaurant } from "@/types";
 
@@ -101,6 +102,19 @@ export default async function SettingsPage() {
           </CardHeader>
           <CardContent>
             <QrCodeCard restaurant={restaurant as Restaurant} />
+          </CardContent>
+        </Card>
+
+        {/* Collecte d'avis avec tracking */}
+        <Card className="border-0 shadow-sm">
+          <CardHeader>
+            <CardTitle className="text-base">Pages de collecte d'avis</CardTitle>
+            <CardDescription>
+              Créez des pages avec QR code pour collecter des avis positifs — scans et clics trackés automatiquement
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <CollectPagesCard />
           </CardContent>
         </Card>
 
