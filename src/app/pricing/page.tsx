@@ -43,11 +43,11 @@ const plans = [
     highlighted: true,
   },
   {
-    id: "business",
-    name: "Business",
+    id: "agency",
+    name: "Agency",
     price: 89,
     features: [
-      "Jusqu'à 3 établissements Google My Business",
+      "Jusqu'à 10 établissements Google My Business",
       "Vue centralisée tous établissements",
       "Réponses IA illimitées",
       "Tout le plan Pro inclus",
@@ -58,7 +58,7 @@ const plans = [
       "Onboarding personnalisé (appel 30 min)",
       "Support dédié — réponse sous 2h",
     ],
-    cta: "Commencer avec Business",
+    cta: "Commencer avec Agency",
     highlighted: false,
   },
 ];
@@ -72,21 +72,33 @@ const guarantees = [
 export default function PricingPage() {
   const router = useRouter();
   const [loading, setLoading] = useState<string | null>(null);
+  const [error, setError] = useState<{ plan: string; message: string } | null>(null);
 
   async function handleSubscribe(plan: string) {
     setLoading(plan);
+    setError(null);
     try {
       const res = await fetch("/api/stripe/checkout", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ plan }),
       });
-      const data = await res.json();
+      const data = await res.json().catch(() => ({}));
       if (data.url) {
         window.location.href = data.url;
       } else if (res.status === 401) {
         router.push(`/login?redirect=/pricing`);
+      } else {
+        setError({
+          plan,
+          message: data.error || "Une erreur est survenue. Réessayez ou contactez le support.",
+        });
       }
+    } catch {
+      setError({
+        plan,
+        message: "Impossible de contacter le serveur. Vérifiez votre connexion et réessayez.",
+      });
     } finally {
       setLoading(null);
     }
@@ -173,9 +185,13 @@ export default function PricingPage() {
                   {loading === plan.id ? "Chargement..." : plan.cta}
                   {loading !== plan.id && <ArrowRight className="w-4 h-4 ml-1" />}
                 </Button>
-                <p className="text-xs text-gray-400 text-center mt-3">
-                  7 jours gratuits · Annulable avant sans frais
-                </p>
+                {error?.plan === plan.id ? (
+                  <p className="text-xs text-red-500 text-center mt-3">{error.message}</p>
+                ) : (
+                  <p className="text-xs text-gray-400 text-center mt-3">
+                    7 jours gratuits · Annulable avant sans frais
+                  </p>
+                )}
               </div>
             );
           })}
