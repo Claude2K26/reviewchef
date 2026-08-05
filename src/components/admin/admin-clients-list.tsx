@@ -1,7 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import { ChevronDown, ChevronUp, QrCode as QrCodeIcon, BarChart3 } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { ChevronDown, ChevronUp, QrCode as QrCodeIcon, BarChart3, Trash2 } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { AdminCollectPageForm } from "./admin-collect-page-form";
 import { AdminQrCode } from "./admin-qr-code";
@@ -24,12 +25,29 @@ export interface AdminClient {
 }
 
 export function AdminClientsList({ clients }: { clients: AdminClient[] }) {
+  const router = useRouter();
   const [search, setSearch] = useState("");
   const [expanded, setExpanded] = useState<string | null>(null);
+  const [deletingId, setDeletingId] = useState<string | null>(null);
 
   const filtered = clients.filter((c) =>
     c.email.toLowerCase().includes(search.toLowerCase())
   );
+
+  async function handleDelete(pageId: string, nom: string) {
+    if (!confirm(`Supprimer la page de collecte "${nom}" ?`)) return;
+    setDeletingId(pageId);
+    try {
+      await fetch("/api/collect", {
+        method: "DELETE",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ id: pageId }),
+      });
+      router.refresh();
+    } finally {
+      setDeletingId(null);
+    }
+  }
 
   return (
     <div className="space-y-3">
@@ -113,6 +131,15 @@ export function AdminClientsList({ clients }: { clients: AdminClient[] }) {
                             )}
                           </div>
                         </div>
+                        <button
+                          type="button"
+                          onClick={() => handleDelete(page.id, page.nom_etablissement)}
+                          disabled={deletingId === page.id}
+                          className="text-gray-300 hover:text-red-400 transition-colors shrink-0 disabled:opacity-50"
+                          aria-label="Supprimer cette page de collecte"
+                        >
+                          <Trash2 className="w-4 h-4" />
+                        </button>
                       </div>
                     ))}
                   </div>

@@ -72,6 +72,7 @@ export async function POST(request: Request) {
 }
 
 // DELETE : suppression d'une page de collecte
+// Un admin peut supprimer la page de n'importe quel client.
 export async function DELETE(request: Request) {
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
@@ -79,6 +80,12 @@ export async function DELETE(request: Request) {
 
   const { id } = await request.json().catch(() => ({}));
   if (!id) return NextResponse.json({ error: "id manquant" }, { status: 400 });
+
+  if (isAdmin(user)) {
+    const { error } = await createServiceClient().from("collect_pages").delete().eq("id", id);
+    if (error) return NextResponse.json({ error: error.message }, { status: 500 });
+    return NextResponse.json({ ok: true });
+  }
 
   const { error } = await supabase
     .from("collect_pages")
