@@ -5,14 +5,13 @@ import { format } from "date-fns";
 import { fr } from "date-fns/locale";
 import { createClient, createServiceClient } from "@/lib/supabase/server";
 import { formatRating } from "@/lib/utils";
+import { isAdmin } from "@/lib/admin";
 import { PrintButton } from "./print-button";
 
 interface Props {
   params: Promise<{ clientId: string }>;
   searchParams: Promise<{ mois?: string }>;
 }
-
-const ADMIN_EMAIL = process.env.ADMIN_EMAIL ?? "";
 
 export default async function RapportPage({ params, searchParams }: Props) {
   const { clientId } = await params;
@@ -23,8 +22,7 @@ export default async function RapportPage({ params, searchParams }: Props) {
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) redirect("/login");
 
-  const isAdmin = user.email === ADMIN_EMAIL;
-  if (!isAdmin && user.id !== clientId) redirect("/dashboard");
+  if (!isAdmin(user) && user.id !== clientId) redirect("/dashboard");
 
   const service = createServiceClient();
 

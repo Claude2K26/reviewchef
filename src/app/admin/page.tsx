@@ -1,9 +1,8 @@
 import { createClient, createServiceClient } from "@/lib/supabase/server";
 import { redirect } from "next/navigation";
 import Link from "next/link";
-import { Users, CreditCard, TrendingUp, Activity } from "lucide-react";
-
-const ADMIN_EMAIL = process.env.ADMIN_EMAIL ?? "";
+import { Users, CreditCard, TrendingUp, Activity, QrCode } from "lucide-react";
+import { isAdmin } from "@/lib/admin";
 
 export default async function AdminPage() {
   // Auth check
@@ -11,7 +10,7 @@ export default async function AdminPage() {
   const { data: { user } } = await supabase.auth.getUser();
 
   if (!user) redirect("/login");
-  if (user.email !== ADMIN_EMAIL) redirect("/dashboard");
+  if (!isAdmin(user)) redirect("/dashboard");
 
   // Fetch all data with service client
   const service = createServiceClient();
@@ -68,9 +67,18 @@ export default async function AdminPage() {
     <div className="min-h-screen bg-gray-50 p-8">
       <div className="max-w-5xl mx-auto">
         {/* Header */}
-        <div className="mb-8">
-          <h1 className="text-3xl font-bold text-gray-900">Admin ReviewChef</h1>
-          <p className="text-gray-500 mt-1">Vue d'ensemble en temps réel</p>
+        <div className="mb-8 flex items-start justify-between gap-4">
+          <div>
+            <h1 className="text-3xl font-bold text-gray-900">Admin ReviewChef</h1>
+            <p className="text-gray-500 mt-1">Vue d'ensemble en temps réel</p>
+          </div>
+          <Link
+            href="/admin/collecte"
+            className="flex items-center gap-2 text-sm font-medium text-gray-600 hover:text-gray-900 bg-white border border-gray-200 rounded-lg px-4 py-2 shrink-0 transition-colors"
+          >
+            <QrCode className="w-4 h-4" />
+            Pages de collecte
+          </Link>
         </div>
 
         {/* Stats */}

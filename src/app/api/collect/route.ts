@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
-import { createClient } from "@/lib/supabase/server";
+import { createClient, createServiceClient } from "@/lib/supabase/server";
+import { isAdmin } from "@/lib/admin";
 
 function toSlug(name: string): string {
   return name
@@ -28,25 +29,41 @@ export async function GET() {
 }
 
 // POST : création d'une nouvelle page de collecte
+// Un admin peut créer une page pour un autre client en passant client_id dans le body.
 export async function POST(request: Request) {
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) return NextResponse.json({ error: "Non authentifié" }, { status: 401 });
 
   const body = await request.json().catch(() => ({}));
-  const { nom_etablissement, google_review_url } = body;
+  const { nom_etablissement, google_review_url, client_id: requestedClientId } = body;
 
   if (!nom_etablissement?.trim() || !google_review_url?.trim()) {
     return NextResponse.json({ error: "Champs obligatoires manquants" }, { status: 400 });
+  }
+
+  const requestingAdmin = isAdmin(user);
+  const targetClientId = requestingAdmin && requestedClientId ? requestedClientId : user.id;
+  const isOnBehalfOfAnother = targetClientId !== user.id;
+
+  // Un admin agissant pour un autre client doit contourner la RLS (auth.uid() = client_id)
+  const service = isOnBehalfOfAnother ? createServiceClient() : null;
+  const db = service ?? supabase;
+
+  if (service) {
+    const { data: targetUser, error: lookupError } = await service.auth.admin.getUserById(targetClientId);
+    if (lookupError || !targetUser?.user) {
+      return NextResponse.json({ error: "Client introuvable" }, { status: 400 });
+    }
   }
 
   const base = toSlug(nom_etablissement);
   const suffix = Math.random().toString(36).substring(2, 6);
   const slug = `${base}-${suffix}`;
 
-  const { data, error } = await supabase
+  const { data, error } = await db
     .from("collect_pages")
-    .insert({ client_id: user.id, slug, nom_etablissement, google_review_url })
+    .insert({ client_id: targetClientId, slug, nom_etablissement, google_review_url })
     .select()
     .single();
 
