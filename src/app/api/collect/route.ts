@@ -12,6 +12,10 @@ function toSlug(name: string): string {
     .substring(0, 40);
 }
 
+function buildGoogleReviewUrl(placeId: string): string {
+  return `https://search.google.com/local/writereview?placeid=${placeId}`;
+}
+
 // GET : liste des pages de collecte de l'utilisateur
 export async function GET() {
   const supabase = await createClient();
@@ -29,6 +33,8 @@ export async function GET() {
 }
 
 // POST : création d'une nouvelle page de collecte
+// L'URL Google est toujours dérivée du google_place_id de l'établissement connecté,
+// jamais saisie à la main, pour garantir qu'elle mène au formulaire "écrire un avis" de Google.
 // Un admin peut créer une page pour un autre client en passant client_id dans le body.
 export async function POST(request: Request) {
   const supabase = await createClient();
@@ -36,17 +42,17 @@ export async function POST(request: Request) {
   if (!user) return NextResponse.json({ error: "Non authentifié" }, { status: 401 });
 
   const body = await request.json().catch(() => ({}));
-  const { nom_etablissement, google_review_url, client_id: requestedClientId } = body;
+  const { restaurant_id, client_id: requestedClientId } = body;
 
-  if (!nom_etablissement?.trim() || !google_review_url?.trim()) {
-    return NextResponse.json({ error: "Champs obligatoires manquants" }, { status: 400 });
+  if (!restaurant_id) {
+    return NextResponse.json({ error: "Établissement manquant" }, { status: 400 });
   }
 
   const requestingAdmin = isAdmin(user);
   const targetClientId = requestingAdmin && requestedClientId ? requestedClientId : user.id;
   const isOnBehalfOfAnother = targetClientId !== user.id;
 
-  // Un admin agissant pour un autre client doit contourner la RLS (auth.uid() = client_id)
+  // Un admin agissant pour un autre client doit contourner la RLS (auth.uid() = client_id / user_id)
   const service = isOnBehalfOfAnother ? createServiceClient() : null;
   const db = service ?? supabase;
 
@@ -57,13 +63,39 @@ export async function POST(request: Request) {
     }
   }
 
-  const base = toSlug(nom_etablissement);
+  const { data: restaurant, error: restaurantError } = await db
+    .from("restaurants")
+    .select("id, name, google_place_id, user_id")
+    .eq("id", restaurant_id)
+    .single();
+
+  // Pour un admin (client RLS bypass), on vérifie explicitement que l'établissement
+  // appartient bien au client ciblé — pour un client normal, la RLS s'en charge déjà.
+  if (restaurantError || !restaurant || restaurant.user_id !== targetClientId) {
+    return NextResponse.json({ error: "Établissement introuvable" }, { status: 400 });
+  }
+
+  if (!restaurant.google_place_id) {
+    return NextResponse.json(
+      { error: "Connectez d'abord Google My Business pour cet établissement avant de créer une page de collecte." },
+      { status: 400 }
+    );
+  }
+
+  const base = toSlug(restaurant.name);
   const suffix = Math.random().toString(36).substring(2, 6);
   const slug = `${base}-${suffix}`;
+  const google_review_url = buildGoogleReviewUrl(restaurant.google_place_id);
 
   const { data, error } = await db
     .from("collect_pages")
-    .insert({ client_id: targetClientId, slug, nom_etablissement, google_review_url })
+    .insert({
+      client_id: targetClientId,
+      restaurant_id: restaurant.id,
+      slug,
+      nom_etablissement: restaurant.name,
+      google_review_url,
+    })
     .select()
     .single();
 

@@ -16,11 +16,18 @@ export interface AdminCollectPage {
   nb_clics: number;
 }
 
+export interface AdminRestaurant {
+  id: string;
+  name: string;
+  google_place_id: string | null;
+}
+
 export interface AdminClient {
   id: string;
   email: string;
   plan: string | null;
   subscription_status: string | null;
+  restaurants: AdminRestaurant[];
   pages: AdminCollectPage[];
 }
 
@@ -145,7 +152,7 @@ export function AdminClientsList({ clients }: { clients: AdminClient[] }) {
                   </div>
                 )}
 
-                <AdminCollectPageForm clientId={client.id} />
+                <AdminCollectPageForm clientId={client.id} restaurants={client.restaurants} />
               </div>
             )}
           </div>

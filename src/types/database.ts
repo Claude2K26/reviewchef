@@ -11,6 +11,7 @@ export interface Restaurant {
   google_account_id: string | null;
   google_location_id: string | null;
   google_location_name: string | null;
+  google_place_id: string | null;
   google_access_token: string | null;
   google_refresh_token: string | null;
   token_expiry: string | null;

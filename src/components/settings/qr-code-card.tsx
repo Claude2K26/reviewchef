@@ -14,7 +14,7 @@ export function QrCodeCard({ restaurant }: QrCodeCardProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [qrDataUrl, setQrDataUrl] = useState<string | null>(null);
 
-  const placeId = (restaurant as any).google_place_id as string | null;
+  const placeId = restaurant.google_place_id;
   const reviewUrl = placeId
     ? `https://search.google.com/local/writereview?placeid=${placeId}`
     : null;

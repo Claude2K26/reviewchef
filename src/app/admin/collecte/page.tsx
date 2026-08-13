@@ -14,15 +14,17 @@ export default async function AdminCollectePage() {
 
   const service = createServiceClient();
 
-  const [{ data: authUsers }, { data: profiles }, { data: collectPages }] = await Promise.all([
+  const [{ data: authUsers }, { data: profiles }, { data: collectPages }, { data: allRestaurants }] = await Promise.all([
     service.auth.admin.listUsers(),
     service.from("profiles").select("id, plan, subscription_status"),
     service.from("collect_pages").select("*").order("created_at", { ascending: false }),
+    service.from("restaurants").select("id, user_id, name, google_place_id"),
   ]);
 
   const allUsers = authUsers?.users ?? [];
   const allProfiles = profiles ?? [];
   const allPages = collectPages ?? [];
+  const allRests = allRestaurants ?? [];
 
   const clients: AdminClient[] = allUsers
     .map((u) => {
@@ -33,6 +35,9 @@ export default async function AdminCollectePage() {
         plan: profile?.plan ?? null,
         subscription_status: profile?.subscription_status ?? null,
         created_at: u.created_at,
+        restaurants: allRests
+          .filter((r) => r.user_id === u.id)
+          .map((r) => ({ id: r.id, name: r.name, google_place_id: r.google_place_id })),
         pages: allPages
           .filter((p) => p.client_id === u.id)
           .map((p) => ({

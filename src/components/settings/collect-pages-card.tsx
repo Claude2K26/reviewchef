@@ -4,8 +4,8 @@ import { useState, useEffect } from "react";
 import QRCode from "qrcode";
 import { Plus, Download, QrCode, Trash2, ExternalLink, BarChart3 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
 interface CollectPage {
   id: string;
@@ -17,12 +17,18 @@ interface CollectPage {
   created_at: string;
 }
 
+interface RestaurantOption {
+  id: string;
+  name: string;
+  google_place_id: string | null;
+}
+
 export function CollectPagesCard() {
   const [pages, setPages] = useState<CollectPage[]>([]);
+  const [restaurants, setRestaurants] = useState<RestaurantOption[]>([]);
   const [loading, setLoading] = useState(true);
   const [showForm, setShowForm] = useState(false);
-  const [nom, setNom] = useState("");
-  const [url, setUrl] = useState("");
+  const [restaurantId, setRestaurantId] = useState("");
   const [saving, setSaving] = useState(false);
   const [formError, setFormError] = useState<string | null>(null);
   const [qrUrls, setQrUrls] = useState<Record<string, string>>({});
@@ -31,7 +37,7 @@ export function CollectPagesCard() {
     ? window.location.origin
     : (process.env.NEXT_PUBLIC_APP_URL ?? "");
 
-  useEffect(() => { fetchPages(); }, []);
+  useEffect(() => { fetchPages(); fetchRestaurants(); }, []);
 
   async function fetchPages() {
     setLoading(true);
@@ -43,6 +49,14 @@ export function CollectPagesCard() {
       setLoading(false);
     }
   }
+
+  async function fetchRestaurants() {
+    const res = await fetch("/api/restaurants");
+    const data = await res.json();
+    setRestaurants(Array.isArray(data) ? data : []);
+  }
+
+  const connectedRestaurants = restaurants.filter((r) => r.google_place_id);
 
   // Génère les QR codes pour chaque page
   useEffect(() => {
@@ -61,18 +75,18 @@ export function CollectPagesCard() {
   async function handleCreate(e: React.FormEvent) {
     e.preventDefault();
     setFormError(null);
+    if (!restaurantId) { setFormError("Sélectionnez un établissement"); return; }
     setSaving(true);
     try {
       const res = await fetch("/api/collect", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ nom_etablissement: nom.trim(), google_review_url: url.trim() }),
+        body: JSON.stringify({ restaurant_id: restaurantId }),
       });
       const data = await res.json();
       if (!res.ok) { setFormError(data.error ?? "Erreur lors de la création"); return; }
       setPages((prev) => [data, ...prev]);
-      setNom("");
-      setUrl("");
+      setRestaurantId("");
       setShowForm(false);
     } finally {
       setSaving(false);
@@ -190,49 +204,44 @@ export function CollectPagesCard() {
         <form onSubmit={handleCreate} className="border border-gray-200 rounded-xl p-4 space-y-4 bg-gray-50">
           <p className="text-sm font-medium text-gray-700">Nouvelle page de collecte</p>
 
-          <div className="space-y-1.5">
-            <Label htmlFor="collect-nom" className="text-xs text-gray-500">
-              Nom de l'établissement
-            </Label>
-            <Input
-              id="collect-nom"
-              placeholder="ex : Le Bistrot du Marché"
-              value={nom}
-              onChange={(e) => setNom(e.target.value)}
-              required
-              className="text-sm"
-            />
-          </div>
-
-          <div className="space-y-1.5">
-            <Label htmlFor="collect-url" className="text-xs text-gray-500">
-              Lien vers votre fiche Google (pour laisser un avis)
-            </Label>
-            <Input
-              id="collect-url"
-              placeholder="https://g.page/r/..."
-              value={url}
-              onChange={(e) => setUrl(e.target.value)}
-              required
-              type="url"
-              className="text-sm"
-            />
-            <p className="text-xs text-gray-400">
-              Trouvez ce lien dans Google Maps → votre fiche → "Demander des avis"
+          {connectedRestaurants.length === 0 ? (
+            <p className="text-xs text-gray-500">
+              Aucun établissement connecté à Google My Business. Connectez-en un dans la section
+              « Google My Business » ci-dessus pour pouvoir créer une page de collecte — l'URL
+              d'avis est générée automatiquement depuis votre fiche connectée.
             </p>
-          </div>
+          ) : (
+            <div className="space-y-1.5">
+              <Label htmlFor="collect-restaurant" className="text-xs text-gray-500">
+                Établissement
+              </Label>
+              <Select value={restaurantId} onValueChange={setRestaurantId}>
+                <SelectTrigger id="collect-restaurant" className="text-sm bg-white">
+                  <SelectValue placeholder="Choisir un établissement" />
+                </SelectTrigger>
+                <SelectContent>
+                  {connectedRestaurants.map((r) => (
+                    <SelectItem key={r.id} value={r.id}>{r.name}</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+              <p className="text-xs text-gray-400">
+                L'URL d'avis Google est générée automatiquement depuis votre fiche connectée.
+              </p>
+            </div>
+          )}
 
           {formError && <p className="text-xs text-red-500">{formError}</p>}
 
           <div className="flex gap-2">
-            <Button type="submit" size="sm" disabled={saving}>
+            <Button type="submit" size="sm" disabled={saving || connectedRestaurants.length === 0}>
               {saving ? "Création..." : "Créer la page"}
             </Button>
             <Button
               type="button"
               variant="outline"
               size="sm"
-              onClick={() => { setShowForm(false); setFormError(null); setNom(""); setUrl(""); }}
+              onClick={() => { setShowForm(false); setFormError(null); setRestaurantId(""); }}
             >
               Annuler
             </Button>

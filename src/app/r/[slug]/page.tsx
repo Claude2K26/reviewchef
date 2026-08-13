@@ -13,11 +13,19 @@ export default async function CollectPage({ params }: Props) {
 
   const { data: page } = await supabase
     .from("collect_pages")
-    .select("nom_etablissement, google_review_url")
+    .select("nom_etablissement, google_review_url, restaurant_id, restaurants(google_place_id)")
     .eq("slug", slug)
     .single();
 
   if (!page) notFound();
+
+  // Recalcule l'URL depuis le google_place_id actuel de l'établissement (au cas où le
+  // commerçant a reconnecté Google My Business depuis la création de la page). Repli sur
+  // la valeur stockée pour les anciennes pages non liées à un restaurant.
+  const placeId = (page.restaurants as unknown as { google_place_id: string | null } | null)?.google_place_id;
+  const googleUrl = placeId
+    ? `https://search.google.com/local/writereview?placeid=${placeId}`
+    : page.google_review_url;
 
   // Incrémente le compteur de scans (page vue)
   await supabase.rpc("increment_scan", { page_slug: slug });
@@ -49,7 +57,7 @@ export default async function CollectPage({ params }: Props) {
         </div>
 
         {/* Bouton avec tracking */}
-        <TrackClickButton slug={slug} googleUrl={page.google_review_url} />
+        <TrackClickButton slug={slug} googleUrl={googleUrl} />
 
         <p className="text-xs text-gray-300">Propulsé par ReviewChef</p>
       </div>
