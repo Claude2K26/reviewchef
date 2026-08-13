@@ -17,7 +17,7 @@ interface RestaurantRow {
   id: string;
   user_id: string;
   name: string;
-  cuisine_type: string;
+  business_type: string;
   tone: string;
   signature: string;
   google_account_id: string;
@@ -38,7 +38,7 @@ export async function POST(request: Request) {
     // Fetch all restaurants with automation enabled and Google connected
     const { data: restaurants, error } = await supabase
       .from("restaurants")
-      .select("id, user_id, name, cuisine_type, tone, signature, google_account_id, google_location_id, last_checked")
+      .select("id, user_id, name, business_type, tone, signature, google_account_id, google_location_id, last_checked")
       .eq("automation_enabled", true)
       .not("google_access_token", "is", null)
       .not("google_account_id", "is", null)
@@ -142,8 +142,8 @@ export async function POST(request: Request) {
             // Generate AI response
             const rating = starRatingToNumber(googleReview.starRating);
             const responseText = await generateReviewResponse({
-              restaurantName: restaurant.name || "notre restaurant",
-              cuisineType: restaurant.cuisine_type || "Française",
+              restaurantName: restaurant.name || "notre établissement",
+              businessType: restaurant.business_type || "Restaurant",
               tone: restaurant.tone || "professional",
               signature: restaurant.signature || restaurant.name || "",
               reviewText: googleReview.comment ?? "",

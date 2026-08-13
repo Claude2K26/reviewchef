@@ -6,7 +6,7 @@ const anthropic = new Anthropic({
 
 interface GenerateReviewResponseParams {
   restaurantName: string;
-  cuisineType: string;
+  businessType: string;
   tone: string;
   signature: string;
   reviewText: string;
@@ -20,7 +20,7 @@ function getToneDescription(tone: string): string {
     friendly: "friendly and warm",
     casual: "casual and approachable",
     formal: "formal and polished",
-    warm: "warm and inviting like a family restaurant",
+    warm: "warm and inviting, like a trusted neighborhood business",
   };
   return tones[tone] || "professional and courteous";
 }
@@ -47,7 +47,7 @@ export async function generateReviewResponse(
   params: GenerateReviewResponseParams,
   retries = 3
 ): Promise<string> {
-  const { restaurantName, cuisineType, tone, signature, reviewText, rating, authorName } = params;
+  const { restaurantName, businessType, tone, signature, reviewText, rating, authorName } = params;
 
   const languageInstruction = reviewText.trim().length < 5
     ? "Réponds en français."
@@ -55,7 +55,7 @@ export async function generateReviewResponse(
 
   const systemPrompt = `${languageInstruction}
 
-You are the owner of "${restaurantName}", a ${cuisineType} restaurant.
+You are the owner of "${restaurantName}" (business type: ${businessType}).
 Your communication style is ${getToneDescription(tone)}.
 You respond to Google reviews personally and authentically.
 

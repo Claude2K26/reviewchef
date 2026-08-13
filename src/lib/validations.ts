@@ -17,8 +17,8 @@ export const signupSchema = z
   });
 
 export const restaurantSettingsSchema = z.object({
-  name: z.string().min(1, "Le nom du restaurant est requis").max(100),
-  cuisine_type: z.string().min(1, "Le type de cuisine est requis").max(50),
+  name: z.string().min(1, "Le nom de l'établissement est requis").max(100),
+  business_type: z.string().min(1, "Le type d'activité est requis").max(50),
   tone: z.enum(["professional", "friendly", "casual", "formal", "warm"]),
   signature: z.string().max(100, "La signature ne peut pas dépasser 100 caractères"),
 });

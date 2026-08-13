@@ -20,7 +20,7 @@ export async function POST(
     .select(`
       *,
       restaurants!inner (
-        id, name, cuisine_type, tone, signature, user_id
+        id, name, business_type, tone, signature, user_id
       )
     `)
     .eq("id", reviewId)
@@ -35,8 +35,8 @@ export async function POST(
 
   try {
     const responseText = await generateReviewResponse({
-      restaurantName: restaurant.name || "notre restaurant",
-      cuisineType: restaurant.cuisine_type || "Française",
+      restaurantName: restaurant.name || "notre établissement",
+      businessType: restaurant.business_type || "Restaurant",
       tone: restaurant.tone || "professional",
       signature: restaurant.signature || restaurant.name || "",
       reviewText: review.review_text || "",

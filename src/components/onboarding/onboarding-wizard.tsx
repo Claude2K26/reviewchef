@@ -28,13 +28,6 @@ const TONES = [
   { value: "warm", label: "Chaleureux (familial)" },
 ];
 
-const CUISINE_TYPES = [
-  "Française", "Italienne", "Japonaise", "Chinoise", "Mexicaine",
-  "Indienne", "Libanaise", "Thaïlandaise", "Américaine", "Méditerranéenne",
-  "Gastronomique", "Brasserie", "Bistrot", "Fast-food", "Pizzeria",
-  "Sushi", "Burger", "Végétarienne", "Végane", "Autre",
-];
-
 interface OnboardingWizardProps {
   restaurant: Restaurant;
   startStep?: number;
@@ -57,7 +50,7 @@ export function OnboardingWizard({ restaurant, startStep = 1 }: OnboardingWizard
     resolver: zodResolver(restaurantSettingsSchema),
     defaultValues: {
       name: restaurant.name ?? "",
-      cuisine_type: restaurant.cuisine_type ?? "Française",
+      business_type: restaurant.business_type ?? "Restaurant",
       tone: restaurant.tone ?? "professional",
       signature: restaurant.signature ?? "",
     },
@@ -138,7 +131,7 @@ export function OnboardingWizard({ restaurant, startStep = 1 }: OnboardingWizard
             </div>
 
             <div className="space-y-1.5">
-              <Label htmlFor="name">Nom du restaurant *</Label>
+              <Label htmlFor="name">Nom de l'établissement *</Label>
               <Input
                 id="name"
                 placeholder="Le Petit Bistrot"
@@ -149,21 +142,14 @@ export function OnboardingWizard({ restaurant, startStep = 1 }: OnboardingWizard
             </div>
 
             <div className="space-y-1.5">
-              <Label>Type de cuisine *</Label>
-              <Select
-                defaultValue={restaurant.cuisine_type ?? "Française"}
-                onValueChange={(v) => setValue("cuisine_type", v, { shouldDirty: true })}
-              >
-                <SelectTrigger>
-                  <SelectValue placeholder="Choisir..." />
-                </SelectTrigger>
-                <SelectContent>
-                  {CUISINE_TYPES.map((c) => (
-                    <SelectItem key={c} value={c}>{c}</SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-              {errors.cuisine_type && <p className="text-xs text-red-500">{errors.cuisine_type.message}</p>}
+              <Label htmlFor="business_type">Type d'activité *</Label>
+              <Input
+                id="business_type"
+                placeholder="Restaurant, coiffeur, garage, boulangerie..."
+                {...register("business_type")}
+                className={errors.business_type ? "border-red-400" : ""}
+              />
+              {errors.business_type && <p className="text-xs text-red-500">{errors.business_type.message}</p>}
             </div>
 
             <div className="space-y-1.5">

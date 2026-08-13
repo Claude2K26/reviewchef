@@ -5,7 +5,7 @@ export interface Restaurant {
   id: string;
   user_id: string;
   name: string;
-  cuisine_type: string;
+  business_type: string;
   tone: RestaurantTone;
   signature: string;
   google_account_id: string | null;

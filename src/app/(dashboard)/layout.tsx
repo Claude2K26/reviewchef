@@ -44,7 +44,7 @@ export default async function DashboardLayout({
       .insert({
         user_id: user.id,
         name: "",
-        cuisine_type: "Française",
+        business_type: "Restaurant",
         tone: "professional",
         signature: "",
       })

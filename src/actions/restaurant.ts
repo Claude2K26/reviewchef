@@ -23,7 +23,7 @@ export async function updateRestaurant(
 
   const updateData = {
     name: parsed.data.name,
-    cuisine_type: parsed.data.cuisine_type,
+    business_type: parsed.data.business_type,
     tone: parsed.data.tone,
     signature: parsed.data.signature,
   };
@@ -79,7 +79,7 @@ export async function createRestaurant(
     .insert({
       user_id: user.id,
       name: parsed.data.name,
-      cuisine_type: parsed.data.cuisine_type,
+      business_type: parsed.data.business_type,
       tone: parsed.data.tone,
       signature: parsed.data.signature,
     })
