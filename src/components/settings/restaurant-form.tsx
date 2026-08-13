@@ -111,7 +111,7 @@ export function RestaurantForm({ restaurant }: RestaurantFormProps) {
         />
         {errors.signature && <p className="text-xs text-red-500">{errors.signature.message}</p>}
         <p className="text-xs text-gray-500">
-          Aparaîtra à la fin de chaque réponse. Laissez vide pour utiliser le nom du restaurant.
+          Aparaîtra à la fin de chaque réponse. Laissez vide pour utiliser le nom de l'établissement.
         </p>
       </div>
 
