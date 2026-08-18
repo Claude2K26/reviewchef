@@ -21,18 +21,6 @@ export async function POST(req: NextRequest) {
 
   const supabase = createServiceClient();
 
-  const PRICE_TO_PLAN: Record<string, string> = {
-    [process.env.STRIPE_PRICE_STARTER!]: "starter",
-    [process.env.STRIPE_PRICE_PRO!]: "pro",
-    [process.env.STRIPE_PRICE_AGENCY!]: "agency",
-    [process.env.STRIPE_PRICE_PREMIUM!]: "premium",
-  };
-
-  function planFromSubscription(subscription: any): string {
-    const priceId = subscription.items?.data?.[0]?.price?.id as string | undefined;
-    return (priceId && PRICE_TO_PLAN[priceId]) ?? "pro";
-  }
-
   if (event.type === "checkout.session.completed") {
     const session = event.data.object as Stripe.Checkout.Session;
     const userId = session.metadata?.supabase_user_id;
@@ -46,7 +34,7 @@ export async function POST(req: NextRequest) {
         id: userId,
         stripe_subscription_id: subscriptionId,
         subscription_status: status,
-        plan: session.metadata?.plan ?? "pro",
+        plan: "pro",
         subscription_end_date: subscription.current_period_end
           ? new Date(subscription.current_period_end * 1000).toISOString()
           : null,
@@ -74,7 +62,7 @@ export async function POST(req: NextRequest) {
         : "inactive";
       await supabase.from("profiles").update({
         subscription_status: updatedStatus,
-        plan: planFromSubscription(subscription),
+        plan: "pro",
         subscription_end_date: subscription.current_period_end
           ? new Date(subscription.current_period_end * 1000).toISOString()
           : null,

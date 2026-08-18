@@ -35,7 +35,7 @@ export default function CGVPage() {
           <div>
             <h2 className="text-lg font-semibold text-gray-900 mb-3">2. Prix et facturation</h2>
             <div className="bg-brand-50 border border-brand-100 rounded-xl p-4 text-sm mb-4">
-              <p className="font-semibold text-brand-800">Plan Pro — 49 € TTC / mois</p>
+              <p className="font-semibold text-brand-800">Abonnement ReviewChef — 39 € TTC / mois</p>
               <p className="text-brand-700 mt-1">Accès complet à toutes les fonctionnalités. Sans engagement.</p>
             </div>
             <ul className="list-disc list-inside space-y-1.5 text-sm">

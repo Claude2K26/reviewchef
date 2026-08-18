@@ -19,7 +19,7 @@ export default async function DashboardLayout({
   const adminClient = createServiceClient();
   const { data: profile } = await adminClient
     .from("profiles")
-    .select("subscription_status, plan")
+    .select("subscription_status")
     .eq("id", user.id)
     .single();
 
@@ -59,12 +59,8 @@ export default async function DashboardLayout({
   const activeRestaurant = restaurants.find((r) => r.id === activeId) ?? restaurants[0];
   const activeRestaurantId = activeRestaurant?.id ?? "";
 
-  const plan = (profile as any)?.plan ?? "pro";
-  const maxRestaurants =
-    plan === "premium" ? 999 :
-    plan === "agency" ? 10 :
-    1; // starter et pro : 1 établissement
-  const canAddMore = restaurants.length < maxRestaurants;
+  const MAX_RESTAURANTS = 3;
+  const canAddMore = restaurants.length < MAX_RESTAURANTS;
 
   return (
     <div className="flex min-h-screen bg-gray-50">

@@ -50,28 +50,15 @@ export async function createRestaurant(
   const parsed = restaurantSettingsSchema.safeParse(data);
   if (!parsed.success) return { success: false, error: parsed.error.errors[0].message };
 
-  const { data: profile } = await supabase
-    .from("profiles")
-    .select("plan")
-    .eq("id", user.id)
-    .single();
-
-  const plan = (profile as any)?.plan ?? "pro";
-  const maxRestaurants =
-    plan === "premium" ? 999 :
-    plan === "agency" ? 10 :
-    1;
+  const MAX_RESTAURANTS = 3;
 
   const { count } = await supabase
     .from("restaurants")
     .select("id", { count: "exact", head: true })
     .eq("user_id", user.id);
 
-  if ((count ?? 0) >= maxRestaurants) {
-    if (plan === "agency") {
-      return { success: false, error: "Limite de 10 établissements atteinte pour le plan Agency" };
-    }
-    return { success: false, error: "Passez au plan Agency pour gérer plusieurs établissements (89€/mois)" };
+  if ((count ?? 0) >= MAX_RESTAURANTS) {
+    return { success: false, error: `Limite de ${MAX_RESTAURANTS} établissements atteinte` };
   }
 
   const { data: restaurant, error } = await supabase
