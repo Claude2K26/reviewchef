@@ -19,7 +19,9 @@ export function validateStripePriceEnv(
 ): StripeEnvIssue[] {
   const issues: StripeEnvIssue[] = [];
 
-  const priceVars = Object.keys(env).filter((key) => key.startsWith("STRIPE_PRICE_"));
+  const priceVars = Object.keys(env).filter(
+    (key) => key === "STRIPE_PRICE" || key.startsWith("STRIPE_PRICE_")
+  );
 
   for (const name of priceVars) {
     const raw = env[name];
