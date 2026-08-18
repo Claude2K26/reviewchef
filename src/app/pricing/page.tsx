@@ -10,56 +10,19 @@ import { PublicFooter } from "@/components/layout/public-footer";
 
 const plans = [
   {
-    id: "starter",
-    name: "Starter",
-    price: 19,
+    id: "pro",
+    name: "ReviewChef",
+    price: 39,
     features: [
-      "1 établissement Google My Business",
-      "Maximum 50 réponses IA par mois",
-      "Surveillance des avis 24h/24",
-      "Tableau de bord basique",
-      "Historique des avis 30 jours",
-      'Badge "Propulsé par ReviewChef" en signature',
+      "Réponses IA illimitées",
+      "Jusqu'à 3 établissements Google My Business",
+      "Surveillance des avis 24h/24, 7j/7",
+      "Personnalisation du ton et signature",
+      "Collecte d'avis positifs (QR code personnalisé)",
+      "Rapport mensuel avec évolution de votre note",
       "Support par email",
     ],
-    cta: "Commencer avec Starter",
-    highlighted: false,
-  },
-  {
-    id: "pro",
-    name: "Pro",
-    price: 49,
-    features: [
-      "1 établissement Google My Business",
-      "Réponses IA illimitées",
-      "Personnalisation du ton et signature",
-      "Notification email à chaque avis répondu",
-      "Récap hebdomadaire par email",
-      "Statistiques avancées (note & volume)",
-      "Historique des avis 12 mois",
-      "Support prioritaire",
-    ],
-    cta: "Essayer gratuitement 7 jours",
-    highlighted: true,
-  },
-  {
-    id: "agency",
-    name: "Agency",
-    price: 89,
-    features: [
-      "Jusqu'à 10 établissements Google My Business",
-      "Vue centralisée tous établissements",
-      "Réponses IA illimitées",
-      "Tout le plan Pro inclus",
-      "Réponses en plusieurs langues (FR, EN, ES)",
-      "Export CSV mensuel des avis et réponses",
-      "Widget avis intégrable sur votre site",
-      "Rapport mensuel PDF",
-      "Onboarding personnalisé (appel 30 min)",
-      "Support dédié — réponse sous 2h",
-    ],
-    cta: "Commencer avec Agency",
-    highlighted: false,
+    cta: "Essayer gratuitement 14 jours",
   },
 ];
 
@@ -115,41 +78,22 @@ export default function PricingPage() {
             Tarifs
           </span>
           <h1 className="text-5xl sm:text-6xl font-black text-gray-900 mb-4 leading-tight">
-            Choisissez votre plan
+            Un abonnement simple
           </h1>
           <p className="text-gray-500 text-lg max-w-xl mx-auto">
             Pas de frais cachés. Résiliable à tout moment.
           </p>
         </div>
 
-        {/* Plans grid */}
-        <div className="max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-6 items-start">
+        {/* Plan */}
+        <div className="max-w-sm mx-auto grid grid-cols-1 gap-6 items-start">
           {plans.map((plan) => {
-            const isHighlighted = plan.highlighted;
-
             return (
               <div
                 key={plan.id}
-                className={`rounded-2xl p-8 relative flex flex-col ${
-                  isHighlighted
-                    ? "border-2 border-gray-900"
-                    : "glass-card"
-                }`}
-                style={
-                  isHighlighted
-                    ? { background: "#ffffff", boxShadow: "0 8px 48px rgba(0,0,0,0.12)" }
-                    : {}
-                }
+                className="rounded-2xl p-8 relative flex flex-col border-2 border-gray-900"
+                style={{ background: "#ffffff", boxShadow: "0 8px 48px rgba(0,0,0,0.12)" }}
               >
-                {/* Badge Populaire */}
-                {isHighlighted && (
-                  <div className="absolute -top-4 left-1/2 -translate-x-1/2">
-                    <span className="bg-gray-900 text-white text-xs font-bold px-4 py-1.5 rounded-full tracking-widest uppercase">
-                      Populaire
-                    </span>
-                  </div>
-                )}
-
                 {/* Plan name & price */}
                 <div className="mb-6">
                   <p className="text-xs font-semibold text-gray-400 uppercase tracking-widest mb-3">
@@ -189,7 +133,7 @@ export default function PricingPage() {
                   <p className="text-xs text-red-500 text-center mt-3">{error.message}</p>
                 ) : (
                   <p className="text-xs text-gray-400 text-center mt-3">
-                    7 jours gratuits · Annulable avant sans frais
+                    14 jours gratuits · Annulable avant sans frais
                   </p>
                 )}
               </div>
