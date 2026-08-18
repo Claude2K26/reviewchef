@@ -1,11 +1,9 @@
 import Link from "next/link";
 import type { Metadata } from "next";
 import {
-  Star,
   CheckCircle,
   ArrowRight,
   ChevronDown,
-  Phone,
   BarChart3,
   QrCode,
   MessageSquare,
@@ -23,67 +21,66 @@ import { FloatingParticles } from "@/components/home/floating-particles";
 import { ReviewsMarquee } from "@/components/home/reviews-marquee";
 
 export const metadata: Metadata = {
-  title: "ReviewChef — Votre note Google au-dessus de 4,5 en 90 jours",
+  title: "ReviewChef — Réponses automatiques à vos avis Google",
   description:
-    "Service de gestion complète des avis Google pour commerces locaux. Nous répondons à 100% de vos avis sous 24h et collectons des avis positifs. Note Google garantie au-dessus de 4,5 en 90 jours.",
+    "ReviewChef surveille votre fiche Google My Business et génère des réponses personnalisées par IA à chaque avis, sous 24h. Essai gratuit 14 jours.",
   alternates: { canonical: "/" },
 };
 
-const CALENDLY_URL = process.env.NEXT_PUBLIC_CALENDLY_URL ?? "#";
 const DARK_BTN = "#111111";
 const DARK_BTN_SHADOW = "0 4px 20px rgba(0,0,0,0.15)";
 
 const steps = [
   {
     num: "01",
-    title: "Un appel de découverte",
-    desc: "On analyse vos avis actuels, on identifie les axes d'amélioration et on vous explique la méthode. 20 minutes, gratuit.",
+    title: "Créez votre compte",
+    desc: "Inscrivez-vous et démarrez votre essai gratuit de 14 jours en quelques minutes.",
   },
   {
     num: "02",
-    title: "On prend tout en main",
-    desc: "Réponse à 100% de vos avis sous 24h, collecte d'avis positifs via QR code. Vous ne touchez à rien.",
+    title: "Connectez Google My Business",
+    desc: "Autorisez l'accès à votre fiche en quelques clics. ReviewChef récupère vos avis automatiquement.",
   },
   {
     num: "03",
-    title: "Votre note progresse",
-    desc: "Rapport mensuel avec l'évolution de votre note, les nouveaux avis et les statistiques de collecte.",
+    title: "L'automatisation prend le relais",
+    desc: "Chaque nouvel avis reçoit une réponse IA personnalisée, publiée automatiquement ou après votre validation.",
   },
 ];
 
 const included = [
-  { icon: MessageSquare, label: "Réponse à 100% de vos avis sous 24h" },
+  { icon: MessageSquare, label: "Réponses IA personnalisées à chaque avis" },
   { icon: QrCode, label: "Collecte d'avis positifs (QR code personnalisé)" },
   { icon: BarChart3, label: "Rapport mensuel avec évolution de votre note" },
   { icon: TrendingUp, label: "Suivi de votre note Google en continu" },
   { icon: Clock, label: "Surveillance 24h/24, 7j/7" },
-  { icon: Shield, label: "Stratégie adaptée à votre type de commerce" },
+  { icon: Shield, label: "Validation manuelle ou publication automatique, au choix" },
 ];
 
 const faqs = [
   {
-    q: "Que se passe-t-il si ma note n'atteint pas 4,5 en 90 jours ?",
-    a: "On continue jusqu'à l'objectif sans frais supplémentaires. La promesse 4,5 en 90 jours, c'est un engagement — pas une estimation.",
+    q: "Comment fonctionne l'essai gratuit ?",
+    a: "Vous avez 14 jours pour tester ReviewChef sans engagement. Vous pouvez annuler à tout moment depuis votre espace client.",
   },
   {
-    q: "Dois-je toucher à quoi que ce soit ?",
-    a: "Non. Vous nous donnez accès à votre fiche Google My Business lors de l'appel, et on s'occupe de tout le reste. Zéro intervention de votre part.",
+    q: "Dois-je installer quelque chose ?",
+    a: "Non. ReviewChef fonctionne directement dans votre navigateur. Il suffit de connecter votre compte Google My Business pour démarrer.",
   },
   {
     q: "Comment se passe la collecte d'avis positifs ?",
-    a: "On crée un QR code personnalisé à afficher dans votre commerce. Quand un client satisfait le scanne, il arrive directement sur votre fiche Google pour laisser un avis.",
+    a: "Vous générez un QR code personnalisé depuis votre tableau de bord et l'affichez dans votre commerce. Quand un client le scanne, il arrive directement sur votre fiche Google pour laisser un avis.",
   },
   {
-    q: "Vous répondez vraiment à 100% des avis, même les mauvais ?",
-    a: "Oui. Surtout les mauvais. Une réponse professionnelle à un avis négatif rassure les futurs clients et montre que vous prenez en compte les retours. C'est l'un des leviers les plus puissants pour améliorer votre note.",
+    q: "L'IA répond vraiment à tous les avis, même les négatifs ?",
+    a: "Oui. Vous choisissez le ton de vos réponses, et l'IA rédige une réponse adaptée à chaque avis, y compris les avis négatifs, avec empathie et professionnalisme.",
+  },
+  {
+    q: "Les réponses sont-elles publiées automatiquement ?",
+    a: "À vous de choisir : activez l'automatisation pour une publication immédiate, ou relisez et validez chaque réponse avant publication.",
   },
   {
     q: "Pour quels types de commerces est-ce adapté ?",
     a: "Restaurants, coiffeurs, garages, hôtels, pharmacies, boutiques, cabinets médicaux, instituts de beauté… Tout commerce avec une fiche Google My Business.",
-  },
-  {
-    q: "Comment se passe l'appel de découverte ?",
-    a: "C'est un appel de 20 à 30 minutes, sans engagement. On analyse ensemble votre situation actuelle (note, volume d'avis) et on vous explique ce qu'on peut faire concrètement pour vous.",
   },
 ];
 
@@ -94,7 +91,7 @@ export default function HomePage() {
     name: "ReviewChef — Gestion des avis Google",
     serviceType: "Gestion de réputation en ligne",
     description:
-      "Service de gestion complète des avis Google pour commerces locaux. Réponse à 100% des avis sous 24h, collecte d'avis positifs, rapport mensuel. Note Google garantie au-dessus de 4,5 en 90 jours.",
+      "Outil self-service de gestion des avis Google pour commerces locaux. Génération de réponses personnalisées par IA, surveillance continue, collecte d'avis via QR code.",
     url: "https://reviewchef.vercel.app",
     provider: { "@type": "Organization", name: "ReviewChef" },
     areaServed: "France",
@@ -131,18 +128,18 @@ export default function HomePage() {
             }}
           >
             <span className="w-1.5 h-1.5 rounded-full bg-gray-800 animate-pulse inline-block" />
-            Service de gestion des avis Google · Résultat garanti
+            Réponse automatique aux avis Google · propulsé par l&apos;IA
           </div>
 
           <h1 className="text-5xl sm:text-6xl lg:text-7xl font-black leading-tight tracking-tight mb-5">
-            <AnimatedText text="Votre note Google" mode="words" delay={0.05} />
+            <AnimatedText text="Vos avis Google," mode="words" delay={0.05} />
             <br />
             <span className="text-gray-900 animate-float-slow">
-              au-dessus de 4,5
+              gérés par l&apos;IA
             </span>
             <br />
             <span className="text-gray-400 text-4xl sm:text-5xl lg:text-6xl font-black">
-              en 90 jours.
+              24h/24, 7j/7.
             </span>
           </h1>
 
@@ -150,15 +147,15 @@ export default function HomePage() {
             className="text-xl text-gray-900 font-semibold mb-3 animate-fade-in"
             style={{ animationDelay: "0.4s" }}
           >
-            On s&apos;occupe de tout.
+            Vous gardez le contrôle. L&apos;IA fait le travail.
           </p>
 
           <p
             className="text-lg text-gray-500 mb-10 max-w-2xl mx-auto animate-fade-in"
             style={{ animationDelay: "0.55s" }}
           >
-            Nous répondons à 100&nbsp;% de vos avis sous 24h, collectons des avis positifs
-            et vous envoyons un rapport mensuel. Vous n&apos;avez rien à faire.
+            ReviewChef surveille votre fiche Google My Business, génère une réponse personnalisée
+            à chaque avis et la publie — automatiquement ou après votre validation.
           </p>
 
           <div
@@ -171,9 +168,8 @@ export default function HomePage() {
               className="w-full sm:w-auto h-12 px-8 text-base text-white font-semibold rounded-xl transition-all duration-300 hover:scale-105 hover:opacity-80"
               style={{ background: DARK_BTN, boxShadow: DARK_BTN_SHADOW }}
             >
-              <Link href={CALENDLY_URL}>
-                <Phone className="w-4 h-4 mr-2" />
-                Réserver un appel gratuit
+              <Link href="/signup">
+                Essayer gratuitement 14 jours
                 <ArrowRight className="w-4 h-4 ml-2" />
               </Link>
             </Button>
@@ -183,7 +179,7 @@ export default function HomePage() {
             className="text-xs text-gray-400 mt-5 animate-fade-in"
             style={{ animationDelay: "0.85s" }}
           >
-            Appel de 20 min · Sans engagement · Résultat garanti
+            Essai 14 jours · Sans engagement · Annulable à tout moment
           </p>
         </div>
 
@@ -198,30 +194,27 @@ export default function HomePage() {
         <div className="max-w-4xl mx-auto grid grid-cols-1 sm:grid-cols-3 gap-12">
           <AnimatedSection delay={0}>
             <div className="text-center">
-              <div className="flex items-end justify-center gap-1 mb-3">
-                <span className="text-6xl font-black text-gray-900">4,5</span>
-                <Star className="w-8 h-8 text-yellow-400 mb-2 fill-yellow-400" />
+              <div className="text-6xl font-black text-gray-900 mb-3">
+                <AnimatedCounter to={100} suffix="%" duration={1400} />
               </div>
-              <p className="text-gray-600 text-sm font-medium">Note Google garantie</p>
-              <p className="text-gray-400 text-xs mt-1">en 90 jours ou on continue</p>
+              <p className="text-gray-600 text-sm font-medium">Des avis pris en charge</p>
+              <p className="text-gray-400 text-xs mt-1">réponse générée pour chaque nouvel avis</p>
             </div>
           </AnimatedSection>
 
           <AnimatedSection delay={120}>
             <div className="text-center">
-              <div className="text-6xl font-black text-gray-900 mb-3">
-                <AnimatedCounter to={100} suffix="%" duration={1400} />
-              </div>
-              <p className="text-gray-600 text-sm font-medium">Des avis répondus</p>
-              <p className="text-gray-400 text-xs mt-1">sous 24h, même les week-ends</p>
+              <div className="text-6xl font-black text-gray-900 mb-3">24h</div>
+              <p className="text-gray-600 text-sm font-medium">Délai de réponse</p>
+              <p className="text-gray-400 text-xs mt-1">même les week-ends</p>
             </div>
           </AnimatedSection>
 
           <AnimatedSection delay={240}>
             <div className="text-center">
-              <div className="text-6xl font-black text-gray-900 mb-3">1</div>
-              <p className="text-gray-600 text-sm font-medium">Rapport mensuel</p>
-              <p className="text-gray-400 text-xs mt-1">note, avis, collecte, tendances</p>
+              <div className="text-6xl font-black text-gray-900 mb-3">24/7</div>
+              <p className="text-gray-600 text-sm font-medium">Surveillance continue</p>
+              <p className="text-gray-400 text-xs mt-1">de votre fiche Google</p>
             </div>
           </AnimatedSection>
         </div>
@@ -239,10 +232,10 @@ export default function HomePage() {
               <AnimatedText text="Comment ça marche" mode="wave" delay={0} />
             </span>
             <h2 className="text-4xl sm:text-5xl font-black text-gray-900 mb-4">
-              <AnimatedText text="Simple comme un coup de fil" mode="words" delay={0.05} />
+              <AnimatedText text="Trois étapes, zéro appel" mode="words" delay={0.05} />
             </h2>
             <p className="text-gray-500 max-w-xl mx-auto">
-              Pas d&apos;outil à apprendre, pas de configuration, pas de changement d&apos;habitudes.
+              Pas d&apos;outil à apprendre, pas de configuration complexe, pas de changement d&apos;habitudes.
             </p>
           </AnimatedSection>
 
@@ -280,9 +273,8 @@ export default function HomePage() {
               className="h-12 px-8 text-base text-white font-semibold rounded-xl transition-all duration-300 hover:scale-105 hover:opacity-80"
               style={{ background: DARK_BTN, boxShadow: DARK_BTN_SHADOW }}
             >
-              <Link href={CALENDLY_URL}>
-                <Phone className="w-4 h-4 mr-2" />
-                Démarrer avec un appel gratuit
+              <Link href="/signup">
+                Essayer gratuitement 14 jours
               </Link>
             </Button>
           </AnimatedSection>
@@ -301,10 +293,10 @@ export default function HomePage() {
               <AnimatedText text="Ce qui est inclus" mode="wave" delay={0} />
             </span>
             <h2 className="text-4xl sm:text-5xl font-black text-gray-900 mb-4">
-              <AnimatedText text="On gère. Vous récoltez." mode="words" delay={0.05} />
+              <AnimatedText text="Tout, en illimité." mode="words" delay={0.05} />
             </h2>
             <p className="text-gray-500 max-w-xl mx-auto">
-              Un service complet, sans outil à apprendre ni temps à y consacrer.
+              Un seul abonnement, sans palier ni fonctionnalité cachée derrière un plan supérieur.
             </p>
           </AnimatedSection>
 
@@ -406,12 +398,12 @@ export default function HomePage() {
               <AnimatedText text="Prêt à démarrer ?" mode="wave" delay={0} />
             </span>
             <h2 className="text-5xl sm:text-6xl font-black text-gray-900 mb-4 leading-tight">
-              <AnimatedText text="Votre note à 4,5" mode="words" delay={0.05} />
+              <AnimatedText text="Prêt à automatiser" mode="words" delay={0.05} />
               <br />
-              <span className="text-gray-400 text-4xl sm:text-5xl">en 90 jours.</span>
+              <span className="text-gray-400 text-4xl sm:text-5xl">vos réponses aux avis ?</span>
             </h2>
             <p className="text-gray-500 mb-10 text-lg">
-              Un appel de 20 minutes pour tout comprendre. Gratuit, sans engagement.
+              Essai gratuit de 14 jours. Aucun engagement, résiliable à tout moment.
             </p>
             <Button
               asChild
@@ -419,14 +411,13 @@ export default function HomePage() {
               className="h-14 px-10 text-base text-white font-semibold rounded-xl transition-all duration-300 hover:scale-105 hover:opacity-80"
               style={{ background: DARK_BTN, boxShadow: DARK_BTN_SHADOW }}
             >
-              <Link href={CALENDLY_URL}>
-                <Phone className="w-5 h-5 mr-2" />
-                Réserver un appel gratuit
+              <Link href="/signup">
+                Essayer gratuitement 14 jours
                 <ArrowRight className="w-5 h-5 ml-2" />
               </Link>
             </Button>
             <div className="flex flex-wrap items-center justify-center gap-x-8 gap-y-2 mt-8 text-gray-400 text-sm">
-              {["Résultat garanti", "Sans engagement", "Zéro outil à apprendre"].map((item) => (
+              {["Essai 14 jours", "Sans engagement", "Zéro outil à apprendre"].map((item) => (
                 <span key={item} className="flex items-center gap-2">
                   <CheckCircle className="w-3.5 h-3.5 text-gray-400" /> {item}
                 </span>
