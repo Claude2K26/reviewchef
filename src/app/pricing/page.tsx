@@ -68,7 +68,7 @@ export default function PricingPage() {
   }
 
   return (
-    <div className="min-h-screen bg-white text-gray-900 flex flex-col overflow-x-hidden">
+    <div className="min-h-screen bg-background text-gray-900 flex flex-col overflow-x-hidden">
       <PublicNav />
 
       <main className="flex-1 w-full px-6 py-20">
@@ -91,8 +91,8 @@ export default function PricingPage() {
             return (
               <div
                 key={plan.id}
-                className="rounded-2xl p-8 relative flex flex-col border-2 border-gray-900"
-                style={{ background: "#ffffff", boxShadow: "0 8px 48px rgba(0,0,0,0.12)" }}
+                className="rounded-[22px] p-8 relative flex flex-col"
+                style={{ background: "#eaf3ee", boxShadow: "0 20px 48px -20px rgba(15,35,28,0.28)" }}
               >
                 {/* Plan name & price */}
                 <div className="mb-6">
@@ -100,19 +100,19 @@ export default function PricingPage() {
                     {plan.name}
                   </p>
                   <div className="flex items-end gap-1 mb-1">
-                    <span className="text-5xl font-black text-gray-900">{plan.price}€</span>
+                    <span className="text-5xl font-black text-gray-900 font-serif">{plan.price}€</span>
                     <span className="text-gray-400 mb-2 text-base">/mois</span>
                   </div>
                   <p className="text-xs text-gray-400">TTC · Renouvellement mensuel automatique</p>
                 </div>
 
-                <div className="h-px bg-gray-100 mb-6" />
+                <div className="h-px mb-6" style={{ background: "rgba(15,35,28,0.08)" }} />
 
                 {/* Features */}
                 <ul className="space-y-3 mb-8 flex-1">
                   {plan.features.map((f) => (
                     <li key={f} className="flex items-start gap-3 text-sm text-gray-600">
-                      <CheckCircle className="w-4 h-4 text-gray-900 shrink-0 mt-0.5" />
+                      <CheckCircle className="w-4 h-4 shrink-0 mt-0.5" style={{ color: "#1b5e45" }} />
                       {f}
                     </li>
                   ))}
@@ -123,8 +123,8 @@ export default function PricingPage() {
                   onClick={() => handleSubscribe(plan.id)}
                   disabled={loading === plan.id}
                   size="lg"
-                  className="w-full text-base text-white font-semibold rounded-xl h-12 transition-all duration-300 hover:scale-[1.02] hover:opacity-80 disabled:opacity-60 disabled:cursor-not-allowed disabled:scale-100"
-                  style={{ background: "#111111", boxShadow: "0 4px 20px rgba(0,0,0,0.15)" }}
+                  className="w-full text-base text-white font-semibold h-12 transition-all duration-300 hover:scale-[1.02] hover:opacity-80 disabled:opacity-60 disabled:cursor-not-allowed disabled:scale-100"
+                  style={{ background: "#1b5e45", boxShadow: "0 4px 20px rgba(15,35,28,0.22)" }}
                 >
                   {loading === plan.id ? "Chargement..." : plan.cta}
                   {loading !== plan.id && <ArrowRight className="w-4 h-4 ml-1" />}
@@ -156,7 +156,8 @@ export default function PricingPage() {
           Déjà abonné ?{" "}
           <Link
             href="/login"
-            className="text-gray-900 hover:text-gray-700 font-medium transition-colors underline underline-offset-2"
+            className="font-medium transition-colors underline underline-offset-2"
+            style={{ color: "#1b5e45" }}
           >
             Se connecter
           </Link>
