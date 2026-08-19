@@ -102,7 +102,7 @@ export function QrCodeCard({ restaurant }: QrCodeCardProps) {
           <p className="text-xs text-gray-500 mb-4 leading-relaxed">
             Scannez pour laisser un avis Google sur <strong>{restaurant.name}</strong>
           </p>
-          <span className="bg-orange-500 text-white text-xs font-semibold px-4 py-2 rounded-lg">
+          <span className="bg-brand-600 text-white text-xs font-semibold px-4 py-2 rounded-full">
             Laisser un avis ⭐
           </span>
         </div>

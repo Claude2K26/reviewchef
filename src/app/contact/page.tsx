@@ -28,7 +28,7 @@ export default function ContactPage() {
   const filled = form.name.trim() && form.email.trim() && form.message.trim();
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-orange-50 via-white to-red-50 flex flex-col">
+    <div className="min-h-screen bg-gradient-to-br from-brand-50 via-white to-red-50 flex flex-col">
       <PublicNav />
 
       <main className="flex-1 flex items-center justify-center px-6 py-16">

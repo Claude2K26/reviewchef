@@ -154,7 +154,7 @@ export function Sidebar({ restaurants, activeRestaurantId, canAddMore }: Sidebar
       </nav>
 
       {/* Auto-pilot badge */}
-      <div className="mx-3 mb-3 p-3 rounded-lg bg-gradient-to-br from-brand-50 to-orange-50 border border-brand-100">
+      <div className="mx-3 mb-3 p-3 rounded-lg bg-gradient-to-br from-brand-50 to-gold-50 border border-brand-100">
         <div className="flex items-center gap-2 mb-1">
           <Zap className="w-3.5 h-3.5 text-brand-600" />
           <span className="text-xs font-semibold text-brand-700">Auto-pilote actif</span>
