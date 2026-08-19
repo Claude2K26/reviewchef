@@ -27,8 +27,8 @@ export const metadata: Metadata = {
   alternates: { canonical: "/" },
 };
 
-const DARK_BTN = "#111111";
-const DARK_BTN_SHADOW = "0 4px 20px rgba(0,0,0,0.15)";
+const DARK_BTN = "#1b5e45";
+const DARK_BTN_SHADOW = "0 4px 20px rgba(15,35,28,0.2)";
 
 const steps = [
   {
@@ -99,7 +99,7 @@ export default function HomePage() {
   };
 
   return (
-    <div className="min-h-screen bg-white text-gray-900 overflow-x-hidden">
+    <div className="min-h-screen bg-background text-gray-900 overflow-x-hidden">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
@@ -114,7 +114,7 @@ export default function HomePage() {
         <div className="absolute inset-0 overflow-hidden pointer-events-none">
           <div
             className="absolute -top-48 -left-48 w-[900px] h-[900px] rounded-full opacity-20 animate-aurora"
-            style={{ background: "radial-gradient(circle, rgba(0,0,0,0.04) 0%, transparent 65%)" }}
+            style={{ background: "radial-gradient(circle, rgba(27,94,69,0.08) 0%, transparent 65%)" }}
           />
         </div>
 
@@ -122,12 +122,12 @@ export default function HomePage() {
           <div
             className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-sm font-medium mb-8 animate-scale-breath"
             style={{
-              border: "1px solid rgba(0,0,0,0.12)",
-              background: "rgba(0,0,0,0.04)",
-              color: "#555",
+              border: "1px solid rgba(15,35,28,0.14)",
+              background: "rgba(15,35,28,0.05)",
+              color: "#3f5148",
             }}
           >
-            <span className="w-1.5 h-1.5 rounded-full bg-gray-800 animate-pulse inline-block" />
+            <span className="w-1.5 h-1.5 rounded-full animate-pulse inline-block" style={{ background: "#1b5e45" }} />
             Réponse automatique aux avis Google · propulsé par l&apos;IA
           </div>
 
@@ -165,7 +165,7 @@ export default function HomePage() {
             <Button
               asChild
               size="lg"
-              className="w-full sm:w-auto h-12 px-8 text-base text-white font-semibold rounded-xl transition-all duration-300 hover:scale-105 hover:opacity-80"
+              className="w-full sm:w-auto h-12 px-8 text-base text-white font-semibold transition-all duration-300 hover:scale-105 hover:opacity-80"
               style={{ background: DARK_BTN, boxShadow: DARK_BTN_SHADOW }}
             >
               <Link href="/signup">
@@ -190,11 +190,11 @@ export default function HomePage() {
       </section>
 
       {/* ── Chiffres clés ── */}
-      <section className="py-24 px-6 bg-gray-50">
+      <section className="py-24 px-6 bg-secondary">
         <div className="max-w-4xl mx-auto grid grid-cols-1 sm:grid-cols-3 gap-12">
           <AnimatedSection delay={0}>
             <div className="text-center">
-              <div className="text-6xl font-black text-gray-900 mb-3">
+              <div className="text-6xl font-black text-gray-900 mb-3 font-serif">
                 <AnimatedCounter to={100} suffix="%" duration={1400} />
               </div>
               <p className="text-gray-600 text-sm font-medium">Des avis pris en charge</p>
@@ -204,7 +204,7 @@ export default function HomePage() {
 
           <AnimatedSection delay={120}>
             <div className="text-center">
-              <div className="text-6xl font-black text-gray-900 mb-3">24h</div>
+              <div className="text-6xl font-black text-gray-900 mb-3 font-serif">24h</div>
               <p className="text-gray-600 text-sm font-medium">Délai de réponse</p>
               <p className="text-gray-400 text-xs mt-1">même les week-ends</p>
             </div>
@@ -212,7 +212,7 @@ export default function HomePage() {
 
           <AnimatedSection delay={240}>
             <div className="text-center">
-              <div className="text-6xl font-black text-gray-900 mb-3">24/7</div>
+              <div className="text-6xl font-black text-gray-900 mb-3 font-serif">24/7</div>
               <p className="text-gray-600 text-sm font-medium">Surveillance continue</p>
               <p className="text-gray-400 text-xs mt-1">de votre fiche Google</p>
             </div>
@@ -243,21 +243,21 @@ export default function HomePage() {
             <div
               className="hidden md:block absolute top-8 left-[16.5%] right-[16.5%] h-px"
               style={{
-                background: "linear-gradient(90deg, transparent, rgba(0,0,0,0.1), rgba(0,0,0,0.1), transparent)",
+                background: "linear-gradient(90deg, transparent, rgba(15,35,28,0.12), rgba(15,35,28,0.12), transparent)",
               }}
             />
             {steps.map((step, i) => (
               <AnimatedSection key={step.num} delay={i * 150}>
                 <div className="text-center">
                   <div
-                    className="w-16 h-16 rounded-2xl mx-auto mb-5 flex items-center justify-center animate-float"
+                    className="w-16 h-16 rounded-3xl mx-auto mb-5 flex items-center justify-center animate-float"
                     style={{
-                      background: "#f5f5f5",
-                      border: "1px solid rgba(0,0,0,0.08)",
+                      background: "#eaf3ee",
+                      border: "1px solid rgba(15,35,28,0.1)",
                       animationDelay: `${i * 0.6}s`,
                     }}
                   >
-                    <span className="text-gray-900 font-black text-xl">{step.num}</span>
+                    <span className="text-gray-900 font-black text-xl font-serif">{step.num}</span>
                   </div>
                   <h3 className="font-semibold text-gray-900 mb-2">{step.title}</h3>
                   <p className="text-sm text-gray-500 leading-relaxed">{step.desc}</p>
@@ -270,7 +270,7 @@ export default function HomePage() {
             <Button
               asChild
               size="lg"
-              className="h-12 px-8 text-base text-white font-semibold rounded-xl transition-all duration-300 hover:scale-105 hover:opacity-80"
+              className="h-12 px-8 text-base text-white font-semibold transition-all duration-300 hover:scale-105 hover:opacity-80"
               style={{ background: DARK_BTN, boxShadow: DARK_BTN_SHADOW }}
             >
               <Link href="/signup">
@@ -307,8 +307,8 @@ export default function HomePage() {
                 <AnimatedSection key={item.label} delay={i * 80}>
                   <div className="glass-card rounded-2xl p-6 flex items-start gap-4 group hover:scale-[1.02] transition-transform duration-300">
                     <div
-                      className="w-10 h-10 rounded-xl flex items-center justify-center shrink-0 transition-all duration-300 group-hover:scale-110 group-hover:rotate-3"
-                      style={{ background: "#f5f5f5", border: "1px solid rgba(0,0,0,0.08)" }}
+                      className="w-10 h-10 rounded-2xl flex items-center justify-center shrink-0 transition-all duration-300 group-hover:scale-110 group-hover:rotate-3"
+                      style={{ background: "#f2f7f4", border: "1px solid rgba(15,35,28,0.1)" }}
                     >
                       <Icon className="w-5 h-5 text-gray-700" />
                     </div>
@@ -342,11 +342,11 @@ export default function HomePage() {
         <div className="relative">
           <div
             className="absolute left-0 top-0 bottom-0 w-40 z-10 pointer-events-none"
-            style={{ background: "linear-gradient(to right, white 60%, transparent)" }}
+            style={{ background: "linear-gradient(to right, #f2f7f4 60%, transparent)" }}
           />
           <div
             className="absolute right-0 top-0 bottom-0 w-40 z-10 pointer-events-none"
-            style={{ background: "linear-gradient(to left, white 60%, transparent)" }}
+            style={{ background: "linear-gradient(to left, #f2f7f4 60%, transparent)" }}
           />
           <ReviewsMarquee />
         </div>
@@ -387,7 +387,7 @@ export default function HomePage() {
       </section>
 
       {/* ── CTA final ── */}
-      <section className="py-32 px-6 relative overflow-hidden bg-gray-50">
+      <section className="py-32 px-6 relative overflow-hidden bg-secondary">
         <div className="absolute inset-0 pointer-events-none">
           <div className="absolute inset-0 hero-grid opacity-30" />
         </div>
@@ -408,7 +408,7 @@ export default function HomePage() {
             <Button
               asChild
               size="lg"
-              className="h-14 px-10 text-base text-white font-semibold rounded-xl transition-all duration-300 hover:scale-105 hover:opacity-80"
+              className="h-14 px-10 text-base text-white font-semibold transition-all duration-300 hover:scale-105 hover:opacity-80"
               style={{ background: DARK_BTN, boxShadow: DARK_BTN_SHADOW }}
             >
               <Link href="/signup">
