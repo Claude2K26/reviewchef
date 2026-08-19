@@ -8,7 +8,7 @@ export function PublicFooter() {
         <div className="flex items-center gap-2">
           <div
             className="w-7 h-7 rounded-lg flex items-center justify-center"
-            style={{ background: "#111" }}
+            style={{ background: "#1b5e45" }}
           >
             <ChefHat className="w-3.5 h-3.5 text-white" />
           </div>

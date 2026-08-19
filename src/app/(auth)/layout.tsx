@@ -10,8 +10,8 @@ export default function AuthLayout({ children }: { children: React.ReactNode }) 
       <header className="relative p-6">
         <Link href="/" className="inline-flex items-center gap-2.5 group">
           <div
-            className="flex items-center justify-center w-9 h-9 rounded-lg transition-all duration-300 group-hover:scale-110"
-            style={{ background: "#111" }}
+            className="flex items-center justify-center w-9 h-9 rounded-xl transition-all duration-300 group-hover:scale-110"
+            style={{ background: "#1b5e45" }}
           >
             <ChefHat className="w-5 h-5 text-white" />
           </div>

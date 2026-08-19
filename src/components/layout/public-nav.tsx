@@ -11,8 +11,8 @@ export function PublicNav() {
       <div className="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
         <Link href="/" className="flex items-center gap-2 group">
           <div
-            className="w-8 h-8 rounded-lg flex items-center justify-center transition-all duration-300 group-hover:scale-110"
-            style={{ background: "#111" }}
+            className="w-8 h-8 rounded-xl flex items-center justify-center transition-all duration-300 group-hover:scale-110"
+            style={{ background: "#1b5e45" }}
           >
             <ChefHat className="w-4 h-4 text-white" />
           </div>
@@ -30,8 +30,8 @@ export function PublicNav() {
           <Button
             asChild
             size="sm"
-            className="text-white font-semibold rounded-lg transition-all duration-300 hover:scale-105"
-            style={{ background: "#111" }}
+            className="text-white font-semibold transition-all duration-300 hover:scale-105"
+            style={{ background: "#1b5e45" }}
           >
             <Link href="/pricing">Commencer</Link>
           </Button>
