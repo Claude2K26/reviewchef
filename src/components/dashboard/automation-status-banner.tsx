@@ -57,7 +57,7 @@ export function AutomationStatusBanner({ restaurant }: AutomationStatusBannerPro
           Auto-pilote activé — {restaurant.google_location_name ?? "votre établissement"}
         </p>
         <p className="text-xs text-emerald-600 mt-0.5">
-          Vos avis sont surveillés et répondus automatiquement 24h/24
+          Vos avis sont vérifiés et répondus automatiquement chaque jour
           {restaurant.last_checked && (
             <> · Dernière vérification : {new Date(restaurant.last_checked).toLocaleTimeString("fr-FR")}</>
           )}

@@ -53,7 +53,7 @@ const included = [
   { icon: QrCode, label: "Collecte d'avis positifs (QR code personnalisé)" },
   { icon: BarChart3, label: "Rapport mensuel avec évolution de votre note" },
   { icon: TrendingUp, label: "Suivi de votre note Google en continu" },
-  { icon: Clock, label: "Surveillance 24h/24, 7j/7" },
+  { icon: Clock, label: "Vérification quotidienne de vos avis" },
   { icon: Shield, label: "Validation manuelle ou publication automatique, au choix" },
 ];
 
@@ -139,7 +139,7 @@ export default function HomePage() {
             </span>
             <br />
             <span className="text-gray-400 text-4xl sm:text-5xl lg:text-6xl font-black">
-              24h/24, 7j/7.
+              chaque jour, sans effort.
             </span>
           </h1>
 
@@ -212,8 +212,8 @@ export default function HomePage() {
 
           <AnimatedSection delay={240}>
             <div className="text-center">
-              <div className="text-6xl font-black text-gray-900 mb-3 font-serif">24/7</div>
-              <p className="text-gray-600 text-sm font-medium">Surveillance continue</p>
+              <div className="text-6xl font-black text-gray-900 mb-3 font-serif">1×/jour</div>
+              <p className="text-gray-600 text-sm font-medium">Vérification automatique</p>
               <p className="text-gray-400 text-xs mt-1">de votre fiche Google</p>
             </div>
           </AnimatedSection>

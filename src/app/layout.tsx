@@ -19,7 +19,7 @@ export const metadata: Metadata = {
     template: "%s | ReviewChef",
   },
   description:
-    "ReviewChef répond automatiquement aux avis Google de votre commerce grâce à l'IA Claude. Surveillance 24h/24, réponses personnalisées, pilote automatique. 49€/mois.",
+    "ReviewChef répond automatiquement aux avis Google de votre commerce grâce à l'IA Claude. Vérification quotidienne, réponses personnalisées, pilote automatique. 39€/mois, essai 14 jours.",
   keywords: [
     "réponse avis Google commerce",
     "automatiser réponses avis Google",
@@ -34,7 +34,7 @@ export const metadata: Metadata = {
   alternates: { canonical: "/" },
   openGraph: {
     title: "ReviewChef — Réponses automatiques aux avis Google",
-    description: "L'IA qui répond à vos avis Google My Business, 24h/24, automatiquement. Personnalisé à votre image.",
+    description: "L'IA qui répond automatiquement à vos avis Google My Business, chaque jour. Personnalisé à votre image.",
     type: "website",
     locale: "fr_FR",
     url: "https://reviewchef.vercel.app",
@@ -43,7 +43,7 @@ export const metadata: Metadata = {
   twitter: {
     card: "summary_large_image",
     title: "ReviewChef — Réponses automatiques aux avis Google",
-    description: "L'IA qui répond à vos avis Google My Business, 24h/24, automatiquement.",
+    description: "L'IA qui répond automatiquement à vos avis Google My Business, chaque jour.",
   },
   verification: {
     google: "udsX1dZratsrF0uvp5mqnxT_i8I0SycSKvzA9t-1weE",

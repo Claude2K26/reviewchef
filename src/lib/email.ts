@@ -91,7 +91,7 @@ export async function sendTrialEndingEmail({
                       <tr>
                         <td style="background:linear-gradient(105deg,#ea580c,#f97316);border-radius:10px;box-shadow:0 4px 16px rgba(249,115,22,0.4);">
                           <a href="${APP_URL}/pricing" style="display:block;padding:14px 32px;color:#ffffff;font-size:16px;font-weight:700;text-decoration:none;white-space:nowrap;">
-                            S'abonner pour 49€/mois →
+                            S'abonner pour 39€/mois →
                           </a>
                         </td>
                       </tr>
@@ -101,9 +101,9 @@ export async function sendTrialEndingEmail({
                     <table width="100%" cellpadding="0" cellspacing="0" style="background:#f9fafb;border-radius:10px;padding:20px;">
                       <tr>
                         <td>
-                          <p style="margin:0 0 12px;font-size:13px;font-weight:600;color:#374151;text-transform:uppercase;letter-spacing:0.05em;">Ce que vous gardez avec le plan Pro</p>
+                          <p style="margin:0 0 12px;font-size:13px;font-weight:600;color:#374151;text-transform:uppercase;letter-spacing:0.05em;">Ce que vous gardez avec votre abonnement</p>
                           ${[
-                            "✅ Réponses automatiques 24h/24",
+                            "✅ Réponses automatiques chaque jour",
                             "✅ Personnalisation du ton et de la signature",
                             "✅ Tableau de bord complet",
                             "✅ Support par email inclus",

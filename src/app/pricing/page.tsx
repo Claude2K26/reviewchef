@@ -16,7 +16,7 @@ const plans = [
     features: [
       "Réponses IA illimitées",
       "Jusqu'à 3 établissements Google My Business",
-      "Surveillance des avis 24h/24, 7j/7",
+      "Vérification quotidienne de vos avis",
       "Personnalisation du ton et signature",
       "Collecte d'avis positifs (QR code personnalisé)",
       "Rapport mensuel avec évolution de votre note",

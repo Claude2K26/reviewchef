@@ -94,7 +94,7 @@ export function GoogleConnectionCard({ restaurant }: GoogleConnectionCardProps) 
           {[
             "Lecture de vos avis Google",
             "Publication de réponses",
-            "Synchronisation toutes les heures",
+            "Synchronisation quotidienne",
           ].map((item) => (
             <li key={item} className="flex items-center gap-2 text-xs text-gray-500">
               <CheckCircle2 className="w-3.5 h-3.5 text-emerald-500 shrink-0" />

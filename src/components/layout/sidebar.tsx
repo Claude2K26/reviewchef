@@ -159,7 +159,7 @@ export function Sidebar({ restaurants, activeRestaurantId, canAddMore }: Sidebar
           <Zap className="w-3.5 h-3.5 text-brand-600" />
           <span className="text-xs font-semibold text-brand-700">Auto-pilote actif</span>
         </div>
-        <p className="text-xs text-brand-600/70">Vos avis sont traités automatiquement 24h/24</p>
+        <p className="text-xs text-brand-600/70">Vos avis sont traités automatiquement chaque jour</p>
       </div>
 
       {/* Sign out */}

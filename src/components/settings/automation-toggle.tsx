@@ -29,7 +29,7 @@ export function AutomationToggle({ restaurant }: AutomationToggleProps) {
       toast({
         title: newValue ? "Automatisation activée !" : "Automatisation désactivée",
         description: newValue
-          ? "ReviewChef va répondre automatiquement à vos avis 24h/24."
+          ? "ReviewChef va vérifier vos avis chaque jour et y répondre automatiquement."
           : "Les réponses automatiques sont en pause.",
         variant: newValue ? ("success" as any) : "default",
       });
@@ -75,7 +75,7 @@ export function AutomationToggle({ restaurant }: AutomationToggleProps) {
         {enabled && (
           <div className="mt-2 flex items-center gap-1.5">
             <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
-            <span className="text-xs text-emerald-600 font-medium">Actif · Vérification toutes les heures</span>
+            <span className="text-xs text-emerald-600 font-medium">Actif · Vérification quotidienne</span>
           </div>
         )}
       </div>
