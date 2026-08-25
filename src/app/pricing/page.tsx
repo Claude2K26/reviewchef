@@ -11,18 +11,20 @@ import { PublicFooter } from "@/components/layout/public-footer";
 const plans = [
   {
     id: "pro",
-    name: "ReviewChef",
+    name: "Abonnement ReviewChef",
     price: 39,
     features: [
-      "Réponses IA illimitées",
-      "Jusqu'à 3 établissements Google My Business",
-      "Vérification quotidienne de vos avis",
-      "Personnalisation du ton et signature",
-      "Collecte d'avis positifs (QR code personnalisé)",
-      "Rapport mensuel avec évolution de votre note",
+      "1 établissement Google My Business",
+      "Réponses IA illimitées à 100% de vos avis",
+      "Publication automatique sous 24h",
+      "Personnalisation du ton et de la signature",
+      "Surveillance des avis 24h/24",
+      "Collecte d'avis via QR code personnalisé",
+      "Notification email à chaque réponse publiée",
+      "Statistiques (note & volume) + historique 12 mois",
       "Support par email",
     ],
-    cta: "Essayer gratuitement 14 jours",
+    cta: "Démarrer l'essai gratuit",
   },
 ];
 
@@ -78,7 +80,7 @@ export default function PricingPage() {
             Tarifs
           </span>
           <h1 className="text-5xl sm:text-6xl font-black text-gray-900 mb-4 leading-tight">
-            Un abonnement simple
+            Un seul plan, tout compris
           </h1>
           <p className="text-gray-500 text-lg max-w-xl mx-auto">
             Pas de frais cachés. Résiliable à tout moment.
@@ -86,7 +88,7 @@ export default function PricingPage() {
         </div>
 
         {/* Plan */}
-        <div className="max-w-sm mx-auto grid grid-cols-1 gap-6 items-start">
+        <div className="max-w-md mx-auto grid grid-cols-1 gap-6 items-start">
           {plans.map((plan) => {
             return (
               <div
@@ -133,7 +135,7 @@ export default function PricingPage() {
                   <p className="text-xs text-red-500 text-center mt-3">{error.message}</p>
                 ) : (
                   <p className="text-xs text-gray-400 text-center mt-3">
-                    14 jours gratuits · Annulable avant sans frais
+                    14 jours gratuits · Résiliable à tout moment
                   </p>
                 )}
               </div>

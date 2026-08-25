@@ -12,14 +12,7 @@ export default async function NewRestaurantPage() {
 
   if (!user) redirect("/login");
 
-  const { data: profile } = await supabase
-    .from("profiles")
-    .select("plan")
-    .eq("id", user.id)
-    .single();
-
-  const plan = (profile as any)?.plan ?? "pro";
-  const maxRestaurants = plan === "business" ? 3 : 1;
+  const maxRestaurants = 1;
 
   const { count } = await supabase
     .from("restaurants")

@@ -50,7 +50,7 @@ export async function createRestaurant(
   const parsed = restaurantSettingsSchema.safeParse(data);
   if (!parsed.success) return { success: false, error: parsed.error.errors[0].message };
 
-  const MAX_RESTAURANTS = 3;
+  const MAX_RESTAURANTS = 1;
 
   const { count } = await supabase
     .from("restaurants")
@@ -58,7 +58,10 @@ export async function createRestaurant(
     .eq("user_id", user.id);
 
   if ((count ?? 0) >= MAX_RESTAURANTS) {
-    return { success: false, error: `Limite de ${MAX_RESTAURANTS} établissements atteinte` };
+    return {
+      success: false,
+      error: "Votre abonnement couvre 1 établissement. Contactez le support pour en ajouter d'autres.",
+    };
   }
 
   const { data: restaurant, error } = await supabase

@@ -19,7 +19,7 @@ export const metadata: Metadata = {
     template: "%s | ReviewChef",
   },
   description:
-    "ReviewChef répond automatiquement aux avis Google de votre commerce grâce à l'IA Claude. Vérification quotidienne, réponses personnalisées, pilote automatique. 39€/mois, essai 14 jours.",
+    "ReviewChef répond automatiquement aux avis Google de votre commerce grâce à l'IA Claude. Vérification quotidienne, réponses personnalisées, pilote automatique.",
   keywords: [
     "réponse avis Google commerce",
     "automatiser réponses avis Google",

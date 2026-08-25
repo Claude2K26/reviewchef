@@ -59,7 +59,7 @@ export default async function DashboardLayout({
   const activeRestaurant = restaurants.find((r) => r.id === activeId) ?? restaurants[0];
   const activeRestaurantId = activeRestaurant?.id ?? "";
 
-  const MAX_RESTAURANTS = 3;
+  const MAX_RESTAURANTS = 1;
   const canAddMore = restaurants.length < MAX_RESTAURANTS;
 
   return (

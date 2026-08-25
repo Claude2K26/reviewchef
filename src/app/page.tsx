@@ -21,9 +21,9 @@ import { FloatingParticles } from "@/components/home/floating-particles";
 import { ReviewsMarquee } from "@/components/home/reviews-marquee";
 
 export const metadata: Metadata = {
-  title: "ReviewChef — Réponses automatiques à vos avis Google",
+  title: "ReviewChef — Réponses automatiques à vos avis Google, dans votre ton",
   description:
-    "ReviewChef surveille votre fiche Google My Business et génère des réponses personnalisées par IA à chaque avis, sous 24h. Essai gratuit 14 jours.",
+    "ReviewChef génère et publie une réponse à chacun de vos avis Google sous 24h, dans le ton que vous choisissez. Surveillance 24h/24, mise en route en quelques minutes. Essai gratuit.",
   alternates: { canonical: "/" },
 };
 
@@ -33,18 +33,18 @@ const DARK_BTN_SHADOW = "0 4px 20px rgba(15,35,28,0.2)";
 const steps = [
   {
     num: "01",
-    title: "Créez votre compte",
-    desc: "Inscrivez-vous et démarrez votre essai gratuit de 14 jours en quelques minutes.",
+    title: "Connectez votre fiche Google",
+    desc: "Vous liez votre établissement Google My Business en quelques clics.",
   },
   {
     num: "02",
-    title: "Connectez Google My Business",
-    desc: "Autorisez l'accès à votre fiche en quelques clics. ReviewChef récupère vos avis automatiquement.",
+    title: "Choisissez votre ton",
+    desc: "Chaleureux, sobre, commercial… vous définissez le style des réponses.",
   },
   {
     num: "03",
-    title: "L'automatisation prend le relais",
-    desc: "Chaque nouvel avis reçoit une réponse IA personnalisée, publiée automatiquement ou après votre validation.",
+    title: "ReviewChef répond à votre place",
+    desc: "Chaque nouvel avis reçoit une réponse sous 24h. Vous suivez tout depuis votre tableau de bord.",
   },
 ];
 
@@ -60,7 +60,11 @@ const included = [
 const faqs = [
   {
     q: "Comment fonctionne l'essai gratuit ?",
-    a: "Vous avez 14 jours pour tester ReviewChef sans engagement. Vous pouvez annuler à tout moment depuis votre espace client.",
+    a: "Vous testez ReviewChef gratuitement, sans engagement. Vous pouvez annuler à tout moment depuis votre espace client.",
+  },
+  {
+    q: "Puis-je résilier quand je veux ?",
+    a: "Oui, sans frais, depuis votre espace client.",
   },
   {
     q: "Dois-je installer quelque chose ?",
@@ -91,7 +95,7 @@ export default function HomePage() {
     name: "ReviewChef — Gestion des avis Google",
     serviceType: "Gestion de réputation en ligne",
     description:
-      "Outil self-service de gestion des avis Google pour commerces locaux. Génération de réponses personnalisées par IA, surveillance continue, collecte d'avis via QR code.",
+      "Logiciel de réponse automatique aux avis Google pour commerces locaux. Réponses générées et publiées sous 24h dans le ton choisi, surveillance 24h/24, collecte d'avis via QR code.",
     url: "https://reviewchef.vercel.app",
     provider: { "@type": "Organization", name: "ReviewChef" },
     areaServed: "France",
@@ -128,18 +132,18 @@ export default function HomePage() {
             }}
           >
             <span className="w-1.5 h-1.5 rounded-full animate-pulse inline-block" style={{ background: "#1b5e45" }} />
-            Réponse automatique aux avis Google · propulsé par l&apos;IA
+            Réponses automatiques à vos avis Google · Propulsé par l&apos;IA Claude
           </div>
 
           <h1 className="text-5xl sm:text-6xl lg:text-7xl font-black leading-tight tracking-tight mb-5">
             <AnimatedText text="Vos avis Google," mode="words" delay={0.05} />
             <br />
             <span className="text-gray-900 animate-float-slow">
-              gérés par l&apos;IA
+              répondus pour vous
             </span>
             <br />
             <span className="text-gray-400 text-4xl sm:text-5xl lg:text-6xl font-black">
-              chaque jour, sans effort.
+              en 24h.
             </span>
           </h1>
 
@@ -147,15 +151,15 @@ export default function HomePage() {
             className="text-xl text-gray-900 font-semibold mb-3 animate-fade-in"
             style={{ animationDelay: "0.4s" }}
           >
-            Vous gardez le contrôle. L&apos;IA fait le travail.
+            Vous choisissez le ton. On répond à votre place.
           </p>
 
           <p
             className="text-lg text-gray-500 mb-10 max-w-2xl mx-auto animate-fade-in"
             style={{ animationDelay: "0.55s" }}
           >
-            ReviewChef surveille votre fiche Google My Business, génère une réponse personnalisée
-            à chaque avis et la publie — automatiquement ou après votre validation.
+            ReviewChef génère et publie une réponse à chacun de vos avis Google sous 24h,
+            dans le ton que vous choisissez. Sans y passer de temps.
           </p>
 
           <div
@@ -169,7 +173,7 @@ export default function HomePage() {
               style={{ background: DARK_BTN, boxShadow: DARK_BTN_SHADOW }}
             >
               <Link href="/signup">
-                Essayer gratuitement 14 jours
+                Démarrer gratuitement
                 <ArrowRight className="w-4 h-4 ml-2" />
               </Link>
             </Button>
@@ -179,7 +183,7 @@ export default function HomePage() {
             className="text-xs text-gray-400 mt-5 animate-fade-in"
             style={{ animationDelay: "0.85s" }}
           >
-            Essai 14 jours · Sans engagement · Annulable à tout moment
+            Essai gratuit · Sans engagement · Résiliable à tout moment
           </p>
         </div>
 
@@ -232,7 +236,7 @@ export default function HomePage() {
               <AnimatedText text="Comment ça marche" mode="wave" delay={0} />
             </span>
             <h2 className="text-4xl sm:text-5xl font-black text-gray-900 mb-4">
-              <AnimatedText text="Trois étapes, zéro appel" mode="words" delay={0.05} />
+              <AnimatedText text="En route en quelques minutes" mode="words" delay={0.05} />
             </h2>
             <p className="text-gray-500 max-w-xl mx-auto">
               Pas d&apos;outil à apprendre, pas de configuration complexe, pas de changement d&apos;habitudes.
@@ -274,7 +278,7 @@ export default function HomePage() {
               style={{ background: DARK_BTN, boxShadow: DARK_BTN_SHADOW }}
             >
               <Link href="/signup">
-                Essayer gratuitement 14 jours
+                Démarrer gratuitement
               </Link>
             </Button>
           </AnimatedSection>
@@ -398,12 +402,12 @@ export default function HomePage() {
               <AnimatedText text="Prêt à démarrer ?" mode="wave" delay={0} />
             </span>
             <h2 className="text-5xl sm:text-6xl font-black text-gray-900 mb-4 leading-tight">
-              <AnimatedText text="Prêt à automatiser" mode="words" delay={0.05} />
+              <AnimatedText text="Prêt à ne plus gérer" mode="words" delay={0.05} />
               <br />
-              <span className="text-gray-400 text-4xl sm:text-5xl">vos réponses aux avis ?</span>
+              <span className="text-gray-400 text-4xl sm:text-5xl">vos avis ?</span>
             </h2>
             <p className="text-gray-500 mb-10 text-lg">
-              Essai gratuit de 14 jours. Aucun engagement, résiliable à tout moment.
+              Créez votre compte et laissez ReviewChef répondre à votre place.
             </p>
             <Button
               asChild
@@ -412,12 +416,12 @@ export default function HomePage() {
               style={{ background: DARK_BTN, boxShadow: DARK_BTN_SHADOW }}
             >
               <Link href="/signup">
-                Essayer gratuitement 14 jours
+                Démarrer gratuitement
                 <ArrowRight className="w-5 h-5 ml-2" />
               </Link>
             </Button>
             <div className="flex flex-wrap items-center justify-center gap-x-8 gap-y-2 mt-8 text-gray-400 text-sm">
-              {["Essai 14 jours", "Sans engagement", "Zéro outil à apprendre"].map((item) => (
+              {["Essai gratuit", "Sans engagement", "Résiliable à tout moment"].map((item) => (
                 <span key={item} className="flex items-center gap-2">
                   <CheckCircle className="w-3.5 h-3.5 text-gray-400" /> {item}
                 </span>
