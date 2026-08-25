@@ -135,7 +135,7 @@ export default function PricingPage() {
                   <p className="text-xs text-red-500 text-center mt-3">{error.message}</p>
                 ) : (
                   <p className="text-xs text-gray-400 text-center mt-3">
-                    14 jours gratuits · Résiliable à tout moment
+                    7 jours gratuits · Résiliable à tout moment
                   </p>
                 )}
               </div>
