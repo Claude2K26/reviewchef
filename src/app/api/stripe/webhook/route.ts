@@ -54,19 +54,23 @@ export async function POST(req: NextRequest) {
 
   if (event.type === "customer.subscription.updated") {
     const subscription = event.data.object as any;
-    const customer = await stripe.customers.retrieve(subscription.customer as string) as Stripe.Customer;
-    const uid = customer.metadata?.supabase_user_id;
-    if (uid) {
-      const updatedStatus = ["active", "trialing"].includes(subscription.status)
-        ? subscription.status
-        : "inactive";
-      await supabase.from("profiles").update({
-        subscription_status: updatedStatus,
-        plan: "pro",
-        subscription_end_date: subscription.current_period_end
-          ? new Date(subscription.current_period_end * 1000).toISOString()
-          : null,
-      }).eq("stripe_subscription_id", subscription.id);
+    try {
+      const customer = await stripe.customers.retrieve(subscription.customer as string) as Stripe.Customer;
+      const uid = customer.metadata?.supabase_user_id;
+      if (uid) {
+        const updatedStatus = ["active", "trialing"].includes(subscription.status)
+          ? subscription.status
+          : "inactive";
+        await supabase.from("profiles").update({
+          subscription_status: updatedStatus,
+          plan: "pro",
+          subscription_end_date: subscription.current_period_end
+            ? new Date(subscription.current_period_end * 1000).toISOString()
+            : null,
+        }).eq("stripe_subscription_id", subscription.id);
+      }
+    } catch (err) {
+      console.error("[StripeWebhook] Failed to process subscription update:", err);
     }
   }
 
