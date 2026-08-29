@@ -27,18 +27,22 @@ export async function POST(req: NextRequest) {
     const subscriptionId = session.subscription as string;
 
     if (userId && subscriptionId) {
-      const subscription = await stripe.subscriptions.retrieve(subscriptionId) as any;
-      // status peut être "trialing" ou "active" selon si le trial est activé
-      const status = ["active", "trialing"].includes(subscription.status) ? subscription.status : "inactive";
-      await supabase.from("profiles").upsert({
-        id: userId,
-        stripe_subscription_id: subscriptionId,
-        subscription_status: status,
-        plan: "pro",
-        subscription_end_date: subscription.current_period_end
-          ? new Date(subscription.current_period_end * 1000).toISOString()
-          : null,
-      });
+      try {
+        const subscription = await stripe.subscriptions.retrieve(subscriptionId) as any;
+        // status peut être "trialing" ou "active" selon si le trial est activé
+        const status = ["active", "trialing"].includes(subscription.status) ? subscription.status : "inactive";
+        await supabase.from("profiles").upsert({
+          id: userId,
+          stripe_subscription_id: subscriptionId,
+          subscription_status: status,
+          plan: "pro",
+          subscription_end_date: subscription.current_period_end
+            ? new Date(subscription.current_period_end * 1000).toISOString()
+            : null,
+        });
+      } catch (err) {
+        console.error("[StripeWebhook] Failed to process checkout completion:", err);
+      }
     }
   }
 
@@ -84,28 +88,32 @@ export async function POST(req: NextRequest) {
 
   if (event.type === "customer.subscription.trial_will_end") {
     const subscription = event.data.object as Stripe.Subscription;
-    const customer = await stripe.customers.retrieve(subscription.customer as string) as Stripe.Customer;
+    try {
+      const customer = await stripe.customers.retrieve(subscription.customer as string) as Stripe.Customer;
 
-    if (customer.email && subscription.trial_end) {
-      const trialEndDate = new Date(subscription.trial_end * 1000);
+      if (customer.email && subscription.trial_end) {
+        const trialEndDate = new Date(subscription.trial_end * 1000);
 
-      // Récupérer le nom du restaurant pour personnaliser l'email
-      const uid = customer.metadata?.supabase_user_id;
-      let restaurantName: string | undefined;
-      if (uid) {
-        const { data: restaurant } = await supabase
-          .from("restaurants")
-          .select("name")
-          .eq("user_id", uid)
-          .single();
-        restaurantName = restaurant?.name || undefined;
+        // Récupérer le nom du restaurant pour personnaliser l'email
+        const uid = customer.metadata?.supabase_user_id;
+        let restaurantName: string | undefined;
+        if (uid) {
+          const { data: restaurant } = await supabase
+            .from("restaurants")
+            .select("name")
+            .eq("user_id", uid)
+            .single();
+          restaurantName = restaurant?.name || undefined;
+        }
+
+        await sendTrialEndingEmail({
+          to: customer.email,
+          trialEndDate,
+          restaurantName,
+        });
       }
-
-      await sendTrialEndingEmail({
-        to: customer.email,
-        trialEndDate,
-        restaurantName,
-      });
+    } catch (err) {
+      console.error("[StripeWebhook] Failed to process trial ending notification:", err);
     }
   }
 
