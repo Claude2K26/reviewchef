@@ -20,10 +20,19 @@ export async function POST() {
     return NextResponse.json({ error: "Aucun abonnement trouvé" }, { status: 404 });
   }
 
-  const session = await stripe.billingPortal.sessions.create({
-    customer: profile.stripe_customer_id,
-    return_url: `${process.env.NEXT_PUBLIC_APP_URL}/settings`,
-  });
+  try {
+    const session = await stripe.billingPortal.sessions.create({
+      customer: profile.stripe_customer_id,
+      return_url: `${process.env.NEXT_PUBLIC_APP_URL}/settings`,
+    });
 
-  return NextResponse.json({ url: session.url });
+    return NextResponse.json({ url: session.url });
+  } catch (err) {
+    console.error("[StripePortal] Erreur lors de la création de la session:", err);
+    const message = err instanceof Error ? err.message : "Erreur inconnue";
+    return NextResponse.json(
+      { error: `Impossible d'ouvrir la gestion de l'abonnement : ${message}` },
+      { status: 500 }
+    );
+  }
 }
